@@ -1,5 +1,5 @@
 # SNDS mininet
-This folder includes mininet script that setups a simple topology, which can be used for validating NDN application.
+This folder includes mininet scripts that setup a simple topology, which can be used for validating NDN application for the SNDS project.
 
 ## Prerequisites 
 * Install NFD from [sources](https://github.com/named-data/NFD)
