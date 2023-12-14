@@ -1,1 +1,1 @@
-# snds
+# Secure Named Data Sharing
