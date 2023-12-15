@@ -120,6 +120,7 @@ def runNDNTopo():
     
     topo.configure_faces(net)
 
+    '''
     # run scripts
     producer = net.hosts[0]
     producer.cmd('export HOME=/tmp/mininet/producer')
@@ -138,6 +139,7 @@ def runNDNTopo():
     closest.cmd('python3 /home/snds/Desktop/mininet/closestCDNNode_byID.py > /tmp/closest')
     time.sleep(5)
     closest.cmd('python3 /home/snds/Desktop/mininet/closestCDNNode_byType.py >> /tmp/closest')
+    '''
 
     
     print
