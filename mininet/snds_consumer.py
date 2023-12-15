@@ -5,13 +5,18 @@ from mininet.node   import  Host
 from typing         import  Optional
 
 import random
+import json
 
 app = NDNApp()
 
 @app.route('/snds/Car1')
 def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
     print("Received Interest!!!")
-    app.put_data(name, content=b'Car1', freshness_period = 10000)
+
+    with open("example.json", "r") as json_file:
+        json_content = json.load(json_file)
+
+    app.put_data(name, content=json.dumps(json_content).encode(), freshness_period = 10000)
     print(f"Data sent: {Name.to_str(name)}")
 
 async def main():
@@ -45,7 +50,11 @@ async def main():
         @app.route('/snds/' + riD)
         def on_interest1(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
             print("Received Interest!!!")
-            app.put_data(name, content=riD.encode(), freshness_period = 10000)
+
+            with open("example.json", "r") as json_file:
+                json_content = json.load(json_file)
+                
+            app.put_data(name, content=json.dumps(json_content).encode(), freshness_period = 10000)
             print(f"Data sent: {Name.to_str(name)}")
 
     except InterestNack as e:

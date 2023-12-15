@@ -4,7 +4,7 @@ from ndn.types      import  InterestNack, InterestTimeout, InterestCanceled, Val
 from mininet.node   import  Host
 from typing         import  Optional
 
-import random
+import json
 
 app = NDNApp()
 
@@ -25,7 +25,10 @@ async def main():
 
         print(f'Received Data Name: {Name.to_str(data_name)}')
         print(meta_info)
-        print(bytes(content) if content else None)
+
+        data = bytes(content)
+        json_data = json.loads(data.decode())
+        print(json_data)
 
     except InterestNack as e:
         #A Nack is received 

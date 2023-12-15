@@ -3,6 +3,8 @@ from ndn.app        import  NDNApp
 from ndn.types      import  InterestNack, InterestTimeout, InterestCanceled, ValidationFailure
 from mininet.node   import  Host
 
+import json
+
 app = NDNApp()
 
 async def express_interest(interest_name):
@@ -45,7 +47,9 @@ async def run():
     data_name, meta_info, content = await express_interest(interest_name)
     print(f'Received Data Name: {Name.to_str(data_name)}')
     print(meta_info)
-    print(bytes(content) if content else None)
+    data = bytes(content)
+    json_data = json.loads(data.decode())
+    print(json_data)
 
     app.shutdown()
 
