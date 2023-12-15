@@ -30,8 +30,5 @@ def on_interest(name: FormalName, interest_param: InterestParam, app_param: Opti
     app.put_data(name, content=bytes(rID), freshness_period = 10000)
     print(f"Data sent: {Name.to_str(name)}")
 
-
 if __name__ == '__main__':
     app.run_forever()
-
-

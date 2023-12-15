@@ -107,8 +107,6 @@ def start_nfd(net):
         print("nfd is starting in {}  with config file {}".format(node.name, confFile))
         node.cmd('nfd --config {} > {}/nfd.out  2>&1&'.format(confFile, homeDir))
 
-
-
 def runNDNTopo():
     topo = NDNTopo()
     net = Mininet(topo=topo)
@@ -141,7 +139,6 @@ def runNDNTopo():
     closest.cmd('python3 /home/snds/Desktop/mininet/closestCDNNode_byType.py >> /tmp/closest')
     '''
 
-    
     print
     info("*** Hosts are running and should have internet connectivity\n")
     info("*** Type 'exit' or control-D to shut down network\n")

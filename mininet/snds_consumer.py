@@ -60,9 +60,6 @@ async def main():
     except ValidationFailure:
         #Validation Failure
         print(f'Data failed to validate')
-    #finally:
-        #app.shutdown()
 
 if __name__ == '__main__':
     app.run_forever(after_start=main())
-    #app.run_forever()
