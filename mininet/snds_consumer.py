@@ -13,7 +13,7 @@ app = NDNApp()
 def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
     print("Received Interest!!!")
 
-    with open("example.json", "r") as json_file:
+    with open("car1.jsonld", "r") as json_file:
         json_content = json.load(json_file)
 
     app.put_data(name, content=json.dumps(json_content).encode(), freshness_period = 10000)
@@ -51,7 +51,7 @@ async def main():
         def on_interest1(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
             print("Received Interest!!!")
 
-            with open("example.json", "r") as json_file:
+            with open("car1.jsonld", "r") as json_file:
                 json_content = json.load(json_file)
                 
             app.put_data(name, content=json.dumps(json_content).encode(), freshness_period = 10000)

@@ -29,7 +29,8 @@ class NDNTopo(Topo):
             'producer'  : '10.0.0.1/8',
             'forwarder' : '10.0.0.2/8',
             'consumer'  : '10.0.0.3/8',
-            'closest'   : '10.0.0.4/8'       
+            'closest'   : '10.0.0.4/8',
+            'ngsild'    : '10.0.0.5/8'       
         }
 
         #Add switch
@@ -79,6 +80,11 @@ class NDNTopo(Topo):
         closest = net.hosts[3]
         closest.cmd('export HOME=/tmp/mininet/closest')
         closest.cmd('nfdc face create udp://10.0.0.2')
+
+        #test
+        ngsild = net.hosts[4]
+        ngsild.cmd('export HOME=/tmp/mininet/ngsild')
+        ngsild.cmd('nfdc face create udp://10.0.0.2')
 
         print("Faces configured!")
 

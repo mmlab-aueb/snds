@@ -3,6 +3,7 @@ from ndn.app        import  NDNApp
 from ndn.types      import  InterestNack, InterestTimeout, InterestCanceled, ValidationFailure
 from mininet.node   import  Host
 
+import sys
 import json
 
 app = NDNApp()
@@ -34,7 +35,9 @@ async def run():
     host.cmd('export HOME=/tmp/mininet/closest')
     host.cmd('nfdc route add /snds/CAR_registry udp://10.0.0.2')
 
-    interest_name = '/snds/CAR_registry'
+    type = sys.argv[1]
+    #print("test " + type)
+    interest_name = '/snds/{}_registry'.format(type)
     data_name, meta_info, content = await express_interest(interest_name)
     print(f'Received Data Name: {Name.to_str(data_name)}')
     print(meta_info)

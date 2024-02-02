@@ -4,6 +4,7 @@ from ndn.types      import  InterestNack, InterestTimeout, InterestCanceled, Val
 from mininet.node   import  Host
 from typing         import  Optional
 
+import sys
 import json
 
 app = NDNApp()
@@ -14,9 +15,11 @@ async def main():
     host.cmd('nfdc route add /snds/Car1 udp://10.0.0.2')
 
     try:
+        id = sys.argv[1]
+        #print("test " + id)
         data_name, meta_info, content = await app.express_interest(
             #Interest name
-            '/snds/Car1', 
+            '/snds/{}'.format(id), 
             must_be_fresh=True, 
             can_be_prefix=False, 
             #Interest lifetime in ms
