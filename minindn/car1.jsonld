@@ -1,0 +1,12 @@
+{
+  "@context": "https://excid-io.github.io/dare/context/ngsi-context.jsonld",
+  "@type": "CAR",
+  "@id": "urn:ngsi-ld:Car:Car1",
+  "name": "",
+  "speed": 60,
+  "location": {
+    "@type": "Address",
+    "country": "GR",
+    "city": "Athens"
+  }
+}
