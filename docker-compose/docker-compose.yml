@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   producer:
-    image: ghcr.io/named-data/mini-ndn:master
+    build: ${PRODUCER_BUILD_CONTEXT}
     mem_limit: 4g
     cpus: 4
     privileged: true
@@ -12,7 +12,7 @@ services:
         python3 SNDS_r_service.py 
 
   consumer:
-    image: ghcr.io/named-data/mini-ndn:master
+    build: ${CONSUMER_BUILD_CONTEXT}
     mem_limit: 4g
     cpus: 4
     privileged: true
@@ -22,17 +22,27 @@ services:
         python3 SNDS_service.py
 
   ngsild:
-    image: ghcr.io/named-data/mini-ndn:master
+    build: ${NGSILD_BUILD_CONTEXT}
     mem_limit: 4g
     cpus: 4
     privileged: true
     ports: 
-        - "8080:8080"
+        - "${NGSILD_PORT}:8080"
     volumes:
       - /lib/modules:/lib/modules
     environment: 
-        - HOSTNAME=10.0.0.13
-        - PORT=8080
+        - HOSTNAME=${NGSILD_HOSTNAME}
+        - PORT=${NGSILD_PORT}
     command: > 
         python3 http_ngsild_proxy.py
 
+  snds: 
+    build: ${SNDS_BUILD_CONTEXT}
+    mem_limit: 4g
+    cpus: 4
+    privileged: true
+    volumes:
+      - /lib/modules:/lib/modules
+    command: > 
+        python3 snds.py snds-topology.conf
+    
