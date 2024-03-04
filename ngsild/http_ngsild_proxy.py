@@ -1,9 +1,17 @@
+import os
+
 from http.server    import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse   import urlparse, parse_qs
 from mininet.node   import Host
+from dotenv import load_dotenv
 
-hostName = "10.0.0.13"
-serverPort = 8080
+load_dotenv()
+
+#hostName = "10.0.0.13"
+#serverPort = 8080
+
+hostName = os.getenv('HTTP_PROXY_HOSTNAME')
+serverPort = os.getenv('HTTP_PROXY_PORT')
 
 class MyServer(BaseHTTPRequestHandler):
 
