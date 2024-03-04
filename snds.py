@@ -17,46 +17,56 @@ load_dotenv()
 
 
 def run():
-    Minindn.cleanUp()
-    Minindn.verifyDependencies()
+    try: 
 
-    topo = CustomTopology()
+        Minindn.cleanUp()
+        Minindn.verifyDependencies()
+        topo = CustomTopology()
 
-    #Define hosts
-    hosts = {
-        'producer'  : os.getenv('PRODUCER_HOSTNAME'),
-        'forwarder' : os.getenv('FORWARDER_HOSTNAME'),
-        'consumer'  : os.getenv('CONSUMER_HOSTNAME'),
-        'closest'   : os.getenv('CLOSEST_HOSTNAME'),
-        'ngsild'    : os.getenv('NGSILD_HOSTNAME')       
-    }
+        #Define hosts
+        hosts = {
+            'producer'  : os.getenv('PRODUCER_HOSTNAME'),
+            'forwarder' : os.getenv('FORWARDER_HOSTNAME'),
+            'consumer'  : os.getenv('CONSUMER_HOSTNAME'),
+            'closest'   : os.getenv('CLOSEST_HOSTNAME'),
+            'ngsild'    : os.getenv('NGSILD_HOSTNAME')       
+        }
 
-    info("Read hosts from environment variables\n")
+        info("Read hosts from environment variables\n")
 
-    topo.add_hosts(hosts)
-    topo.add_switch('switch1')
+        topo.add_hosts(hosts)
+        topo.add_switch('switch1')
 
-    print(topo.hosts_dictionary)
-    print(topo.switches_dictionary)
+        print(topo.hosts_dictionary)
+        print(topo.switches_dictionary)
 
-   
-    for host_name, _ in topo.hosts_dictionary.items(): 
-        topo.add_switch_link_for_host(host_name, 'switch1', delay='10ms')
+       
+        for host_name, _ in topo.hosts_dictionary.items(): 
+            topo.add_switch_link_for_host(host_name, 'switch1', delay='10ms')
 
-    ndn = Minindn()
+        #print(topo.hosts()) 
+        #print(topo.links())
+        #print(topo.switches())
 
-    ndn.start()
+        ndn = Minindn(topo=topo)
 
-    info('Starting NFD on nodes\n')
-    nfds = AppManager(ndn, ndn.net.hosts, Nfd)
-    info('Starting NLSR on nodes\n')
-    nlsrs = AppManager(ndn, ndn.net.hosts, Nlsr)
-    sleep(90)
+        ndn.start()
 
-    MiniNDNCLI(ndn.net)
+        info('Starting NFD on nodes\n')
+        nfds = AppManager(ndn, ndn.net.hosts, Nfd)
+        info('Starting NLSR on nodes\n')
+        nlsrs = AppManager(ndn, ndn.net.hosts, Nlsr)
+        sleep(90)
 
-    ndn.stop()
+        MiniNDNCLI(ndn.net)
+
+        ndn.stop()
+    except Exception as e: 
+        Minindn.handleException()
+        print(f"An error occurred: {e}")
 
 if __name__ == '__main__':
-    setLogLevel('info')
+    setLogLevel(os.getenv('LOG_LEVEL'))
     run()
+        
+
