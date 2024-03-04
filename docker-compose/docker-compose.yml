@@ -1,46 +1,19 @@
 version: '3.8'
 
 services:
-  producer:
-    build: ${PRODUCER_BUILD_CONTEXT}
-    mem_limit: 4g
-    cpus: 4
-    privileged: true
-    volumes:
-      - /lib/modules:/lib/modules
-    command: > 
-        python3 SNDS_r_service.py 
-
-  consumer:
-    build: ${CONSUMER_BUILD_CONTEXT}
-    mem_limit: 4g
-    cpus: 4
-    privileged: true
-    volumes:
-      - /lib/modules:/lib/modules
-    command: >
-        python3 SNDS_service.py
-
-  ngsild:
-    build: ${NGSILD_BUILD_CONTEXT}
-    mem_limit: 4g
-    cpus: 4
-    privileged: true
-    ports: 
-        - "${NGSILD_PORT}:8080"
-    volumes:
-      - /lib/modules:/lib/modules
-    environment: 
-        - HOSTNAME=${NGSILD_HOSTNAME}
-        - PORT=${NGSILD_PORT}
-    command: > 
-        python3 http_ngsild_proxy.py
-
   snds: 
     build: ${SNDS_BUILD_CONTEXT}
     mem_limit: 4g
-    cpus: 4
     privileged: true
+    environment: 
+      - HTTP_PROXY_HOSTNAME=${HTTP_PROXY_HOSTNAME}
+      - HTTP_PROXY_PORT=${HTTP_PROXY_PORT}
+      - PRODUCER_HOSTNAME=${PRODUCER_HOSTNAME}
+      - FORWARDER_HOSTNAME=${FORWARDER_HOSTNAME}
+      - CONSUMER_HOSTNAME=${CONSUMER_HOSTNAME}
+      - CLOSEST_HOSTNAME=${CLOSEST_HOSTNAME}
+      - NGSILD_HOSTNAME=${NGSILD_HOSTNAME}
+      - LOG_LEVEL=${LOG_LEVEL}
     volumes:
       - /lib/modules:/lib/modules
     command: > 
