@@ -6,17 +6,24 @@ from typing         import Optional
 
 import random 
 import json
+import sys
+import subprocess
 
 app = NDNApp()
 
-snds_service = Host('consumer')
-snds_service.cmd('nlsrc advertise /snds/Car1')
+#snds_service = Host('consumer')
+#snds_service.cmd('nlsrc advertise /snds/Car1')
 
-@app.route('/snds/Car1')
+OBJECT = sys.argv[1]
+TYPE = sys.argv[2]
+
+subprocess.run(["nlsrc", "advertise", "/snds/{}".format(OBJECT)])
+
+@app.route('/snds/{}'.format(OBJECT))
 def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
     print(f"Received Interest: {Name.to_str(name)}")
-
-    with open("car1.jsonld", "r") as json_file:
+    
+    with open("{}.jsonld".format(OBJECT), "r") as json_file:
         json_content = json.load(json_file)
 
     app.put_data(name, content=json.dumps(json_content).encode(), freshness_period=10000)
@@ -29,7 +36,7 @@ async def main():
         nonce = str(random.randint(0,100000000))
 
         data_name, meta_info, content = await app.express_interest (
-            '/snds/CAR/{}'.format(nonce),
+            '/snds/{}/{}'.format(TYPE, nonce),
             must_be_fresh=True,
             can_be_prefix=False,
             lifetime=6000
@@ -41,13 +48,15 @@ async def main():
         riD = str(int.from_bytes(content, 'big'))
         #print(riD)
 
-        snds_service.cmd('nlsrc advertise /snds/' + riD)
+        #snds_service.cmd('nlsrc advertise /snds/' + riD)
+        subprocess.run(["nlsrc", "advertise", "/snds/{}".format(riD)])
+
 
         @app.route('/snds/' + riD)
         def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
             print(f"Received Interest: {Name.to_str(name)}")
 
-            with open("car1.jsonld", "r") as json_file:
+            with open("{}.jsonld".format(OBJECT), "r") as json_file:
                 json_content = json.load(json_file)
 
             app.put_data(name, content=json.dumps(json_content).encode(), freshness_period=10000)

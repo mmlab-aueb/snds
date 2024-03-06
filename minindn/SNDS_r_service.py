@@ -5,16 +5,23 @@ from mininet.node   import Host
 
 import random
 import base64
+import sys
+import subprocess
 
 app = NDNApp()
 
-snds_r_service = Host('producer')
-snds_r_service.cmd('nlsrc advertise /snds/CAR')
-snds_r_service.cmd('nlsrc advertise /snds/CAR_registry')
+#snds_r_service = Host('producer')
+#snds_r_service.cmd('nlsrc advertise /snds/CAR')
+#snds_r_service.cmd('nlsrc advertise /snds/CAR_registry')
+
+TYPE = sys.argv[1]
+
+subprocess.run(["nlsrc", "advertise", "/snds/{}".format(TYPE)])
+subprocess.run(["nlsrc", "advertise", "/snds/{}_registry".format(TYPE)])
 
 rID = []
     
-@app.route('/snds/CAR')
+@app.route('/snds/{}'.format(TYPE))
 def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
     print(f"Received Interest: {Name.to_str(name)}")
 
@@ -30,7 +37,7 @@ def on_interest(name: FormalName, interest_param: InterestParam, app_param: Opti
 
     print(f"Data sent: {Name.to_str(name)}")
 
-@app.route('/snds/CAR_registry')
+@app.route('/snds/{}_registry'.format(TYPE))
 def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
     print(f"Received Interest: {Name.to_str(name)}")
 
