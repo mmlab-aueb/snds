@@ -27,6 +27,11 @@ async def main():
         json_data = json.loads(data.decode())
         print(json_data)
 
+        json_ld_name = "{}.jsonld".format(id)
+
+        with open(json_ld_name, "w") as json_ld:
+            json.dump(json_data, json_ld, indent=2)
+
     except InterestNack as e:
         print(f'Nacked with reason={e.reason}')
     except InterestTimeout:

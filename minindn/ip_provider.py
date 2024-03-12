@@ -12,7 +12,7 @@ headers = {
 }
 params = {
     'provider': 'provider1',
-    'id': 'urn:ngsi-ld:Car:' + id,
+    'id': 'urn:ngsi-ld:' + TYPE + ':' + id,
     'type': TYPE
 }
 

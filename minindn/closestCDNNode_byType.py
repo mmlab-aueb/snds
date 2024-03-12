@@ -49,6 +49,11 @@ async def run():
     json_data = json.loads(data.decode())
     print(json_data)
 
+    json_ld_name = "{}.jsonld".format(json_data["@id"].split(":")[-1])
+
+    with open(json_ld_name, "w") as json_ld:
+        json.dump(json_data, json_ld, indent=2)
+
     app.shutdown()
 
 if __name__ == '__main__':

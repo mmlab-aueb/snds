@@ -19,6 +19,3 @@ params = {
 response = requests.request("GET", url, headers=headers, params=params)
 
 print(response.text)
-
-
-

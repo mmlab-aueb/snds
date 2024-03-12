@@ -1,12 +1,11 @@
-from mininet.log import setLogLevel, info
-
-from minindn.minindn import Minindn
-from minindn.util import MiniNDNCLI
-from minindn.apps.app_manager import AppManager
-from minindn.apps.nfd import Nfd
-from minindn.apps.nlsr import Nlsr
-from time import sleep
-from mininet.topo import Topo
+from mininet.log                import setLogLevel, info
+from minindn.minindn            import Minindn
+from minindn.util               import MiniNDNCLI
+from minindn.apps.app_manager   import AppManager
+from minindn.apps.nfd           import Nfd
+from minindn.apps.nlsr          import Nlsr
+from time                       import sleep
+from mininet.topo               import Topo
 
 def run():
     Minindn.cleanUp()
@@ -22,7 +21,30 @@ def run():
     nlsrs = AppManager(ndn, ndn.net.hosts, Nlsr)
     sleep(40)
 
+    '''i = 0
+    for host in ndn.net.hosts:
+        host.cmd('export HOME=/tmp/minindn/' + host.name)
+        host.cmd('python3 /home/minindn/snds/minindn/SDNS_r_service.py Type_' + host.name + ' &')
+        host.cmd('python3 /home/minindn/snds/minindn/http_ngsild_proxy.py &')
+        host.cmd('python3 /home/minindn/snds/minindn/ip_provider.py Type_' + host.name + ' item' + str(i))
+        i = i + 1
+
+    #for x in range(0, 1000):
+    for k in range(0 , i):
+        for host in ndn.net.hosts:
+            host.cmd('export HOME=/tmp/minindn/' + host.name)
+            host.cmd('(time python3 /home/minindn/snds/minindn/ip_consumerByID.py item' + str(k) + ') 2>> /tmp/minindn/' + host.name + '/' + host.name + '_id.txt')
+
+    #for x in range(0, 1000):
+    for host in ndn.net.hosts:
+        for node in ndn.net.hosts:
+            host.cmd('export HOME=/tmp/minindn/' + host.name)
+            host.cmd('(time python3 /home/minindn/snds/minindn/ip_consumerByType.py Type_' + node.name + ') 2>> /tmp/minindn/' + host.name + '/' + host.name + '_type.txt') '''
+               
+
+
     
+    ############################ICSS experiment#############
     #run all services on all nodes
     for host in ndn.net.hosts:
         if host.name != 'forwarder':
@@ -30,33 +52,13 @@ def run():
             host.cmd('export HOME=/tmp/minindn/' + host.name)
             host.cmd('python3 /home/minindn/snds/minindn/SNDS_r_service.py Type_' + host.name + ' &')
             host.cmd('python3 /home/minindn/snds/minindn/http_ngsild_proxy.py &')
-            
-	
-	
-    '''node1 = ndn.net.hosts[1]
-    node1.cmd('export HOME=/tmp/minindn/node1')
-    node1.cmd('python3 /home/minindn/snds/minindn/client_provider.py Type_node1 item1 > /tmp/minindn/node1_pr.txt')
 
     sleep(5)
 
-    forwarder = ndn.net.hosts[0]
+    '''forwarder = ndn.net.hosts[0]
     forwarder.cmdPrint('tcpdump -i any -n -l -A -s0 > /tmp/minindn/packets.txt &')
 
-    node3 = ndn.net.hosts[3]
-    node3.cmd('export HOME=/tmp/minindn/node3')
-    node3.cmd('python3 /home/minindn/snds/minindn/client_consumer.py Type_node1 item1 > /tmp/minindn/node3_con.txt &')
-    sleep(5)
-
-    node2 = ndn.net.hosts[2]
-    node2.cmd('export HOME=/tmp/minindn/node2')
-    node2.cmd('python3 /home/minindn/snds/minindn/client_consumer.py Type_node1 item1 > /tmp/minindn/node2_con.txt &')
-    sleep(5)
-
-    node4 = ndn.net.hosts[4]
-    node4.cmd('export HOME=/tmp/minindn/node4')
-    node4.cmd('python3 /home/minindn/snds/minindn/client_consumer.py Type_node1 item1 > /tmp/minindn/node4_con.txt &')'''
-
-    
+    #===========================
     sleep(5)
     forwarder = ndn.net.hosts[0]
     forwarder.cmdPrint('tcpdump -i any -n -l -A -s0 > /tmp/minindn/cmd1.txt &')
@@ -70,7 +72,7 @@ def run():
     node3.cmd('export HOME=/tmp/minindn/node3')
     node3.cmdPrint(' time python3 /home/minindn/snds/minindn/ip_provider.py Type_node2 item3 > /tmp/minindn/node3_pr.txt 2>&1')
     
-    '''
+    
 	#===========================
 	sleep(5)
     forwarder.cmdPrint('killall tcpdump; tcpdump -i any -n -l -A -s0 > /tmp/minindn/cmd3.txt &')
@@ -108,7 +110,7 @@ def run():
    
     node4.cmdPrint('time python3 /home/minindn/snds/minindn/ip_consumerByType.py Type_node4  >> /tmp/minindn/node4_con.txt 2>&1')
 	#===========================
-    '''
+    
     sleep(5)
     forwarder.cmdPrint('killall tcpdump; tcpdump -i any -n -l -A -s0 > /tmp/minindn/cmd9.txt &')
    
@@ -118,10 +120,8 @@ def run():
     sleep (5)
     forwarder.cmdPrint('killall tcpdump; tcpdump -i any -n -l -A -s0 > /tmp/minindn/cmd10.txt &')
    
-    node3.cmdPrint('time python3 /home/minindn/snds/minindn/ip_consumerByType.py Type_node2  > /tmp/minindn/node3_con.txt')
+    node3.cmdPrint('time python3 /home/minindn/snds/minindn/ip_consumerByType.py Type_node2  > /tmp/minindn/node3_con.txt') '''
 
-
-    
 
     MiniNDNCLI(ndn.net)
 

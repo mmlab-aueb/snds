@@ -11,9 +11,6 @@ import subprocess
 
 app = NDNApp()
 
-#snds_service = Host('consumer')
-#snds_service.cmd('nlsrc advertise /snds/Car1')
-
 OBJECT = sys.argv[1]
 TYPE = sys.argv[2]
 
@@ -48,9 +45,7 @@ async def main():
         riD = str(int.from_bytes(content, 'big'))
         #print(riD)
 
-        #snds_service.cmd('nlsrc advertise /snds/' + riD)
         subprocess.run(["nlsrc", "advertise", "/snds/{}".format(riD)])
-
 
         @app.route('/snds/' + riD)
         def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):

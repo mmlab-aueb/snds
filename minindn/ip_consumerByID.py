@@ -2,8 +2,8 @@ import requests
 import json
 import sys
 
-TYPE = sys.argv[1]
-id = sys.argv[2]
+#TYPE = sys.argv[1]
+id = sys.argv[1]
 
 
 #Read a record by id 
@@ -20,5 +20,3 @@ params = {
 
 response = requests.request("GET", url, headers=headers, params=params)
 print(response.text)
-
-

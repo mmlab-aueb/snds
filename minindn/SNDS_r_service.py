@@ -10,10 +10,6 @@ import subprocess
 
 app = NDNApp()
 
-#snds_r_service = Host('producer')
-#snds_r_service.cmd('nlsrc advertise /snds/CAR')
-#snds_r_service.cmd('nlsrc advertise /snds/CAR_registry')
-
 TYPE = sys.argv[1]
 
 subprocess.run(["nlsrc", "advertise", "/snds/{}".format(TYPE)])
