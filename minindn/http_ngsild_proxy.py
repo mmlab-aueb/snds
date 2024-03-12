@@ -4,7 +4,6 @@ from mininet.node   import Host
 
 import os
 import subprocess
-import socket
 
 #hostName = "localhost"
 serverPort = 8080
