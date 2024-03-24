@@ -5,23 +5,32 @@ This folder includes scripts that setup a simple topology, which can be used for
 * Clone the mini-ndn repository (`git clone https://github.com/named-data/mini-ndn`)
 * Install mini-ndn by running (`./install.sh`)
 
-## Execution
-In the minindn directory, run `sudo python3 snds.py snds-topology.conf`. Then, in the `mini-ndn>` command prompt run `xterm consumer producer ngsild forwarder`.
-In the xterm of `producer` run: 
+## Run with docker
+
+The image inside the mini-ndn repository must be built. Do not build it from inside the git ``submodule`` rather clone the repo and proceed to build the image using: 
+
+
 ```
-export HOME=/tmp/minindn/producer
-python3 SNDS_r_service.py
+docker build -t minindn .
 ```
-In the xterm of `consumer` run:
+
+The image then can be executed using: 
 ```
-export HOME=/tmp/minindn/consumer
-python3 SNDS_service.py
+docker run -m 4g --cpus=4 -it --privileged \
+       -v /lib/modules:/lib/modules \
+       minindn bin/bash
 ```
-In the xterm of `ngsild` run:
+
+
+To run the local implemenation you can use the ``run_through_docker.sh``: 
+
 ```
-python3 http_ngsild_proxy.py
+chmod +x run_through_docker.sh
+./run_through_docker
 ```
-In the xterm of `forwarder` run:
+
+The files of the project will be found inside the ``/app/`` folder. You can run ``snds.py`` using: 
+
 ```
-python3 client.py
+python snds.py
 ```
