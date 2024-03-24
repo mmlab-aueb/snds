@@ -8,13 +8,14 @@ from minindn.apps.nfd import Nfd
 from minindn.apps.nlsr import Nlsr
 
 from time import sleep
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
 # self made topology class
 from Topology import CustomTopology
 
-load_dotenv()
+#load_dotenv()
 
+setLogLevel(os.getenv('LOG_LEVEL', 'info'))
 
 def run():
     try: 
