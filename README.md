@@ -1,10 +1,6 @@
 # Secure Named Data Sharing minindn implementation
 This folder includes scripts that setup a simple topology, which can be used for validating NDN application for the SNDS project in the Mini-NDN networking emulation tool, which is a fork of Mininet.
 
-## Prerequisites 
-* Clone the mini-ndn repository (`git clone https://github.com/named-data/mini-ndn`)
-* Install mini-ndn by running (`./install.sh`)
-
 ## Run with docker
 
 The image inside the mini-ndn repository must be built. Do not build it from inside the git ``submodule`` rather clone the repo and proceed to build the image using: 
@@ -34,3 +30,10 @@ The files of the project will be found inside the ``/app/`` folder. You can run 
 ```
 python snds.py
 ```
+
+## Run without docker
+* Clone the mini-ndn repository (`git clone https://github.com/named-data/mini-ndn`)
+* Install mini-ndn by running (`./install.sh`)
+
+
+In the minindn directory, run `sudo python snds.py `. 
