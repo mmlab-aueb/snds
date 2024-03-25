@@ -1,6 +1,7 @@
 import os 
+import logging
 
-from mininet.log import setLogLevel, info
+from mininet.log import MininetLogger
 from minindn.minindn import Minindn
 from minindn.util import MiniNDNCLI
 from minindn.apps.app_manager import AppManager
@@ -15,7 +16,9 @@ from Topology import CustomTopology
 
 #load_dotenv()
 
-setLogLevel(os.getenv('LOG_LEVEL', 'info'))
+# Define a new logging format
+standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+
 
 def run():
     try: 
@@ -33,31 +36,29 @@ def run():
             'ngsild'    : os.getenv('NGSILD_HOSTNAME')       
         }
 
-        info("Read hosts from environment variables\n")
+        _logger.info("Read hosts from environment variables\n")
 
         topo.add_hosts(hosts)
         topo.add_switch('switch1')
 
-        print(topo.hosts_dictionary)
-        print(topo.switches_dictionary)
-
-       
         for host_name, _ in topo.hosts_dictionary.items(): 
             topo.add_switch_link_for_host(host_name, 'switch1', delay='10ms')
 
-        #print(topo.hosts()) 
-        #print(topo.links())
-        #print(topo.switches())
 
         ndn = Minindn(topo=topo)
 
         ndn.start()
 
-        info('Starting NFD on nodes\n')
+        _logger.info('Starting NFD on nodes\n')
         nfds = AppManager(ndn, ndn.net.hosts, Nfd)
-        info('Starting NLSR on nodes\n')
+        _logger.info('Starting NLSR on nodes\n')
         nlsrs = AppManager(ndn, ndn.net.hosts, Nlsr)
         sleep(90)
+
+
+        for host in ndn.net.hosts: 
+            _logger.debug(f"Parsing host {host} to run service.\n")
+
 
         MiniNDNCLI(ndn.net)
 
@@ -67,7 +68,10 @@ def run():
         print(f"An error occurred: {e}")
 
 if __name__ == '__main__':
-    setLogLevel(os.getenv('LOG_LEVEL'))
+    _logger = MininetLogger(os.path.basename(__file__))
+    _logger.setLogLevel(os.getenv('LOG_LEVEL', 'info'))
+    for handler in _logger.handlers:
+        handler.setFormatter(logging.Formatter(standard_logging))
     run()
         
 

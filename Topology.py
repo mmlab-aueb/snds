@@ -1,8 +1,17 @@
-import ipaddress
 import re
+import logging
+import os
 
 from mininet.topo import Topo
-from mininet.log import setLogLevel, info
+from mininet.log import MininetLogger
+
+# Define a new logging format
+standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+
+_logger = MininetLogger(os.path.basename(__file__))
+_logger.setLogLevel(os.getenv('LOG_LEVEL', 'info'))
+for handler in _logger.handlers:
+    handler.setFormatter(logging.Formatter(standard_logging))
 
 class CustomTopology(Topo): 
     def __init__(self, log_level='info'): 
@@ -18,7 +27,6 @@ class CustomTopology(Topo):
         # 'switch_name': 'switch_name'
         self.switches_dictionary={}
 
-        setLogLevel(log_level)
         
 
     def add_switch(self, switch_name: str): 
@@ -29,7 +37,7 @@ class CustomTopology(Topo):
         new_switch=self.addSwitch(switch_name)
         self.switches_dictionary[switch_name]={'switch_name': new_switch}
 
-        info('Created switch: {switch_name}\n')
+        _logger.info(f'Created switch: {switch_name}\n')
 
     def add_host(self, host_name:str, host_ip:str):
 
@@ -46,7 +54,7 @@ class CustomTopology(Topo):
         #    info(f"Error: {host_ip} is not a valid IP address, while adding host.\n")
 
         h = self.addHost(host_name, ip=host_ip)
-        info(f"Added host: {host_name} with ip: {host_ip}\n")
+        _logger.info(f"Added host: {host_name} with ip: {host_ip}\n")
 
         self.hosts_dictionary[host_name]={
             'host_name': host_name, 
@@ -85,7 +93,7 @@ class CustomTopology(Topo):
 
         self.addLink(self.hosts_dictionary[host_name1]['host_name'],self.hosts_dictionary[host_name2]['host_name'], delay=delay, bw=bandwidth)
 
-        info(f'Added link between host: {host_name1} and host {host_name2}, with delay {delay} and bandwidth {bandwidth}\n')
+        _logger.info(f'Added link between host: {host_name1} and host {host_name2}, with delay {delay} and bandwidth {bandwidth}\n')
         
 
     def add_switch_link_for_host(self, host_name:str, switch_name: str, delay: str=None, bandwidth: int=None):
@@ -112,7 +120,7 @@ class CustomTopology(Topo):
 
         self.addLink(self.switches_dictionary[switch_name]['switch_name'],self.hosts_dictionary[host_name]['host_name'], delay=delay, bw=bandwidth)
 
-        info(f'Added link between host: {host_name} and switch {switch_name}, with delay {delay} and bandwidth {bandwidth}\n')
+        _logger.info(f'Added link between host: {host_name} and switch {switch_name}, with delay {delay} and bandwidth {bandwidth}\n')
 
         
 
