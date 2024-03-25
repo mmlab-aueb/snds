@@ -1,5 +1,6 @@
 import os 
 import logging
+import typing
 
 from mininet.log import MininetLogger
 from minindn.minindn import Minindn
@@ -16,11 +17,8 @@ from Topology import CustomTopology
 
 #load_dotenv()
 
-# Define a new logging format
-standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
-
-def run():
+def run(_logger: MininetLogger):
     try: 
 
         Minindn.cleanUp()
@@ -53,25 +51,56 @@ def run():
         nfds = AppManager(ndn, ndn.net.hosts, Nfd)
         _logger.info('Starting NLSR on nodes\n')
         nlsrs = AppManager(ndn, ndn.net.hosts, Nlsr)
-        sleep(90)
+        #sleep(90)
 
 
-        for host in ndn.net.hosts: 
-            _logger.debug(f"Parsing host {host} to run service.\n")
+        topo.add_mininet_hosts(ndn.net.hosts)
+
+        topo.run_command_on_mininet_host(
+            host_name='ngsild', 
+            command=f'ls'
+        )
+
+        topo.run_command_on_mininet_host(
+            host_name='ngsild', 
+            command=f'export HOME=/tmp/ngsild && python $HOME/http_ngsild_proxy.py'
+        )
 
 
         MiniNDNCLI(ndn.net)
 
         ndn.stop()
     except Exception as e: 
+        # Log the error message
+        _logger.error(f"An error occurred: {e}\n")
+
+        # Log the type of the exception
+        _logger.error(f"Exception type: {type(e).__name__}\n")
+
+        # Get a full traceback
+        import traceback
+        tb = traceback.format_exc()
+        _logger.error(f"Traceback: {tb}\n")
+
         Minindn.handleException()
-        print(f"An error occurred: {e}")
+
+    except BaseException as e:
+        # This will catch everything, including KeyboardInterrupt, SystemExit, etc.
+        _logger.error(f"A non-standard exception occurred: {e}\n")
+
+        Minindn.handleException()
 
 if __name__ == '__main__':
+    # Define a new logging format
+    standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+
     _logger = MininetLogger(os.path.basename(__file__))
     _logger.setLogLevel(os.getenv('LOG_LEVEL', 'info'))
+
     for handler in _logger.handlers:
         handler.setFormatter(logging.Formatter(standard_logging))
-    run()
+
+    run(_logger)
+
         
 

@@ -1,9 +1,13 @@
 import re
 import logging
 import os
+from typing import List
 
 from mininet.topo import Topo
 from mininet.log import MininetLogger
+from mininet.node import Host
+
+
 
 # Define a new logging format
 standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -13,8 +17,9 @@ _logger.setLogLevel(os.getenv('LOG_LEVEL', 'info'))
 for handler in _logger.handlers:
     handler.setFormatter(logging.Formatter(standard_logging))
 
+
 class CustomTopology(Topo): 
-    def __init__(self, log_level='info'): 
+    def __init__(self): 
         super().__init__()
         # This gets filled in add_host and will contain a structure: 
         #'host_name'= {
@@ -27,11 +32,30 @@ class CustomTopology(Topo):
         # 'switch_name': 'switch_name'
         self.switches_dictionary={}
 
-        
+        # Get filled in add_mininet_hosts when minindn is created
+        # 'host.name': 'mininethost object'
+        self.mininet_hosts = {}
+
+
+    def run_command_on_mininet_host(self, host_name:str, command:str, verbose: bool=True):
+        _logger.info(f"Running command: {command} on host: {host_name}\n")
+        host = self.mininet_hosts[host_name]
+        result = host.cmdPrint(command)
+        _logger.debug(f"Result after running: {command} on host: {host_name}\nResult: {result}\n")
+
+    def add_mininet_hosts(self, hosts: List[Host]): 
+        #TODO compatibility between topo and hosts
+        for host in hosts: 
+            #call topo hosts method which returns hosts as a list
+            if host.name not in self.hosts(): 
+                raise ValueError(f"Error in add_mininet_hosts. Host {host.name} is not present in {self.hosts}")
+
+            _logger.debug(f"Adding mininet host: {host.name} to self.mininet_hosts dictionary\n")
+            self.mininet_hosts[host.name] = host
 
     def add_switch(self, switch_name: str): 
 
-        if not isinstance(switch_name,str): 
+        if not isinstance(switch_name, str): 
             raise ValueError("Error in add_switch: switch_name should be a string.")
 
         new_switch=self.addSwitch(switch_name)
