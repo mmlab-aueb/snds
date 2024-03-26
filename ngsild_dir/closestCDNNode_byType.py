@@ -19,37 +19,73 @@ async def express_interest(interest_name):
         )
         return data_name, meta_info, content
     except InterestNack as e:
-        print(f'Nacked with reason={e.reason}')
+        _logger.error(f'Nacked with reason={e.reason}')
     except InterestTimeout:
-        print(f'Timeout')
+        _logger.error(f'Timeout')
     except InterestCanceled:
-        print(f'Canceled')
+        _logger.error(f'Canceled')
     except ValidationFailure:
-        print(f'Data failed to validate')
+        _logger.error(f'Data failed to validate')
 
 async def run():
+    # run inside the http_ngsild_proxy using 
+    # python closestCDNNode_byType requested_type
     requested_type = sys.argv[1]
+
     interest_name = '/snds/{}_registry'.format(requested_type)
-    #print('interest name ' + interest_name )
+
+    _logger.debug(f'Interest name: {interest_name}\n')
+
     data_name, meta_info, content = await express_interest(interest_name)
 
-    print(f"Received Data Name: {Name.to_str(data_name)}")
-    #print(meta_info)
+    _logger.info(f"Received Data Name in run: {Name.to_str(data_name)}\n")
+
     rIDs = list(content)
-    #print(rIDs)
 
     interest_name = '/snds/{}'.format(rIDs[-1])
-    #print('interest name ' + interest_name )
 
     data_name, meta_info, content = await express_interest(interest_name)
 
-    print(f"Received Data Name: {Name.to_str(data_name)}")
-    #print(meta_info)
+    _logger.info(f"Received Data Name: {Name.to_str(data_name)}\n")
+
     data = bytes(content)
     json_data = json.loads(data.decode())
-    print(json_data)
+
+    _logger.debug(f"JSON DATA RECEIVED: {json_data}\n")
 
     app.shutdown()
 
 if __name__ == '__main__':
-    app.run_forever(after_start=run())
+    # Define a new logging format
+    standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+
+    _logger = MininetLogger(os.path.basename(__file__))
+    #TODO hardcoded log level
+    _logger.setLogLevel('debug')
+    for handler in _logger.handlers:
+        handler.setFormatter(logging.Formatter(standard_logging))
+
+    try: 
+        app.run_forever(after_start=run())
+    except Exception as e: 
+        # Log the error message
+        _logger.error(f"An error occurred: {e}\n")
+
+        # Log the type of the exception
+        _logger.error(f"Exception type: {type(e).__name__}\n")
+
+        # Get a full traceback
+        import traceback
+        tb = traceback.format_exc()
+        _logger.error(f"Traceback: {tb}\n")
+    except BaseException as e: 
+        # This will catch everything, including KeyboardInterrupt, SystemExit, etc.
+        _logger.error(f"A non-standard exception occurred: {e}\n")
+
+        # Log the type of the exception
+        _logger.error(f"Exception type: {type(e).__name__}\n")
+
+        # Get a full traceback
+        import traceback
+        tb = traceback.format_exc()
+        _logger.error(f"Traceback: {tb}\n")

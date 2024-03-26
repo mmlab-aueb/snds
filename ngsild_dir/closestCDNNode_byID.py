@@ -9,7 +9,7 @@ import json
 
 app = NDNApp()
 
-async def main():
+async def run():
     try:
         id = sys.argv[1]
 
@@ -20,23 +20,55 @@ async def main():
             lifetime=6000
         )
 
-        print(f"Received Data Name: {Name.to_str(data_name)}")
+        _logger.info(f"Received Data Name: {Name.to_str(data_name)}\n")
         
-        #print(meta_info)
         data = bytes(content)
         json_data = json.loads(data.decode())
-        print(json_data)
+
+        _logger.debug("RECEIVED JSON DATA: {json_data}\n")
 
     except InterestNack as e:
-        print(f'Nacked with reason={e.reason}')
+        _logger.error(f'Nacked with reason={e.reason}\n')
     except InterestTimeout:
-        print(f'Timeout')
+        _logger.error(f'Timeout'\n)
     except InterestCanceled:
-        print(f'Canceled')
+        _logger.error(f'Canceled'\n)
     except ValidationFailure:
-        print(f'Data failed to validate')
+        _logger.error(f'Data failed to validate'\n)
     finally:
         app.shutdown()
 
 if __name__ == '__main__':
-    app.run_forever(after_start=main())
+    # Define a new logging format
+    standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+
+    _logger = MininetLogger(os.path.basename(__file__))
+    #TODO hardcoded log level
+    _logger.setLogLevel('debug')
+    for handler in _logger.handlers:
+        handler.setFormatter(logging.Formatter(standard_logging))
+
+    try: 
+        app.run_forever(after_start=run())
+    except Exception as e: 
+        # Log the error message
+        _logger.error(f"An error occurred: {e}\n")
+
+        # Log the type of the exception
+        _logger.error(f"Exception type: {type(e).__name__}\n")
+
+        # Get a full traceback
+        import traceback
+        tb = traceback.format_exc()
+        _logger.error(f"Traceback: {tb}\n")
+    except BaseException as e: 
+        # This will catch everything, including KeyboardInterrupt, SystemExit, etc.
+        _logger.error(f"A non-standard exception occurred: {e}\n")
+
+        # Log the type of the exception
+        _logger.error(f"Exception type: {type(e).__name__}\n")
+
+        # Get a full traceback
+        import traceback
+        tb = traceback.format_exc()
+        _logger.error(f"Traceback: {tb}\n")

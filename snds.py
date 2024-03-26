@@ -41,7 +41,7 @@ def setup_nodes(topo: CustomTopology):
         host_name='ngsild', 
         command=f'mkdir -p $HOME/tmp/ && mkdir -p /mini-ndn/app/logs/ && python /mini-ndn/app/ngsild_dir/http_ngsild_proxy.py 2>&1 | tee $HOME/tmp/http_ngsild_proxy_logs.log /mini-ndn/app/logs/http_ngsild_proxy_logs.log &'
     )
-
+    
     _, http_pid = result.split()
     http_pid = http_pid.strip()
 

@@ -35,7 +35,7 @@ class MyServer(BaseHTTPRequestHandler):
             id = query_params["id"][0]
             _logger.debug(f"Received ID in do_GET: {id}\n")
 
-            result = host.cmd('python closestCDNNode_byID.py ' + id.split(":")[-1])
+            result = host.cmd(f'python closestCDNNode_byID.py {id.split(":")[-1]}')
 
             _logger.debug(f"Result after running: python closestCDNNode_byID.py\nResult: {result}\n")
 
@@ -44,7 +44,7 @@ class MyServer(BaseHTTPRequestHandler):
             requested_type = query_params["type"][0]
             _logger.debug(f"Received requested_type: {requested_type} in do_GET.\n")
             
-            result = host.cmd('python closestCDNNode_byType.py ' + requested_type)
+            result = host.cmd(f'python closestCDNNode_byType.py {requested_type}')
 
             _logger.debug(f"Result after running: python closestCDNNode_byType.py\nResult: {result}\n")
 
