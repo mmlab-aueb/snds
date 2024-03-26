@@ -18,6 +18,18 @@ from Topology import CustomTopology
 #load_dotenv()
 
 
+def setup_nodes(topo: CustomTopology):
+    
+    topo.run_command_on_mininet_host(
+        host_name='ngsild', 
+        command=f'chmod u+x /mini-ndn/app/ngsild_dir/http_ngsild_proxy.py'
+    )
+
+    topo.run_command_on_mininet_host(
+        host_name='ngsild', 
+        command=f'export HOME=/mini-ndn/app/tmp/ngsild_tmp_dir && mkdir -p $HOME && python /mini-ndn/app/ngsild_dir/http_ngsild_proxy.py > $HOME/logs.log 2>&1 &'
+    )
+
 def run(_logger: MininetLogger):
     try: 
 
@@ -26,12 +38,13 @@ def run(_logger: MininetLogger):
         topo = CustomTopology()
 
         #Define hosts
+        #TODO hardcoded hosts 
         hosts = {
-            'producer'  : os.getenv('PRODUCER_HOSTNAME'),
-            'forwarder' : os.getenv('FORWARDER_HOSTNAME'),
-            'consumer'  : os.getenv('CONSUMER_HOSTNAME'),
-            'closest'   : os.getenv('CLOSEST_HOSTNAME'),
-            'ngsild'    : os.getenv('NGSILD_HOSTNAME')       
+            'producer': '10.0.0.1/8',
+            'forwarder': '10.0.0.2/8',
+            'consumer': '10.0.0.3/8',
+            'closest': '10.0.0.4/8',
+            'ngsild': '10.0.0.5/8'
         }
 
         _logger.info("Read hosts from environment variables\n")
@@ -51,21 +64,10 @@ def run(_logger: MininetLogger):
         nfds = AppManager(ndn, ndn.net.hosts, Nfd)
         _logger.info('Starting NLSR on nodes\n')
         nlsrs = AppManager(ndn, ndn.net.hosts, Nlsr)
-        #sleep(90)
-
 
         topo.add_mininet_hosts(ndn.net.hosts)
 
-        topo.run_command_on_mininet_host(
-            host_name='ngsild', 
-            command=f'ls'
-        )
-
-        topo.run_command_on_mininet_host(
-            host_name='ngsild', 
-            command=f'export HOME=/tmp/ngsild && python $HOME/http_ngsild_proxy.py'
-        )
-
+        setup_nodes(topo)
 
         MiniNDNCLI(ndn.net)
 
@@ -95,7 +97,8 @@ if __name__ == '__main__':
     standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
     _logger = MininetLogger(os.path.basename(__file__))
-    _logger.setLogLevel(os.getenv('LOG_LEVEL', 'info'))
+    #TODO hardcoded log level
+    _logger.setLogLevel('debug')
 
     for handler in _logger.handlers:
         handler.setFormatter(logging.Formatter(standard_logging))

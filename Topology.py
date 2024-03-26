@@ -13,7 +13,8 @@ from mininet.node import Host
 standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
 _logger = MininetLogger(os.path.basename(__file__))
-_logger.setLogLevel(os.getenv('LOG_LEVEL', 'info'))
+#TODO hardcoded log level
+_logger.setLogLevel('debug')
 for handler in _logger.handlers:
     handler.setFormatter(logging.Formatter(standard_logging))
 
@@ -37,11 +38,13 @@ class CustomTopology(Topo):
         self.mininet_hosts = {}
 
 
-    def run_command_on_mininet_host(self, host_name:str, command:str, verbose: bool=True):
+    def run_command_on_mininet_host(self, host_name:str, command:str, verbose: bool=True) -> str:
         _logger.info(f"Running command: {command} on host: {host_name}\n")
         host = self.mininet_hosts[host_name]
         result = host.cmdPrint(command)
         _logger.debug(f"Result after running: {command} on host: {host_name}\nResult: {result}\n")
+
+        return result
 
     def add_mininet_hosts(self, hosts: List[Host]): 
         #TODO compatibility between topo and hosts
