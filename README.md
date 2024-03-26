@@ -28,8 +28,10 @@ chmod +x run_through_docker.sh
 The files of the project will be found inside the ``/app/`` folder. You can run ``snds.py`` using: 
 
 ```
-python snds.py
+sudo python snds.py
 ```
+
+Note that sudo is important here. 
 
 ## Run without docker
 * Clone the mini-ndn repository (`git clone https://github.com/named-data/mini-ndn`)
