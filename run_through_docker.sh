@@ -6,10 +6,14 @@ docker stop snds-app || true  # The `|| true` ensures that the script continues 
 
 docker rm -f snds-app  # Remove the existing container if it exists
 
+# create the logs directory if it doesn't exist
+mkdir -p logs
+
 #Run interactive shell session
 docker run -m 4g --cpus=4 -it --privileged \
   --env-file .env \
   -v /lib/modules:/lib/modules \
+  -v ./logs:/mini-ndn/app/logs \
   --name snds-app \
   snds \
   /bin/bash
@@ -18,6 +22,7 @@ docker run -m 4g --cpus=4 -it --privileged \
 #docker run -m 4g --cpus=4 --privileged \
 #  --env-file .env \
 #  -v /lib/modules:/lib/modules \
+#  -v ./logs:/mini-ndn/app/ \
 #  --name snds-app \
 #  snds \
 #  sudo python snds.py

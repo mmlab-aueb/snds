@@ -1,6 +1,8 @@
 import os 
 import logging
 import typing
+import re
+import signal
 
 from mininet.log import MininetLogger
 from minindn.minindn import Minindn
@@ -27,9 +29,25 @@ def setup_nodes(topo: CustomTopology):
 
     topo.run_command_on_mininet_host(
         host_name='ngsild', 
-        command=f'export HOME=/mini-ndn/app/tmp/ngsild_tmp_dir && mkdir -p $HOME && python /mini-ndn/app/ngsild_dir/http_ngsild_proxy.py > $HOME/logs.log 2>&1 &'
+        command=f'chmod u+x /mini-ndn/app/ngsild_dir/closestCDNNode_byType.py'
     )
 
+    topo.run_command_on_mininet_host(
+        host_name='ngsild', 
+        command=f'chmod u+x /mini-ndn/app/ngsild_dir/closestCDNNode_byID.py'
+    )
+
+    result = topo.run_command_on_mininet_host(
+        host_name='ngsild', 
+        command=f'mkdir -p $HOME/tmp/ && mkdir -p /mini-ndn/app/logs/ && python /mini-ndn/app/ngsild_dir/http_ngsild_proxy.py 2>&1 | tee $HOME/tmp/http_ngsild_proxy_logs.log /mini-ndn/app/logs/http_ngsild_proxy_logs.log &'
+    )
+
+    _, http_pid = result.split()
+    http_pid = http_pid.strip()
+
+    _logger.debug(f"HTTP pid is:{http_pid}\n")
+
+    
 def run(_logger: MininetLogger):
     try: 
 
@@ -84,15 +102,29 @@ def run(_logger: MininetLogger):
         tb = traceback.format_exc()
         _logger.error(f"Traceback: {tb}\n")
 
-        Minindn.handleException()
-
     except BaseException as e:
         # This will catch everything, including KeyboardInterrupt, SystemExit, etc.
         _logger.error(f"A non-standard exception occurred: {e}\n")
 
+        # Log the type of the exception
+        _logger.error(f"Exception type: {type(e).__name__}\n")
+
+        # Get a full traceback
+        import traceback
+        tb = traceback.format_exc()
+        _logger.error(f"Traceback: {tb}\n")
+
+    finally:
+
+        #sanity check shutdown http server
+        topo.run_command_on_mininet_host(
+            host_name='ngsild', 
+            command=f'kill -SIGTERM {http_pid}'
+        )
         Minindn.handleException()
 
 if __name__ == '__main__':
+    http_pid = -1
     # Define a new logging format
     standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 

@@ -40,7 +40,12 @@ class CustomTopology(Topo):
 
     def run_command_on_mininet_host(self, host_name:str, command:str, verbose: bool=True) -> str:
         _logger.info(f"Running command: {command} on host: {host_name}\n")
-        host = self.mininet_hosts[host_name]
+        host = self.mininet_hosts.get(host_name, None) 
+
+        if host is None: 
+            _logger.error(f"Host {host_name} is not found in mininet_hosts\n")
+            return '' 
+
         result = host.cmdPrint(command)
         _logger.debug(f"Result after running: {command} on host: {host_name}\nResult: {result}\n")
 

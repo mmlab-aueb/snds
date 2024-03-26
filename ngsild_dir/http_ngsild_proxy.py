@@ -46,7 +46,7 @@ class MyServer(BaseHTTPRequestHandler):
             
             result = host.cmd('python closestCDNNode_byType.py ' + requested_type)
 
-            _logger.debug(f"Result after running: python3 closestCDNNode_byType.py\nResult: {result}\n")
+            _logger.debug(f"Result after running: python closestCDNNode_byType.py\nResult: {result}\n")
 
             self.wfile.write(bytes(result, encoding="utf-8"))
         
