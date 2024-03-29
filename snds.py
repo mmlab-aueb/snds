@@ -37,16 +37,33 @@ def setup_nodes(topo: CustomTopology):
         command=f'chmod u+x /mini-ndn/app/ngsild_dir/closestCDNNode_byID.py'
     )
 
+    topo.run_command_on_mininet_host(
+        host_name='producer',
+        command=f'chmod u+x /mini-ndn/app/producer_dir/SNDS_r_service.py',
+    )
+
     result = topo.run_command_on_mininet_host(
         host_name='ngsild', 
         command=f'mkdir -p $HOME/tmp/ && mkdir -p /mini-ndn/app/logs/ && python /mini-ndn/app/ngsild_dir/http_ngsild_proxy.py 2>&1 | tee $HOME/tmp/http_ngsild_proxy_logs.log /mini-ndn/app/logs/http_ngsild_proxy_logs.log &'
     )
     
+    global http_pid
     _, http_pid = result.split()
     http_pid = http_pid.strip()
 
-    _logger.debug(f"HTTP pid is:{http_pid}\n")
+    _logger.debug(f"HTTP/ngsild PID is:{http_pid}\n")
 
+
+    result = topo.run_command_on_mininet_host(
+        host_name='producer',
+        command=f'mkdir -p $HOME/tmp/ && mkdir -p /mini-ndn/app/logs/ && python /mini-ndn/app/producer_dir/SNDS_r_service.py 2>&1 | tee $HOME/tmp/producer_logs.log /mini-ndn/app/logs/producers_logs.log &'
+    )
+
+    global producer_pid
+    _, producer_pid = result.split()
+    producer_pid = producer_pid.split()
+
+    _logger.debug(f"Producer PID is:{producer_pid}\n")
     
 def run(_logger: MininetLogger):
     try: 
@@ -121,10 +138,18 @@ def run(_logger: MininetLogger):
             host_name='ngsild', 
             command=f'kill -SIGTERM {http_pid}'
         )
+
+        #sanity check shutdown producer server
+        topo.run_command_on_mininet_host(
+            host_name='ngsild', 
+            command=f'kill -SIGTERM {producer_pid}'
+        )
         Minindn.handleException()
 
 if __name__ == '__main__':
+    global http_pid, producer_pid
     http_pid = -1
+    producer_pid = -1
     # Define a new logging format
     standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
