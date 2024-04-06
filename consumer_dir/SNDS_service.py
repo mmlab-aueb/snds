@@ -2,26 +2,76 @@ from ndn.encoding   import Name, InterestParam, FormalName, BinaryStr
 from ndn.app        import NDNApp
 from ndn.types      import InterestNack, InterestTimeout, InterestCanceled, ValidationFailure
 from mininet.node   import Host
+from mininet.log    import MininetLogger
 from typing         import Optional
 
 import random 
 import json
+import logging
+import argparse
+import os
 
 app = NDNApp()
 
-snds_service = Host('consumer')
-snds_service.cmd('nlsrc advertise /snds/Car1')
+# Define a new logging format
+standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
-@app.route('/snds/Car1')
+_logger = MininetLogger(os.path.basename(__file__))
+#TODO hardcoded log level
+_logger.setLogLevel('debug')
+for handler in _logger.handlers:
+    handler.setFormatter(logging.Formatter(standard_logging))
+
+def parse_args(): 
+
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--host-name",
+        type=str,
+        required=True,
+    )
+
+    parser.add_argument(
+        "--r-type",
+        type=str, 
+        required=True,
+    )
+
+    parser.add_argument(
+        "--object-name", 
+        type=str, 
+        required=True,
+    )
+
+
+    return parser.parse_args()
+
+
+args = parse_args()
+
+host_name = args.host_name
+r_type = args.r_type
+object_name = args.object_name
+
+def advertisement_app_route(r_type: str): 
+    return f"/snds/{r_type}"
+
+app_route = advertisement_app_route()
+
+snds_service = Host(host_name)
+snds_service.cmd(f"nlsrc advertise {app_route}")
+
+@app.route(app_route)
 def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
-    print(f"Received Interest: {Name.to_str(name)}")
+    _logger.info(f"Received Interest: {Name.to_str(name)}")
 
-    with open("car1.jsonld", "r") as json_file:
+    with open(f"{object_name}.jsonld", "r") as json_file:
         json_content = json.load(json_file)
 
     app.put_data(name, content=json.dumps(json_content).encode(), freshness_period=10000)
 
-    print(f"Data sent: {Name.to_str(name)}")
+    _logger.debug(f"Data sent: {Name.to_str(name)}")
 
 
 async def main():
@@ -29,39 +79,42 @@ async def main():
         nonce = str(random.randint(0,100000000))
 
         data_name, meta_info, content = await app.express_interest (
-            '/snds/CAR/{}'.format(nonce),
+            '/snds/{}/{}'.format(r_type, nonce),
             must_be_fresh=True,
             can_be_prefix=False,
             lifetime=6000
         )
-        print(f"Received Data Name: {Name.to_str(data_name)}")
-        #print(meta_info)
-        print(bytes(content) if content else None)
+        _logger.info(f"Received Data Name: {Name.to_str(data_name)}")
+        _logger.debug(bytes(content) if content else None)
 
-        riD = str(int.from_bytes(content, 'big'))
+        rID = str(int.from_bytes(content, 'big'))
         #print(riD)
 
-        snds_service.cmd('nlsrc advertise /snds/' + riD)
+        snds_service.cmd(f"nlsrc advertise /snds/{rID}")
 
-        @app.route('/snds/' + riD)
+        @app.route(f"/snds/{rID}")
         def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
-            print(f"Received Interest: {Name.to_str(name)}")
+            _logger.info(f"Received Interest: {Name.to_str(name)}")
 
-            with open("car1.jsonld", "r") as json_file:
+            with open(f"{object_name}.jsonld", "r") as json_file:
                 json_content = json.load(json_file)
 
             app.put_data(name, content=json.dumps(json_content).encode(), freshness_period=10000)
 
-            print(f"Data sent: {Name.to_str(name)}")
+            _logger.debug(f"Data sent: {Name.to_str(name)}")
 
     except InterestNack as e:
-        print(f'Nacked with reason={e.reason}')
-    except InterestTimeout:
-        print(f'Timeout')
-    except InterestCanceled:
-        print(f'Canceled')
-    except ValidationFailure:
-        print(f'Data failed to validate')
+        _logger.error(f'Nacked with reason={e.reason}')
+        raise e
+    except InterestTimeout as e:
+        _logger.error('Timeout')
+        raise e
+    except InterestCanceled as e:
+        _logger.error('Canceled')
+        raise e
+    except ValidationFailure as e:
+        _logger.error('Data failed to validate')
+        raise e
 
 if __name__ == '__main__':
     app.run_forever(after_start=main())
