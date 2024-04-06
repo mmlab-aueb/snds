@@ -11,6 +11,7 @@ RUN pip install -r requirements.txt
 COPY Topology.py ./
 COPY ngsild_dir ./ngsild_dir/
 COPY producer_dir ./producer_dir/
+COPY consumer_dir ./consumer_dir/
 
 COPY scripts_for_nodes_config.yaml ./
 

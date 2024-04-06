@@ -6,7 +6,7 @@ from mininet.log import MininetLogger
 from minindn.minindn import Minindn
 from minindn.util import MiniNDNCLI
 from minindn.apps.app_manager import AppManager
-from minindn.apps.nfd import Nfd
+from minindn.apps.nfd import Nfd 
 from minindn.apps.nlsr import Nlsr
 
 #from dotenv import load_dotenv
@@ -37,6 +37,9 @@ def setup_nodes(topo: CustomTopology, yaml_path: str):
 
             # Join environment variables with spaces
             env_vars = " ".join(script['environment_variables'])
+
+            if script['name'] == 'http_ngsild_proxy.py': 
+                env_vars = f"--host-name {host_name} {env_vars}"
 
             # Construct the command, ensuring proper path and log file handling
             command = (

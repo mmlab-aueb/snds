@@ -20,6 +20,13 @@ def parse_args():
     
     parser = argparse.ArgumentParser()
 
+    # THE MININDN host name
+    parser.add_argument(
+        '--host-name',
+        type=str, 
+        required=True,
+    )
+
     parser.add_argument(
         "--host-ip",
         type=str,
@@ -48,10 +55,22 @@ class MyServer(BaseHTTPRequestHandler):
     def do_GET(self):
         self._set_headers()
 
-        host = Host('closest')
-        host.cmd('export HOME=/tmp/minindn/closest')
+        host = Host(host_name)
 
         query_params = parse_qs(urlparse(self.path).query)
+
+
+        if "provider" in query_params: 
+            id = query_params["id"][0]
+            r_type = query_params["type"][0]
+            
+            _logger.debug(f"Got query IP provider for id: {id} and type: {r_type}\n")
+
+            host.cmd(f"python digital_twin.py --id {id} --r-type {r_type}")
+
+            return 
+
+
         if "id" in query_params:
             id = query_params["id"][0]
             _logger.debug(f"Received ID in do_GET: {id}\n")
@@ -79,10 +98,13 @@ if __name__ == "__main__":
 
     host_ip: str = args.host_ip
     server_port: str = args.server_port
+    host_name: str = args.host_name
 
     _logger.debug(f"Read host_ip from environment: {host_ip}\n")
     _logger.debug(f"Read server_port from environment: {server_port}\n")
+    _logger.debug(f"Read host_name from environment: {host_name}\n")
 
+    
     webServer = HTTPServer((host_ip, int(server_port)), MyServer)
     _logger.info(f"Server started at http://{host_ip}:{server_port}\n")
     try:
