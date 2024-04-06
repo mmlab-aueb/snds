@@ -1,13 +1,31 @@
-from ndn.encoding   import Name, InterestParam, FormalName, BinaryStr
+from ndn.encoding   import Name
 from ndn.app        import NDNApp
 from ndn.types      import InterestNack, InterestTimeout, InterestCanceled, ValidationFailure
-from mininet.node   import Host
-from typing         import Optional
 
 import sys 
 import json
+import argparse
 
-app = NDNApp()
+# Define a new logging format
+standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+
+_logger = MininetLogger(os.path.basename(__file__))
+#TODO hardcoded log level
+_logger.setLogLevel('debug')
+for handler in _logger.handlers:
+    handler.setFormatter(logging.Formatter(standard_logging))
+
+def parse_args(): 
+
+    parser = argparse.ArgumentParser()
+
+    parser.add_arguments(
+        '--type', 
+        type=str, 
+        required=True
+    )
+
+    return parser.parse_args()
 
 async def express_interest(interest_name):
     try:
@@ -21,16 +39,19 @@ async def express_interest(interest_name):
     except InterestNack as e:
         _logger.error(f'Nacked with reason={e.reason}')
     except InterestTimeout:
-        _logger.error(f'Timeout')
+        _logger.error('Timeout')
     except InterestCanceled:
-        _logger.error(f'Canceled')
+        _logger.error('Canceled')
     except ValidationFailure:
-        _logger.error(f'Data failed to validate')
+        _logger.error('Data failed to validate')
 
 async def run():
-    # run inside the http_ngsild_proxy using 
-    # python closestCDNNode_byType requested_type
-    requested_type = sys.argv[1]
+
+    args = parse_args()
+
+    requested_type: str = args.type
+
+    app = NDNApp()
 
     interest_name = '/snds/{}_registry'.format(requested_type)
 
@@ -56,14 +77,6 @@ async def run():
     app.shutdown()
 
 if __name__ == '__main__':
-    # Define a new logging format
-    standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-
-    _logger = MininetLogger(os.path.basename(__file__))
-    #TODO hardcoded log level
-    _logger.setLogLevel('debug')
-    for handler in _logger.handlers:
-        handler.setFormatter(logging.Formatter(standard_logging))
 
     try: 
         app.run_forever(after_start=run())

@@ -1,21 +1,42 @@
 import os
 import logging
+import argparse
 
 from http.server    import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse   import urlparse, parse_qs
 from mininet.node   import Host
 from mininet.log    import MininetLogger
-#from dotenv import load_dotenv
 
-#load_dotenv()
+# Define a new logging format
+standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
-#TODO hardcoded port and ip
-hostName = "0.0.0.0"
-serverPort = 8080
+_logger = MininetLogger(os.path.basename(__file__))
+#TODO hardcoded log level
+_logger.setLogLevel('debug')
+for handler in _logger.handlers:
+    handler.setFormatter(logging.Formatter(standard_logging))
 
-#hostName = os.getenv('HTTP_PROXY_HOSTNAME')
-#serverPort = os.getenv('HTTP_PROXY_PORT')
+def parse_args():
+    
+    parser = argparse.ArgumentParser()
 
+    parser.add_argument(
+        "--host-ip",
+        type=str,
+        required=True, 
+        help="Specify the IP for the webserver."
+    )
+
+    parser.add_argument(
+        "--server-port",
+        type=str,
+        required=True,
+        help="Specify the port the webserver listens to."
+    )
+
+    args = parser.parse_args()
+
+    return args
 
 class MyServer(BaseHTTPRequestHandler):
 
@@ -35,7 +56,7 @@ class MyServer(BaseHTTPRequestHandler):
             id = query_params["id"][0]
             _logger.debug(f"Received ID in do_GET: {id}\n")
 
-            result = host.cmd(f'python closestCDNNode_byID.py {id.split(":")[-1]}')
+            result = host.cmd(f'python closestCDNNode_byID.py --id {id.split(":")[-1]}')
 
             _logger.debug(f"Result after running: python closestCDNNode_byID.py\nResult: {result}\n")
 
@@ -44,7 +65,7 @@ class MyServer(BaseHTTPRequestHandler):
             requested_type = query_params["type"][0]
             _logger.debug(f"Received requested_type: {requested_type} in do_GET.\n")
             
-            result = host.cmd(f'python closestCDNNode_byType.py {requested_type}')
+            result = host.cmd(f'python closestCDNNode_byType.py --type {requested_type}')
 
             _logger.debug(f"Result after running: python closestCDNNode_byType.py\nResult: {result}\n")
 
@@ -54,17 +75,16 @@ class MyServer(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
 
-    # Define a new logging format
-    standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    args = parse_args()
 
-    _logger = MininetLogger(os.path.basename(__file__))
-    #TODO hardcoded log level
-    _logger.setLogLevel('debug')
-    for handler in _logger.handlers:
-        handler.setFormatter(logging.Formatter(standard_logging))
+    host_ip: str = args.host_ip
+    server_port: str = args.server_port
 
-    webServer = HTTPServer((hostName, serverPort), MyServer)
-    _logger.info(f"Server started at http://{hostName}:{serverPort}\n")
+    _logger.debug(f"Read host_ip from environment: {host_ip}\n")
+    _logger.debug(f"Read server_port from environment: {server_port}\n")
+
+    webServer = HTTPServer((host_ip, int(server_port)), MyServer)
+    _logger.info(f"Server started at http://{host_ip}:{server_port}\n")
     try:
         webServer.serve_forever()
     except Exception as e: 

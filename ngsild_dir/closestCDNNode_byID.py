@@ -1,17 +1,37 @@
-from ndn.encoding   import Name, InterestParam, FormalName, BinaryStr
+from ndn.encoding   import Name
 from ndn.app        import NDNApp
 from ndn.types      import InterestNack, InterestTimeout, InterestCanceled, ValidationFailure
-from mininet.node   import Host
-from typing         import Optional
+from mininet.log    import MininetLogger
 
-import sys 
 import json
+import argparse
+import os
+import logging
 
-app = NDNApp()
+# Define a new logging format
+standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+
+_logger = MininetLogger(os.path.basename(__file__))
+#TODO hardcoded log level
+_logger.setLogLevel('debug')
+for handler in _logger.handlers:
+    handler.setFormatter(logging.Formatter(standard_logging))
+
+def parse_args(): 
+
+    parser = argparse.ArgumentParser()
+
+    parser.add_arguments(
+        '--id', 
+        type=str, 
+        required=True
+    )
+
+    return parser.parse_args()
+
 
 async def run():
     try:
-        id = sys.argv[1]
 
         data_name, meta_info, content = await app.express_interest (
             '/snds/{}'.format(id),
@@ -23,30 +43,32 @@ async def run():
         _logger.info(f"Received Data Name: {Name.to_str(data_name)}\n")
         
         data = bytes(content)
-        json_data = json.loads(data.decode())
+        json.loads(data.decode())
 
         _logger.debug("RECEIVED JSON DATA: {json_data}\n")
 
     except InterestNack as e:
         _logger.error(f'Nacked with reason={e.reason}\n')
-    except InterestTimeout:
-        _logger.error(f'Timeout'\n)
-    except InterestCanceled:
-        _logger.error(f'Canceled'\n)
-    except ValidationFailure:
-        _logger.error(f'Data failed to validate'\n)
+        raise e
+    except InterestTimeout as e:
+        _logger.error('Timeout\n')
+        raise e
+    except InterestCanceled as e:
+        _logger.error('Canceled\n')
+        raise e
+    except ValidationFailure as e:
+        _logger.error('Data failed to validate\n')
+        raise e
     finally:
         app.shutdown()
 
 if __name__ == '__main__':
-    # Define a new logging format
-    standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    
+    args = parse_args()
 
-    _logger = MininetLogger(os.path.basename(__file__))
-    #TODO hardcoded log level
-    _logger.setLogLevel('debug')
-    for handler in _logger.handlers:
-        handler.setFormatter(logging.Formatter(standard_logging))
+    id: str = args.id
+
+    app = NDNApp()
 
     try: 
         app.run_forever(after_start=run())
