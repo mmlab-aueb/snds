@@ -1,8 +1,6 @@
 import os 
 import logging
-import typing
-import re
-import signal
+import yaml
 
 from mininet.log import MininetLogger
 from minindn.minindn import Minindn
@@ -11,7 +9,6 @@ from minindn.apps.app_manager import AppManager
 from minindn.apps.nfd import Nfd
 from minindn.apps.nlsr import Nlsr
 
-from time import sleep
 #from dotenv import load_dotenv
 
 # self made topology class
@@ -19,51 +16,41 @@ from Topology import CustomTopology
 
 #load_dotenv()
 
-
-def setup_nodes(topo: CustomTopology):
-    
-    topo.run_command_on_mininet_host(
-        host_name='ngsild', 
-        command=f'chmod u+x /mini-ndn/app/ngsild_dir/http_ngsild_proxy.py'
-    )
-
-    topo.run_command_on_mininet_host(
-        host_name='ngsild', 
-        command=f'chmod u+x /mini-ndn/app/ngsild_dir/closestCDNNode_byType.py'
-    )
-
-    topo.run_command_on_mininet_host(
-        host_name='ngsild', 
-        command=f'chmod u+x /mini-ndn/app/ngsild_dir/closestCDNNode_byID.py'
-    )
-
-    topo.run_command_on_mininet_host(
-        host_name='producer',
-        command=f'chmod u+x /mini-ndn/app/producer_dir/SNDS_r_service.py',
-    )
-
-    result = topo.run_command_on_mininet_host(
-        host_name='ngsild', 
-        command=f'mkdir -p $HOME/tmp/ && mkdir -p /mini-ndn/app/logs/ && python /mini-ndn/app/ngsild_dir/http_ngsild_proxy.py 2>&1 | tee $HOME/tmp/http_ngsild_proxy_logs.log /mini-ndn/app/logs/http_ngsild_proxy_logs.log &'
-    )
-    
-    global http_pid
-    _, http_pid = result.split()
-    http_pid = http_pid.strip()
-
-    _logger.debug(f"HTTP/ngsild PID is:{http_pid}\n")
+def setup_nodes(topo: CustomTopology, yaml_path: str):
 
 
-    result = topo.run_command_on_mininet_host(
-        host_name='producer',
-        command=f'mkdir -p $HOME/tmp/ && mkdir -p /mini-ndn/app/logs/ && python /mini-ndn/app/producer_dir/SNDS_r_service.py 2>&1 | tee $HOME/tmp/producer_logs.log /mini-ndn/app/logs/producers_logs.log &'
-    )
+    #read the script yaml file 
+    with open(yaml_path, 'r') as file: 
+        data = yaml.safe_load(file)
 
-    global producer_pid
-    _, producer_pid = result.split()
-    producer_pid = producer_pid.split()
+    for script in data['scripts']:
+        for host_name in topo.hosts_dictionary.keys():
 
-    _logger.debug(f"Producer PID is:{producer_pid}\n")
+            # Ensure the script is executable
+            topo.run_command_on_mininet_host(
+                host_name=host_name,
+                command=f"chmod u+x {script['path']}{script['name']}"
+            )
+
+            if not script['run_from_main']:
+                continue
+
+            # Join environment variables with spaces
+            env_vars = " ".join(script['environment_variables'])
+
+            # Construct the command, ensuring proper path and log file handling
+            command = (
+                f"mkdir -p $HOME/tmp/ && "
+                f"mkdir -p {script['log_path']} && "
+                f"python {script['path']}{script['name']} {env_vars} "
+                f"2>&1 | tee $HOME/tmp/{script['log']} {script['log_path']}{script['log']} &"
+            )
+
+            topo.run_command_on_mininet_host(
+                host_name=host_name,
+                command=command
+            )
+
     
 def run(_logger: MininetLogger):
     try: 
@@ -102,7 +89,7 @@ def run(_logger: MininetLogger):
 
         topo.add_mininet_hosts(ndn.net.hosts)
 
-        setup_nodes(topo)
+        setup_nodes(topo, './scripts_for_nodes_config.yaml')
 
         MiniNDNCLI(ndn.net)
 
