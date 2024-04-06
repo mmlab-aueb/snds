@@ -28,6 +28,8 @@ scripts:
     log: "SNDS_service_logs.log"
     log_path: "/mini-ndn/app/logs/"
     environment_variables:
+      - '--host-name'
+      - 'consumer'
       - '--object'
       - 'item1'
       - '--r-type'

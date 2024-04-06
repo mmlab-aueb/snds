@@ -120,17 +120,6 @@ def run(_logger: MininetLogger):
 
     finally:
 
-        #sanity check shutdown http server
-        topo.run_command_on_mininet_host(
-            host_name='ngsild', 
-            command=f'kill -SIGTERM {http_pid}'
-        )
-
-        #sanity check shutdown producer server
-        topo.run_command_on_mininet_host(
-            host_name='ngsild', 
-            command=f'kill -SIGTERM {producer_pid}'
-        )
         Minindn.handleException()
 
 if __name__ == '__main__':

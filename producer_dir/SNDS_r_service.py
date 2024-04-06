@@ -37,7 +37,7 @@ def parse_args():
     )
 
     parser.add_argument(
-        "--host-hame", 
+        "--host-name", 
         type=str, 
         required=True,
         help="Specify the host name the service will run in."
