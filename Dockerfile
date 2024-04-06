@@ -12,6 +12,8 @@ COPY Topology.py ./
 COPY ngsild_dir ./ngsild_dir/
 COPY producer_dir ./producer_dir/
 
+COPY scripts_for_nodes_config.yaml ./
+
 # Make sure to import main script last as its that will probably change
 COPY snds.py ./
 
