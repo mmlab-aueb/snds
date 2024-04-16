@@ -3,6 +3,7 @@ import logging
 import yaml
 import shlex
 
+from time import sleep
 
 from mininet.log import MininetLogger
 from minindn.minindn import Minindn
@@ -36,6 +37,7 @@ def setup_nodes(topo: CustomTopology, yaml_path: str):
                 command=f"chmod u+x {script['path']}{script['name']}"
             )
 
+
             if not script['run_from_main']:
                 continue
 
@@ -52,10 +54,37 @@ def setup_nodes(topo: CustomTopology, yaml_path: str):
 
             env_vars = " ".join(env_vars_processed)
 
-            # Construct the command
             command = (
                 f"mkdir -p $HOME/tmp/ && "
-                f"mkdir -p {script['log_path']}/{host_name}/ && "
+                f"mkdir -p $HOME/log/ && "
+                f"mkdir -p {script['log_path']}/{host_name}/ "
+            )
+
+
+            result = topo.run_command_on_mininet_host(
+                host_name=host_name,
+                command=command
+            )
+
+            # Construct the command
+            command = (
+                f"inotifywait -m -r -e modify -e move -e create -e delete --format '%w%f' '/tmp/minindn/{host_name}/log' | "
+                f"while read file; do "
+                f"rsync -az '/tmp/minindn/{host_name}/log' '{script['log_path']}/{host_name}/' ; "
+                f"done &"
+            )
+
+            result = topo.run_command_on_mininet_host(
+                host_name=host_name,
+                command=command
+            )
+
+            if len(result.split()) == 2: 
+                _, pid = result.split()
+                background_service_pids.append({"host_name": host_name, "pid": pid})
+
+            # Construct the command
+            command = (
                 f"python {script['path']}{script['name']} {env_vars} "
                 f"2>&1 | tee {script['log_path']}/{host_name}/{script['log']}"
             )
@@ -68,7 +97,7 @@ def setup_nodes(topo: CustomTopology, yaml_path: str):
                 command=command
             )
 
-            if script["background_service"]: 
+            if len(result.split()) == 2: 
                 _, pid = result.split()
                 background_service_pids.append({"host_name": host_name, "pid": pid})
 
@@ -103,16 +132,16 @@ def run(_logger: MininetLogger):
 
         ndn.start()
 
+        for host in ndn.net.hosts: 
+            _logger.debug(f"Node: {host.params}\n")
         _logger.info('Starting NFD on nodes\n')
-        nfds = AppManager(ndn, ndn.net.hosts, Nfd)
+        nfds = AppManager(ndn, ndn.net.hosts, Nfd, logLevel="DEBUG")
         _logger.info('Starting NLSR on nodes\n')
         nlsrs = AppManager(ndn, ndn.net.hosts, Nlsr)
 
         topo.add_mininet_hosts(ndn.net.hosts)
 
         setup_nodes(topo, './scripts_for_nodes_config.yaml')
-
-        print(background_service_pids)
 
         MiniNDNCLI(ndn.net)
 

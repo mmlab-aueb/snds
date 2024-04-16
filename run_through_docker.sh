@@ -13,7 +13,7 @@ mkdir -p logs
 docker run -m 4g --cpus=4 -it --privileged \
   --env-file .env \
   -v /lib/modules:/lib/modules \
-  -v ./logs:/mini-ndn/app/logs \
+  -v ./logs:/app/logs \
   --name snds-app \
   snds \
   /bin/bash
