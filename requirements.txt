@@ -1,1 +1,1 @@
-ndn-python-repo==0.2a5
+ndn-python-repo==0.3
