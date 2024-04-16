@@ -33,6 +33,14 @@ sudo python snds.py
 
 Note that sudo is important here. 
 
+You should also run using: 
+
+```
+sudo python snds.py 2>&1 | tee logs/snds.log
+```
+
+To redirect the output to both stdout and stderr's to the snds.log file.
+
 ## Run without docker
 * Clone the mini-ndn repository (`git clone https://github.com/named-data/mini-ndn`)
 * Install mini-ndn by running (`./install.sh`)
