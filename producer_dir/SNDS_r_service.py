@@ -63,6 +63,9 @@ _logger.debug(f"Read host-name from environment: {host_name}\n")
 app_route: str = advertisement_app_route(r_type)
 app_route_registry: str = advertisement_app_route_registry(r_type)
 
+_logger.debug(f"App route: {app_route}\n")
+_logger.debug(f"App route registry: {app_route_registry}\n")
+
 snds_r_service = Host(host_name)
 snds_r_service.cmd(f"nlsrc advertise {app_route}")
 snds_r_service.cmd(f"nlsrc advertise {app_route_registry}")

@@ -8,7 +8,7 @@ scripts:
       - '0.0.0.0'
       - '--server-port'
       - '8080'
-      - '&'  # background service
+    background_service: True
     run_from_main: True
 
   - name: "SNDS_r_service.py"
@@ -18,38 +18,32 @@ scripts:
     environment_variables:
       - '--r-type'
       - 'car'
-      - '--host-name'
-      - 'producer'
-      - '&'  # background service
+    background_service: True
     run_from_main: True
 
   - name: "SNDS_service.py"
     path: "/mini-ndn/app/consumer_dir/"
     log: "SNDS_service_logs.log"
     log_path: "/mini-ndn/app/logs/"
-    environment_variables:
-      - '--host-name'
-      - 'consumer'
-      - '--object'
-      - 'item1'
-      - '--r-type'
-      - 'car'
+    environment_variables: []
     run_from_main: False
 
   - name: "closestCDNNode_byType.py"
     path: "/mini-ndn/app/ngsild_dir/"
     # shares file with proxy
-    log: ""
-    log_path: ""
+    log: "closestCDNNODE_byType.log"
+    log_path: "/mini-ndn/app/logs/"
     # inputted dynamically inside http proxy
     environment_variables: []
+    background_service: False
     run_from_main: False
 
   - name: "closestCDNNode_byID.py"
     path: "/mini-ndn/app/ngsild_dir/"
     # shares file with proxy
-    log: ""
-    log_path: ""
+    log: "closestCDNNode_byID.log"
+    log_path: "/mini-ndn/app/logs"
     # inputted dynamically inside http proxy
     environment_variables: []
+    background_service: False
     run_from_main: False

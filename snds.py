@@ -1,6 +1,8 @@
 import os 
 import logging
 import yaml
+import shlex
+
 
 from mininet.log import MininetLogger
 from minindn.minindn import Minindn
@@ -15,6 +17,8 @@ from minindn.apps.nlsr import Nlsr
 from Topology import CustomTopology
 
 #load_dotenv()
+
+background_service_pids = []
 
 def setup_nodes(topo: CustomTopology, yaml_path: str):
 
@@ -35,24 +39,38 @@ def setup_nodes(topo: CustomTopology, yaml_path: str):
             if not script['run_from_main']:
                 continue
 
-            # Join environment variables with spaces
-            env_vars = " ".join(script['environment_variables'])
+            env_vars_processed = []
 
-            if script['name'] == 'http_ngsild_proxy.py': 
-                env_vars = f"--host-name {host_name} {env_vars}"
+            for i in range(0, len(script["environment_variables"]), 2):
 
-            # Construct the command, ensuring proper path and log file handling
+                if i+1 < len(script["environment_variables"]): 
+                    env_var = f"{script['environment_variables'][i]}={script['environment_variables'][i+1]}"
+
+                env_vars_processed.append(shlex.quote(env_var))
+           
+            env_vars_processed.append(shlex.quote(f"--host-name={host_name}"))
+
+            env_vars = " ".join(env_vars_processed)
+
+            # Construct the command
             command = (
                 f"mkdir -p $HOME/tmp/ && "
-                f"mkdir -p {script['log_path']} && "
+                f"mkdir -p {script['log_path']}/{host_name}/ && "
                 f"python {script['path']}{script['name']} {env_vars} "
-                f"2>&1 | tee $HOME/tmp/{script['log']} {script['log_path']}{script['log']} &"
+                f"2>&1 | tee {script['log_path']}/{host_name}/{script['log']}"
             )
 
-            topo.run_command_on_mininet_host(
+            if script["background_service"]: 
+                command += ' &'
+
+            result = topo.run_command_on_mininet_host(
                 host_name=host_name,
                 command=command
             )
+
+            if script["background_service"]: 
+                _, pid = result.split()
+                background_service_pids.append({"host_name": host_name, "pid": pid})
 
     
 def run(_logger: MininetLogger):
@@ -94,6 +112,8 @@ def run(_logger: MininetLogger):
 
         setup_nodes(topo, './scripts_for_nodes_config.yaml')
 
+        print(background_service_pids)
+
         MiniNDNCLI(ndn.net)
 
         ndn.stop()
@@ -122,13 +142,24 @@ def run(_logger: MininetLogger):
         _logger.error(f"Traceback: {tb}\n")
 
     finally:
+        # Assume background_service_pids holds PIDs of the background services
+        for service in background_service_pids:
+
+            pid = service["pid"]
+            host_name = service["host_name"]
+
+            kill_command = f"kill {pid}"
+        
+            # Execute the kill command on the appropriate host
+            # Assuming `host_name` is known or determined earlier
+            kill_result = topo.run_command_on_mininet_host(
+                host_name=host_name,
+                command=kill_command,
+            )
 
         Minindn.handleException()
 
 if __name__ == '__main__':
-    global http_pid, producer_pid
-    http_pid = -1
-    producer_pid = -1
     # Define a new logging format
     standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
