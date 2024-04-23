@@ -1,9 +1,9 @@
 import os 
 import logging
 import yaml
+import argparse
 import shlex
 
-from time import sleep
 
 from mininet.log import MininetLogger
 from minindn.minindn import Minindn
@@ -102,33 +102,54 @@ def setup_nodes(topo: CustomTopology, yaml_path: str):
                 background_service_pids.append({"host_name": host_name, "pid": pid})
 
     
-def run(_logger: MininetLogger):
+def run():
     try: 
 
         Minindn.cleanUp()
         Minindn.verifyDependencies()
-        topo = CustomTopology()
+        custom_topo = CustomTopology()
 
-        #Define hosts
-        #TODO hardcoded hosts 
-        hosts = {
-            'producer': '10.0.0.1/8',
-            'forwarder': '10.0.0.2/8',
-            'consumer': '10.0.0.3/8',
-            'closest': '10.0.0.4/8',
-            'ngsild': '10.0.0.5/8'
-        }
+        args = parse_args()
 
-        _logger.info("Read hosts from environment variables\n")
+        if not args.topo_file_custom:
 
-        topo.add_hosts(hosts)
-        topo.add_switch('switch1')
+            #Define hosts
+            #TODO hardcoded hosts 
+            hosts = {
+                'producer': '10.0.0.1/8',
+                'forwarder': '10.0.0.2/8',
+                'consumer': '10.0.0.3/8',
+                'closest': '10.0.0.4/8',
+                'ngsild': '10.0.0.5/8'
+            }
 
-        for host_name, _ in topo.hosts_dictionary.items(): 
-            topo.add_switch_link_for_host(host_name, 'switch1', delay='10ms')
+            _logger.info("Read hosts from environment variables\n")
+
+            for host_name in hosts.keys():
+                custom_topo.add_host(host_name=host_name)
+
+            #topo.add_hosts(hosts)
+            custom_topo.add_switch('switch1')
+
+            for host_name, _ in custom_topo.hosts_dictionary.items(): 
+                custom_topo.add_link(host_name, 'switch1', delay='10ms')
+            
+            _logger.debug(f"Nodes inside topo: {custom_topo.g.node}\n")
+            _logger.debug(f"Links inside topo: {custom_topo.g.edge}\n")
+        else:  
+           
+            topo, faces = custom_topo.processTopo(args.topo_file_custom)
 
 
-        ndn = Minindn(topo=topo)
+            for node_name, extra_params in topo.g.node.items():
+                custom_topo.add_host(node_name, **extra_params)
+
+            for node_name, links in topo.g.edge.items():
+                for dest_node, link_details in links.items():
+                    for link_id, params in link_details.items():
+                        custom_topo.add_link(**params)
+
+        ndn = Minindn(topo=custom_topo)
 
         ndn.start()
 
@@ -188,6 +209,18 @@ def run(_logger: MininetLogger):
 
         Minindn.handleException()
 
+def parse_args(): 
+
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--topo-file-custom", 
+        type=str, 
+    )
+
+
+    return parser.parse_args()
+
 if __name__ == '__main__':
     # Define a new logging format
     standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -199,7 +232,5 @@ if __name__ == '__main__':
     for handler in _logger.handlers:
         handler.setFormatter(logging.Formatter(standard_logging))
 
-    run(_logger)
-
-        
+    run()
 

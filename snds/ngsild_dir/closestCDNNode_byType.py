@@ -1,10 +1,12 @@
 from ndn.encoding   import Name
 from ndn.app        import NDNApp
 from ndn.types      import InterestNack, InterestTimeout, InterestCanceled, ValidationFailure
+from mininet.log    import MininetLogger
 
-import sys 
 import json
 import argparse
+import os
+import logging
 
 # Define a new logging format
 standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -78,6 +80,7 @@ async def run():
 
 if __name__ == '__main__':
 
+    app = NDNApp()
     try: 
         app.run_forever(after_start=run())
     except Exception as e: 

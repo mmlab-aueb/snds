@@ -1,8 +1,8 @@
 scripts:
   - name: "http_ngsild_proxy.py"
-    path: "/app/ngsild_dir/"
+    path: "/app/snds/ngsild_dir/"
     log: "http_ngsild_proxy_logs.log"
-    log_path: "/app/logs/"
+    log_path: "/app/snds/logs/"
     environment_variables:
       - '--host-ip'
       - '0.0.0.0'
@@ -12,9 +12,9 @@ scripts:
     run_from_main: True
 
   - name: "SNDS_r_service.py"
-    path: "/app/producer_dir/"
+    path: "/app/snds/producer_dir/"
     log: "SNDS_r_service_logs.log"
-    log_path: "/app/logs/"
+    log_path: "/app/snds/logs/"
     environment_variables:
       - '--r-type'
       - 'car'
@@ -22,27 +22,27 @@ scripts:
     run_from_main: True
 
   - name: "SNDS_service.py"
-    path: "/app/consumer_dir/"
+    path: "/app/snds/forwarder_dir/"
     log: "SNDS_service_logs.log"
-    log_path: "/app/logs/"
+    log_path: "/app/snds/logs/"
     environment_variables: []
     run_from_main: False
 
   - name: "closestCDNNode_byType.py"
-    path: "/app/ngsild_dir/"
+    path: "/app/snds/ngsild_dir/"
     # shares file with proxy
     log: "closestCDNNODE_byType.log"
-    log_path: "/app/logs/"
+    log_path: "/app/snds/logs/"
     # inputted dynamically inside http proxy
     environment_variables: []
     background_service: False
     run_from_main: False
 
   - name: "closestCDNNode_byID.py"
-    path: "/app/ngsild_dir/"
+    path: "/app/snds/ngsild_dir/"
     # shares file with proxy
     log: "closestCDNNode_byID.log"
-    log_path: "/app/logs"
+    log_path: "/app/snds/logs"
     # inputted dynamically inside http proxy
     environment_variables: []
     background_service: False

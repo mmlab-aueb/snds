@@ -64,14 +64,14 @@ snds_service.cmd(f"nlsrc advertise {app_route}")
 
 @app.route(app_route)
 def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
-    _logger.info(f"Received Interest: {Name.to_str(name)}")
+    _logger.info(f"Received Interest: {Name.to_str(name)}\n")
 
     with open(f"{object_name}.jsonld", "r") as json_file:
         json_content = json.load(json_file)
 
     app.put_data(name, content=json.dumps(json_content).encode(), freshness_period=10000)
 
-    _logger.debug(f"Data sent: {Name.to_str(name)}")
+    _logger.debug(f"Data sent: {Name.to_str(name)}\n")
 
 
 async def main():
@@ -84,24 +84,25 @@ async def main():
             can_be_prefix=False,
             lifetime=6000
         )
-        _logger.info(f"Received Data Name: {Name.to_str(data_name)}")
+        _logger.info(f"Received Data Name: {Name.to_str(data_name)}\n")
         _logger.debug(bytes(content) if content else None)
 
         rID = str(int.from_bytes(content, 'big'))
-        #print(riD)
 
-        snds_service.cmd(f"nlsrc advertise /snds/{rID}")
+        _logger.debug(f"rID received: {rID}\n")
 
-        @app.route(f"/snds/{rID}")
-        def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
-            _logger.info(f"Received Interest: {Name.to_str(name)}")
+        # snds_service.cmd(f"nlsrc advertise /snds/{rID}")
 
-            with open(f"{object_name}.jsonld", "r") as json_file:
-                json_content = json.load(json_file)
+       # @app.route(f"/snds/{rID}")
+       # def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
+       #     _logger.info(f"Received Interest: {Name.to_str(name)}")
 
-            app.put_data(name, content=json.dumps(json_content).encode(), freshness_period=10000)
+       #     with open(f"{object_name}.jsonld", "r") as json_file:
+       #         json_content = json.load(json_file)
 
-            _logger.debug(f"Data sent: {Name.to_str(name)}")
+       #     app.put_data(name, content=json.dumps(json_content).encode(), freshness_period=10000)
+
+       #     _logger.debug(f"Data sent: {Name.to_str(name)}")
 
     except InterestNack as e:
         _logger.error(f'Nacked with reason={e.reason}')
