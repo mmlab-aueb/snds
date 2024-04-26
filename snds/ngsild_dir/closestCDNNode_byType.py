@@ -53,8 +53,6 @@ async def run():
 
     requested_type: str = args.type
 
-    app = NDNApp()
-
     interest_name = '/snds/{}_registry'.format(requested_type)
 
     _logger.debug(f'Interest name: {interest_name}\n')
@@ -75,8 +73,6 @@ async def run():
     json_data = json.loads(data.decode())
 
     _logger.debug(f"JSON DATA RECEIVED: {json_data}\n")
-
-    app.shutdown()
 
 if __name__ == '__main__':
 

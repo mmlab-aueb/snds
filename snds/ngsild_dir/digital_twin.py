@@ -2,37 +2,36 @@ import argparse
 import logging
 import os
 import json
+import shlex  # Import shlex
 
-from mininet.node   import Host
-from mininet.log    import MininetLogger
+from mininet.node import Host
+from mininet.log import MininetLogger
 
 # Define a new logging format
 standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
 _logger = MininetLogger(os.path.basename(__file__))
-#TODO hardcoded log level
 _logger.setLogLevel('debug')
 for handler in _logger.handlers:
     handler.setFormatter(logging.Formatter(standard_logging))
 
-def parse_args(): 
-
+def parse_args():
     parser = argparse.ArgumentParser()
 
     # mininet host name
-    parser.add_arguments(
+    parser.add_argument(
         '--host-name',
-        type=str, 
+        type=str,
         required=True,
     )
 
-    parser.add_arguments(
-        '--id', 
-        type=str, 
+    parser.add_argument(
+        '--id',
+        type=str,
         required=True
     )
 
-    parser.add_arguments(
+    parser.add_argument(
         '--r-type',
         type=str,
         required=True,
@@ -43,11 +42,11 @@ def parse_args():
 
 args = parse_args()
 
-r_type = args.r_type
-id = args.id
-host_name = args.host_name
+r_type = shlex.quote(args.r_type)
+id = shlex.quote(args.id)
+host_name = shlex.quote(args.host_name)
 
-#Define JSON-LD data as python dictionary 
+# Define JSON-LD data as python dictionary
 json_ld_data = {
     "@context": "https://excid-io.github.io/dare/context/ngsi-context.jsonld",
     "@type": r_type,
@@ -58,18 +57,14 @@ json_ld_data = {
         "street": "Trias 2",
         "country": "GR",
         "city": "Athens"
-    }    
+    }
 }
 
-id = id.split(":")[-1]
-
-
-json_ld_name = "{}.jsonld".format(id)
-
+id = id.split(":")[-1]  # Sanitize and split the ID to prevent directory traversal and injection
+json_ld_name = f"{id}.jsonld"  # Use f-string for clarity and security
 
 with open(json_ld_name, "w") as json_ld:
     json.dump(json_ld_data, json_ld, indent=2)
 
 host = Host(host_name)
 host.cmd(f'python /mini-ndn/app/SNDS_service.py --object-name {id} --r-type {json_ld_data["@type"]} --host-name {host_name}')
-

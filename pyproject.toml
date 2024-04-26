@@ -14,3 +14,9 @@ dependencies = [
     "PyYAML==6.0.1",
     "configparser==7.0.0",
 ]
+
+authors = [
+    { name = "Fotios Bistas", email = "fotis.bistas@gmail.com" },
+    { name = "Iakovos Pittaras", email = "jac-pittaras@live.com" }
+]
+
