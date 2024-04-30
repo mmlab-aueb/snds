@@ -1,33 +1,32 @@
 import aiohttp
-import os
-import logging
 
-from mininet.log    import MininetLogger
+from contextlib import asynccontextmanager
+#from mininet.log    import MininetLogger
 from typing import Dict, Any, AsyncGenerator
 
 # Define a new logging format
-standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+#standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+#
+#_logger = MininetLogger(os.path.basename(__file__))
+##TODO hardcoded log level
+#_logger.setLogLevel('debug')
 
-_logger = MininetLogger(os.path.basename(__file__))
-#TODO hardcoded log level
-_logger.setLogLevel('debug')
+#for handler in _logger.handlers:
+#    handler.setFormatter(logging.Formatter(standard_logging))
 
-for handler in _logger.handlers:
-    handler.setFormatter(logging.Formatter(standard_logging))
-
+@asynccontextmanager
 async def _aiohttp_get(headers: Dict[str, Any], url: str, params: Dict[str, Any]) -> AsyncGenerator:
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url, headers=headers, params=params) as response:
+    async with aiohttp.ClientSession(headers=headers) as session:
+        async with session.get(url, params=params) as response:
             yield response
 
-
 async def get_request(url: str, headers: Dict[str, Any], params: Dict[str, Any]):
-    try: 
-        async with _aiohttp_get(headers=headers, url=url, params=params) as response:
-            # Check if the response status is successful (e.g., 200 OK)
+    try:
+        # Check if the response status is successful (e.g., 200 OK) if response.status != 200:
+        async with _aiohttp_get(headers=headers, url=url, params=params) as response: 
             if response.status != 200:
                 error_message = await response.text()
-                raise aiohttp.http_exceptions.HttpProcessingError(code=response.status, message=f"Unexpected status {response.status}: {error_message}")
+                raise aiohttp.HttpProcessingError(message=f"Unexpected status {response.status}: {error_message}", status=response.status)
 
             content_type = response.headers.get("Content-Type")  # Accessing headers directly
 
@@ -44,5 +43,6 @@ async def get_request(url: str, headers: Dict[str, Any], params: Dict[str, Any])
         import traceback
         # Correctly format and log the traceback
         log_message = ''.join(traceback.format_exception(None, e, e.__traceback__))
-        _logger.error("Failed to process HTTP request: " + log_message)
+        print(log_message)
+        #_logger.error("Failed to process HTTP request: " + log_message)
         
