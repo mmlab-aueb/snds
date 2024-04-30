@@ -10,7 +10,7 @@ name = "snds"
 version = "0.1.0"
 dependencies = [
     "aiohttp==3.9.3",
-    "python-ndn==0.4.2",
+    "ndn-python-repo==0.3",
     "PyYAML==6.0.1",
     "configparser==7.0.0",
 ]

@@ -41,10 +41,6 @@ object_name = shlex.quote(args.object_name)
 def advertisement_app_route(r_type: str):
     return f"/snds/{r_type}"
 
-def rid_app_route(rID: int): 
-
-    return f"/snds/{rID}"
-
 app_route = advertisement_app_route(r_type)
 
 snds_service = Host(host_name)
@@ -70,23 +66,10 @@ async def main():
             lifetime=6000
         )
         _logger.info(f"Received Data Name: {Name.to_str(data_name)}\n")
-        _logger.debug(bytes(content) if content else None + "\n")
+        _logger.debug(bytes(content) if content else None)
 
         rID = str(int.from_bytes(content, 'big'))
         _logger.debug(f"rID received: {rID}\n")
-
-        snds_service.cmd(f"nlsrc advertise {rid_app_route(rID)}")
-
-        @app.route(f"/snds/{rID}")
-        def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
-            _logger.info(f"Received Interest: {Name.to_str(name)}\n")
-
-            with open("{}.jsonld".format(object_name), "r") as json_file:
-                json_content = json.load(json_file)
-
-            app.put_data(name, content=json.dumps(json_content).encode(), freshness_period=10000)
-
-            _logger.debug(f"Data sent: {Name.to_str(name)}\n")
 
     except InterestNack as e:
         _logger.error(f'Nacked with reason={e.reason}')
@@ -102,4 +85,4 @@ async def main():
         raise e
 
 if __name__ == '__main__':
-    app.run_forever(after_start=main())
+    app.run_forever(after_start=main)
