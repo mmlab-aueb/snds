@@ -64,12 +64,14 @@ _logger.debug(f"App route: {app_route}\n")
 _logger.debug(f"App route registry: {app_route_registry}\n")
 
 snds_r_service = Host(host_name)
-snds_r_service.cmd(f"nlsrc advertise {app_route}")
-snds_r_service.cmd(f"nlsrc advertise {app_route_registry}")
+result = snds_r_service.cmd(f"nlsrc advertise {app_route}")
+_logger.debug(f"Result after running nlsrc advertise {app_route}:\nResult: {result}\n")
+result = snds_r_service.cmd(f"nlsrc advertise {app_route_registry}")
+_logger.debug(f"Result after running nlsrc advertise {app_route_registry}:\nResult: {result}\n")
 
 @app.route(app_route)
 def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
-    _logger.info(f"Received Interest: {Name.to_str(name)}\n")
+    _logger.info(f"Received Interest: {Name.to_str(name)}\nFor route: {app_route}\n")
 
     # Create the rID
     r_ID = random.randint(0,200)
@@ -80,17 +82,17 @@ def on_interest(name: FormalName, interest_param: InterestParam, app_param: Opti
 
     app.put_data(name, content=(rIDs[-1].to_bytes(2, 'big')), freshness_period=10000)
 
-    _logger.info(f"Data sent: {Name.to_str(name)}\n")
+    _logger.info(f"Data sent: {Name.to_str(name)}\nFrom route: {app_route}\n")
 
 @app.route(app_route_registry)
-def on_interest_registry(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
-    _logger.info(f"Received Interest: {Name.to_str(name)}\n")
+def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
+    _logger.info(f"Received Interest: {Name.to_str(name)}\nFor route: {app_route_registry}\n")
 
     _logger.debug(f"rIDs: {rIDs}\n")
 
     app.put_data(name, content=bytes(rIDs), freshness_period=10000)
 
-    _logger.info(f"Data sent: {Name.to_str(name)}\n")
+    _logger.info(f"Data sent: {Name.to_str(name)}\nFrom route: {app_route_registry}\n")
 
 # This file runs inside the producer
 if __name__ == '__main__':

@@ -38,6 +38,8 @@ host_name = shlex.quote(args.host_name)
 r_type = shlex.quote(args.r_type)
 object_name = shlex.quote(args.object_name)
 
+_logger.debug(f"Arguments inside SNDS_service:\nhost_name: {host_name}\nr_type: {r_type}\nobject_name: {object_name}\n")
+
 def advertisement_app_route(r_type: str):
     return f"/snds/{r_type}"
 
@@ -52,13 +54,13 @@ _logger.debug(f"Result after running nlsrc advertise {app_route}:\nResult {resul
 
 @app.route(app_route)
 def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
-    _logger.info(f"Received Interest: {Name.to_str(name)}\n")
+    _logger.info(f"Received Interest: {Name.to_str(name)}\nFor route: {app_route}\n")
 
     with open(f"{object_name}.jsonld", "r") as json_file:
         json_content = json.load(json_file)
 
     app.put_data(name, content=json.dumps(json_content).encode(), freshness_period=10000)
-    _logger.debug(f"Data sent: {Name.to_str(name)}\n")
+    _logger.debug(f"Data sent: {Name.to_str(name)}\nFrom route: {app_route}\n")
 
 async def main():
     try:
@@ -70,25 +72,26 @@ async def main():
             lifetime=6000
         )
         _logger.info(f"Received Data Name: {Name.to_str(data_name)}\n")
-        _logger.debug(bytes(content) if content else None + "\n")
+        _logger.debug(bytes(content) if content else "" + "\n")
 
         rID = str(int.from_bytes(content, 'big'))
         _logger.debug(f"rID received: {rID}\n")
+        
+        rid_app_route_str = rid_app_route(rID)
+        result = snds_service.cmd(f"nlsrc advertise {rid_app_route_str}")
 
-        result = snds_service.cmd(f"nlsrc advertise {rid_app_route(rID)}")
+        _logger.debug(f"Result after running nlsrc advertise {rid_app_route_str}:\nResult {result}\n")
 
-        _logger.debug(f"Result after running nlsrc advertise {rid_app_route(rID)}:\nResult {result}\n")
-
-        @app.route(rid_app_route(rID))
+        @app.route(rid_app_route_str)
         def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
-            _logger.info(f"Received Interest: {Name.to_str(name)}\n")
+            _logger.info(f"Received Interest: {Name.to_str(name)}\nFor route: {rid_app_route_str}\n")
 
             with open("{}.jsonld".format(object_name), "r") as json_file:
                 json_content = json.load(json_file)
 
             app.put_data(name, content=json.dumps(json_content).encode(), freshness_period=10000)
 
-            _logger.debug(f"Data sent: {Name.to_str(name)}\n")
+            _logger.debug(f"Data sent: {Name.to_str(name)}\nFrom route: {rid_app_route_str}\n")
 
     except InterestNack as e:
         _logger.error(f'Nacked with reason={e.reason}\n')
@@ -106,6 +109,7 @@ async def main():
     except Exception as e:
         _logger.error(f"Non standard exception occured: {e}\n")
         _logger.info(f"Closing SNDS service.\n")
+        app.shutdown()
     
 
 if __name__ == '__main__':
