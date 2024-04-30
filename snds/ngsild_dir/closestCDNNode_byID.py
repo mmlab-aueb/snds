@@ -43,9 +43,15 @@ async def run():
         _logger.info(f"Received Data Name: {Name.to_str(data_name)}\n")
         
         data = bytes(content)
-        json.loads(data.decode())
+        json_data = json.loads(data.decode())
 
         _logger.debug("RECEIVED JSON DATA: {json_data}\n")
+
+        json_ld_name = "{}.jsonld".format(id)
+
+        with open(json_ld_name, "w") as json_ld:
+            json.dump(json_data, json_ld, indent=2)
+
 
     except InterestNack as e:
         _logger.error(f'Nacked with reason={e.reason}\n')
@@ -67,6 +73,8 @@ if __name__ == '__main__':
     args = parse_args()
 
     id: str = args.id
+
+    _logger.debug(f"Read ID from environment variable: {id}")
 
     app = NDNApp()
 
@@ -94,3 +102,5 @@ if __name__ == '__main__':
         import traceback
         tb = traceback.format_exc()
         _logger.error(f"Traceback: {tb}\n")
+
+

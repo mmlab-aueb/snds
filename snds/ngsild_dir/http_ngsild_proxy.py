@@ -73,7 +73,7 @@ class MyServer(BaseHTTPRequestHandler):
             id = shlex.quote(query_params["id"][0])
             _logger.debug(f"Received ID in do_GET: {id}\n")
             result = host.cmd(f'python closestCDNNode_byID.py --id {id.split(":")[-1]}')
-            _logger.debug(f"Result after running: python closestCDNNode_byID.py\nResult: {result}\n")
+            _logger.debug(f"Result after running: python closestCDNNode_byID.py --id {id.split(':')[-1]}\nResult: {result}\n")
             self.wfile.write(bytes(result, "utf-8"))
             return
 
