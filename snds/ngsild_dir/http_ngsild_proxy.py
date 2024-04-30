@@ -64,7 +64,9 @@ class MyServer(BaseHTTPRequestHandler):
             r_type = shlex.quote(query_params["type"][0])
 
             _logger.debug(f"Got query IP provider for id: {id} and type: {r_type}\n")
-            host.cmd(f"python digital_twin.py --id {id} --r-type {r_type}")
+            result = host.cmd(f"python digital_twin.py --host-name {host_name} --id {id} --r-type {r_type}")
+            _logger.debug(f"Result after running: python digital_twin.py\nResult: {result}\n")
+            self.wfile.write(bytes(result, "utf-8"))
             return
 
         if "id" in query_params:

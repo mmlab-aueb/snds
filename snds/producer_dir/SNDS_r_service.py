@@ -1,13 +1,14 @@
 import argparse
 import logging
 import os
-import json
 import shlex
 import random
 from ndn.app import NDNApp
 from ndn.encoding import Name, InterestParam, BinaryStr, FormalName
 from mininet.node import Host
 from mininet.log import MininetLogger
+
+from typing import Optional
 
 # Define a new logging format
 standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'

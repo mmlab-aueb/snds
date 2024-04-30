@@ -32,6 +32,8 @@ async def get_request(url: str, headers: Dict[str, Any], params: Dict[str, Any])
 
             if content_type and "application/json" in content_type:
                 return await response.json()
+            elif content_type and "text/html" in content_type:
+                return await response.text()
             else:
                 # If the content type is not application/json, raise an exception
                 raise aiohttp.ContentTypeError(

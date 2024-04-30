@@ -47,3 +47,36 @@ scripts:
     environment_variables: []
     background_service: False
     run_from_main: False
+
+
+  - name: "digital_twin.py"
+    path: "/app/snds/ngsild_dir/"
+    log: "digital_twin.log"
+    log_path: "/app/snds/logs/"
+    environment_variables: []
+    background_service: False
+    run_from_main: False
+ 
+  - name: "ip_provider.py"
+    path: "/app/snds/consumer_dir/"
+    log: "ip_provider.log"
+    log_path: "/app/snds/logs/"
+    environment_variables: []
+    background_service: False
+    run_from_main: False
+
+  - name: "consumer_by_id.py"
+    path: "/app/snds/consumer_dir/"
+    log: "consumer_by_id.log"
+    log_path: "/app/snds/logs/"
+    environment_variables: []
+    background_service: False
+    run_from_main: False
+
+  - name: "consumer_by_type.py"
+    path: "/app/snds/consumer_dir/"
+    log: "consumer_by_type.log"
+    log_path: "/app/snds/logs"
+    environment_variables: []
+    background_service: False
+    run_from_main: False

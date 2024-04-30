@@ -30,8 +30,6 @@ def setup_nodes(custom_topo: CustomTopology, yaml_path: str):
     with open(yaml_path, 'r') as file:
         data = yaml.safe_load(file)
 
-    print(custom_topo.hosts_dictionary)
-
     for script in data['scripts']:
         for host_name in custom_topo.hosts_dictionary.keys():
 
@@ -42,6 +40,10 @@ def setup_nodes(custom_topo: CustomTopology, yaml_path: str):
             )
 
 
+            custom_topo.run_command_on_mininet_host(
+                host_name=host_name,
+                command=f"cp {script['path']}{script['name']} $HOME"
+            )
             if not script['run_from_main']:
                 continue
 
@@ -70,13 +72,13 @@ def setup_nodes(custom_topo: CustomTopology, yaml_path: str):
                 command=command
             )
 
-            # Construct the command
-            command = (
-                f"inotifywait -m -r -e modify -e move -e create -e delete --format '%w%f' '/tmp/minindn/{host_name}/log' | "
-                f"while read file; do "
-                f"rsync -az '/tmp/minindn/{host_name}/log' '{script['log_path']}/{host_name}/' ; "
-                f"done &"
-            )
+            # Construct the command to log the nlsr and nfd logs
+            #command = (
+            #    f"inotifywait -m -r -e modify -e move -e create -e delete --format '%w%f' '/tmp/minindn/{host_name}/log' | "
+            #    f"while read file; do "
+            #    f"rsync -az '/tmp/minindn/{host_name}/log' '{script['log_path']}/{host_name}/' ; "
+            #    f"done &"
+            #)
 
             result = custom_topo.run_command_on_mininet_host(
                 host_name=host_name,

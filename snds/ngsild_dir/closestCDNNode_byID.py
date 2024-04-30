@@ -21,7 +21,7 @@ def parse_args():
 
     parser = argparse.ArgumentParser()
 
-    parser.add_arguments(
+    parser.add_argument(
         '--id', 
         type=str, 
         required=True
