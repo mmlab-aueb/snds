@@ -41,10 +41,14 @@ object_name = shlex.quote(args.object_name)
 def advertisement_app_route(r_type: str):
     return f"/snds/{r_type}"
 
+def rid_app_route(rid: int):
+    return f"/snds/{rid}"
+
 app_route = advertisement_app_route(r_type)
 
 snds_service = Host(host_name)
-snds_service.cmd(f"nlsrc advertise {app_route}")
+result = snds_service.cmd(f"nlsrc advertise {app_route}")
+_logger.debug(f"Result after running nlsrc advertise {app_route}:\nResult {result}\n")
 
 @app.route(app_route)
 def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
@@ -66,23 +70,43 @@ async def main():
             lifetime=6000
         )
         _logger.info(f"Received Data Name: {Name.to_str(data_name)}\n")
-        _logger.debug(bytes(content) if content else None)
+        _logger.debug(bytes(content) if content else None + "\n")
 
         rID = str(int.from_bytes(content, 'big'))
         _logger.debug(f"rID received: {rID}\n")
 
+        result = snds_service.cmd(f"nlsrc advertise {rid_app_route(rID)}")
+
+        _logger.debug(f"Result after running nlsrc advertise {rid_app_route(rID)}:\nResult {result}\n")
+
+        @app.route(rid_app_route(rID))
+        def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
+            _logger.info(f"Received Interest: {Name.to_str(name)}\n")
+
+            with open("{}.jsonld".format(object_name), "r") as json_file:
+                json_content = json.load(json_file)
+
+            app.put_data(name, content=json.dumps(json_content).encode(), freshness_period=10000)
+
+            _logger.debug(f"Data sent: {Name.to_str(name)}\n")
+
     except InterestNack as e:
-        _logger.error(f'Nacked with reason={e.reason}')
+        _logger.error(f'Nacked with reason={e.reason}\n')
         raise e
     except InterestTimeout as e:
-        _logger.error('Timeout')
+        _logger.error('Timeout: {e.reason}\n')
         raise e
     except InterestCanceled as e:
-        _logger.error('Canceled')
+        _logger.error('Canceled: {e.reason}\n')
         raise e
     except ValidationFailure as e:
-        _logger.error('Data failed to validate')
+        _logger.error('Data failed to validate: {e.reason}\n')
         raise e
 
+    except Exception as e:
+        _logger.error(f"Non standard exception occured: {e}\n")
+        _logger.info(f"Closing SNDS service.\n")
+    
+
 if __name__ == '__main__':
-    app.run_forever(after_start=main)
+    app.run_forever(after_start=main())

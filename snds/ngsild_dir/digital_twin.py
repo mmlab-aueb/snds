@@ -43,14 +43,14 @@ def parse_args():
 args = parse_args()
 
 r_type = shlex.quote(args.r_type)
-id = shlex.quote(args.id)
+id_w = shlex.quote(args.id)
 host_name = shlex.quote(args.host_name)
 
 # Define JSON-LD data as python dictionary
 json_ld_data = {
     "@context": "https://excid-io.github.io/dare/context/ngsi-context.jsonld",
     "@type": r_type,
-    "@id": id,
+    "@id": id_w,
     "speed": 60,
     "location": {
         "@type": "Address",
@@ -60,16 +60,16 @@ json_ld_data = {
     }
 }
 
-id = id.split(":")[-1]  # Sanitize and split the ID to prevent directory traversal and injection
-json_ld_name = f"{id}.jsonld"  # Use f-string for clarity and security
+id_w = id_w.split(":")[-1]  # Sanitize and split the ID to prevent directory traversal and injection
+json_ld_name = f"{id_w}.jsonld"  # Use f-string for clarity and security
 
 with open(json_ld_name, "w") as json_ld:
-    _logger.debug(f"Opening JSON file: {json_ld_name}\n")
+    _logger.debug(f"Writing to JSON file: {json_ld_name}\n")
     json.dump(json_ld_data, json_ld, indent=2)
 
 host = Host(host_name)
-result = host.cmd(f'python SNDS_service.py --object-name {id} --r-type {json_ld_data["@type"]} --host-name {host_name}')
+result = host.cmd(f'python SNDS_service.py --object-name {id_w} --r-type {json_ld_data["@type"]} --host-name {host_name}')
 
 
-_logger.debug(f"Result after running SNDS_service with object-name {id}, r-type {json_ld_data['@type']} and host-name {host_name}\n:Result {result}\n")
+_logger.debug(f"Result after running SNDS_service with object-name {id_w}, r-type {json_ld_data['@type']} and host-name {host_name}\n:Result {result}\n")
 
