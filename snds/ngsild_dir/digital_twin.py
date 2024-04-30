@@ -68,7 +68,7 @@ with open(json_ld_name, "w") as json_ld:
     json.dump(json_ld_data, json_ld, indent=2)
 
 host = Host(host_name)
-result = host.cmd(f'python SNDS_service.py --object-name {id_w} --r-type {json_ld_data["@type"]} --host-name {host_name}')
+result = host.cmd(f'python SNDS_service.py --object-name {id_w} --r-type {json_ld_data["@type"]} --host-name {host_name} &')
 
 
 _logger.debug(f"Result after running SNDS_service with object-name {id_w}, r-type {json_ld_data['@type']} and host-name {host_name}\n:Result {result}\n")
