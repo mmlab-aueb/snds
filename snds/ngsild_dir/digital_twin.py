@@ -64,7 +64,12 @@ id = id.split(":")[-1]  # Sanitize and split the ID to prevent directory travers
 json_ld_name = f"{id}.jsonld"  # Use f-string for clarity and security
 
 with open(json_ld_name, "w") as json_ld:
+    _logger.debug(f"Opening JSON file: {json_ld_name}\n")
     json.dump(json_ld_data, json_ld, indent=2)
 
 host = Host(host_name)
-host.cmd(f'python /mini-ndn/app/SNDS_service.py --object-name {id} --r-type {json_ld_data["@type"]} --host-name {host_name}')
+result = host.cmd(f'python SNDS_service.py --object-name {id} --r-type {json_ld_data["@type"]} --host-name {host_name}')
+
+
+_logger.debug(f"Result after running SNDS_service with object-name {id}, r-type {json_ld_data['@type']} and host-name {host_name}\n:Result {result}\n")
+

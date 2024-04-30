@@ -17,7 +17,7 @@ scripts:
     log_path: "/app/snds/logs/"
     environment_variables:
       - '--r-type'
-      - 'car'
+      - 'Car'
     background_service: True
     run_from_main: True
 
@@ -26,6 +26,7 @@ scripts:
     log: "SNDS_service_logs.log"
     log_path: "/app/snds/logs/"
     environment_variables: []
+    background_service: False
     run_from_main: False
 
   - name: "closestCDNNode_byType.py"

@@ -15,6 +15,7 @@ from minindn.apps.nlsr import Nlsr
 #from dotenv import load_dotenv
 
 from pprint import pprint
+from time import sleep
 
 # self made topology class
 from Topology import CustomTopology
@@ -139,6 +140,8 @@ def run():
         nfds = AppManager(ndn, ndn.net.hosts, Nfd, logLevel="DEBUG")
         _logger.info('Starting NLSR on nodes\n')
         nlsrs = AppManager(ndn, ndn.net.hosts, Nlsr)
+
+        sleep(40)
 
         custom_topo.add_mininet_hosts(ndn.net.hosts)
 
