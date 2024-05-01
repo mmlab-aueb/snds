@@ -32,7 +32,8 @@ def parse_args():
 
 async def run():
     try:
-
+        
+        _logger.info(f"Expressing interest on id: {id}\n")
         data_name, meta_info, content = await app.express_interest (
             '/snds/{}'.format(id),
             must_be_fresh=True,
@@ -74,7 +75,7 @@ if __name__ == '__main__':
 
     id: str = args.id
 
-    _logger.debug(f"Read ID from environment variable: {id}")
+    _logger.debug(f"Read ID from environment variable: {id}\n")
 
     app = NDNApp()
 

@@ -16,7 +16,7 @@ scripts:
     log: "SNDS_r_service_logs.log"
     log_path: "/app/snds/logs/"
     environment_variables:
-      - '--r-type'
+      - '--type'
       - 'Car'
     background_service: True
     run_from_main: True

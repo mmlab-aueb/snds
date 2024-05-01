@@ -28,37 +28,35 @@ def parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        "--r-type",
+        "--type",
         type=str,
         required=True,
-        help="Specify the R-type the service will advertise"
     )
 
     parser.add_argument(
         "--host-name",
         type=str,
         required=True,
-        help="Specify the host name the service will run in."
     )
 
     return parser.parse_args()
 
-def advertisement_app_route(r_type: str):
-    return f"/snds/{r_type}"
+def advertisement_app_route(snds_type: str):
+    return f"/snds/{snds_type}"
 
-def advertisement_app_route_registry(r_type: str):
-    return f"/snds/{r_type}_registry"
+def advertisement_app_route_registry(snds_type: str):
+    return f"/snds/{snds_type}_registry"
 
 args = parse_args()
 
 # Sanitize inputs
-r_type: str = shlex.quote(args.r_type)
+snds_type: str = shlex.quote(args.type)
 host_name: str = shlex.quote(args.host_name)
 
-app_route: str = advertisement_app_route(r_type)
-app_route_registry: str = advertisement_app_route_registry(r_type)
+app_route: str = advertisement_app_route(snds_type)
+app_route_registry: str = advertisement_app_route_registry(snds_type)
 
-_logger.debug(f"Read R-type from environment: {r_type}\n")
+_logger.debug(f"Read SNDS-type from environment: {snds_type}\n")
 _logger.debug(f"Read host-name from environment: {host_name}\n")
 
 _logger.debug(f"App route: {app_route}\n")

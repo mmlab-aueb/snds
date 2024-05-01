@@ -26,7 +26,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--host-name", type=str, required=True)
-    parser.add_argument("--r-type", type=str, required=True)
+    parser.add_argument("--type", type=str, required=True)
     parser.add_argument("--object-name", type=str, required=True)
 
     return parser.parse_args()
@@ -35,18 +35,18 @@ args = parse_args()
 
 # Sanitize inputs
 host_name = shlex.quote(args.host_name)
-r_type = shlex.quote(args.r_type)
+snds_type = shlex.quote(args.type)
 object_name = shlex.quote(args.object_name)
 
-_logger.debug(f"Arguments inside SNDS_service:\nhost_name: {host_name}\nr_type: {r_type}\nobject_name: {object_name}\n")
+_logger.debug(f"Arguments inside SNDS_service:\nhost_name: {host_name}\nsnds_type: {snds_type}\nobject_name: {object_name}\n")
 
-def advertisement_app_route(r_type: str):
-    return f"/snds/{r_type}"
+def advertisement_app_route(snds_type: str):
+    return f"/snds/{snds_type}"
 
 def rid_app_route(rid: int):
     return f"/snds/{rid}"
 
-app_route = advertisement_app_route(r_type)
+app_route = advertisement_app_route(snds_type)
 
 # Function to run a command and return a combined result
 def run_subprocess(command):
@@ -74,7 +74,7 @@ async def main():
     try:
         nonce = str(random.randint(0,100000000))
         data_name, meta_info, content = await app.express_interest(
-            f'/snds/{r_type}/{nonce}',
+            f'/snds/{snds_type}/{nonce}',
             must_be_fresh=True,
             can_be_prefix=False,
             lifetime=6000

@@ -28,7 +28,7 @@ def parse_args():
     )
 
     parser.add_argument(
-        "--rID", 
+        "--id", 
         type=str, 
         required=True,
     )
@@ -51,7 +51,7 @@ args = parse_args()
 
 ip = args.ip
 snds_type = args.type
-rID = args.rID
+id = args.id
 port = args.port
 
 
@@ -65,7 +65,7 @@ headers = {
 
 params = {
     'provider': 'provider1',
-    'id': f'urn:ngsi-ld:{snds_type}:{rID}',
+    'id': f'urn:ngsi-ld:{snds_type}:{id}',
     'type': snds_type,
 }
 

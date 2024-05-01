@@ -22,7 +22,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        "--rID",
+        "--id",
         type=str, 
         required=True,
     )
@@ -46,7 +46,7 @@ _logger.info("---Read a single record by id---\n")
 args = parse_args()
 
 ip = args.ip
-rID = args.rID
+id = args.id 
 port = args.port
 
 url = f"http://{ip}:{port}"
@@ -58,7 +58,7 @@ headers = {
 params = {
     #TODO what in the name of god is this?
     'consumer': 'consumer1',
-    'id':f'urn:ngsi-ld:Car:{rID}',
+    'id':f'urn:ngsi-ld:Car:{id}',
 }
 
 response = asyncio.run(get_request(url=url, headers=headers, params=params))
