@@ -1,7 +1,6 @@
 from ndn.encoding import Name, InterestParam, FormalName, BinaryStr
 from ndn.app import NDNApp
 from ndn.types import InterestNack, InterestTimeout, InterestCanceled, ValidationFailure
-from mininet.node import Host
 from mininet.log import MininetLogger
 from typing import Optional
 
@@ -11,6 +10,7 @@ import logging
 import argparse
 import os
 import shlex
+import subprocess
 
 app = NDNApp()
 
@@ -48,8 +48,16 @@ def rid_app_route(rid: int):
 
 app_route = advertisement_app_route(r_type)
 
-snds_service = Host(host_name)
-result = snds_service.cmd(f"nlsrc advertise {app_route}")
+# Function to run a command and return a combined result
+def run_subprocess(command):
+    result = subprocess.run(command, capture_output=True, text=True)
+    # Combining stdout, stderr, and return code into a single string
+    combined_output = f"STDOUT: {result.stdout}\nSTDERR: {result.stderr}\nReturn Code: {result.returncode}\n"
+    return combined_output
+
+#snds_service = Host(host_name)
+#result = snds_service.cmd(f"nlsrc advertise {app_route}")
+result = run_subprocess(["nlsrc", "advertise", app_route])
 _logger.debug(f"Result after running nlsrc advertise {app_route}:\nResult {result}\n")
 
 @app.route(app_route)
@@ -78,7 +86,8 @@ async def main():
         _logger.debug(f"rID received: {rID}\n")
         
         rid_app_route_str = rid_app_route(rID)
-        result = snds_service.cmd(f"nlsrc advertise {rid_app_route_str}")
+        #result = snds_service.cmd(f"nlsrc advertise {rid_app_route_str}")
+        result = run_subprocess(["nlsrc", "advertise", rid_app_route_str])
 
         _logger.debug(f"Result after running nlsrc advertise {rid_app_route_str}:\nResult {result}\n")
 
@@ -108,7 +117,7 @@ async def main():
 
     except Exception as e:
         _logger.error(f"Non standard exception occured: {e}\n")
-        _logger.info(f"Closing SNDS service.\n")
+        _logger.info("Closing SNDS service.\n")
         app.shutdown()
     
 

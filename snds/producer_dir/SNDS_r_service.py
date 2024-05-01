@@ -3,9 +3,10 @@ import logging
 import os
 import shlex
 import random
+import subprocess 
+
 from ndn.app import NDNApp
 from ndn.encoding import Name, InterestParam, BinaryStr, FormalName
-from mininet.node import Host
 from mininet.log import MininetLogger
 
 from typing import Optional
@@ -63,11 +64,29 @@ _logger.debug(f"Read host-name from environment: {host_name}\n")
 _logger.debug(f"App route: {app_route}\n")
 _logger.debug(f"App route registry: {app_route_registry}\n")
 
-snds_r_service = Host(host_name)
-result = snds_r_service.cmd(f"nlsrc advertise {app_route}")
+#snds_r_service = Host(host_name)
+
+# Function to run a command and return a combined result
+def run_subprocess(command):
+    result = subprocess.run(command, capture_output=True, text=True)
+    # Combining stdout, stderr, and return code into a single string
+    combined_output = f"STDOUT: {result.stdout}\nSTDERR: {result.stderr}\nReturn Code: {result.returncode}\n"
+    return combined_output
+
+
+result = run_subprocess(["nlsrc", "advertise", app_route])
 _logger.debug(f"Result after running nlsrc advertise {app_route}:\nResult: {result}\n")
-result = snds_r_service.cmd(f"nlsrc advertise {app_route_registry}")
+
+
+result = run_subprocess(["nlsrc", "advertise", app_route_registry])
 _logger.debug(f"Result after running nlsrc advertise {app_route_registry}:\nResult: {result}\n")
+
+#subprocess.run(["nlsrc", "advertise", app_route_registry])
+
+#result = snds_r_service.cmd(f"nlsrc advertise {app_route}")
+#_logger.debug(f"Result after running nlsrc advertise {app_route}:\nResult: {result}\n")
+#result = snds_r_service.cmd(f"nlsrc advertise {app_route_registry}")
+#_logger.debug(f"Result after running nlsrc advertise {app_route_registry}:\nResult: {result}\n")
 
 @app.route(app_route)
 def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
