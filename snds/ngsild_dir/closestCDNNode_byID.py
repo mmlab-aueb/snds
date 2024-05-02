@@ -46,7 +46,7 @@ async def run():
         data = bytes(content)
         json_data = json.loads(data.decode())
 
-        _logger.debug("RECEIVED JSON DATA: {json_data}\n")
+        _logger.debug(f"RECEIVED JSON DATA: {json_data}\n")
 
         json_ld_name = "{}.jsonld".format(id)
 

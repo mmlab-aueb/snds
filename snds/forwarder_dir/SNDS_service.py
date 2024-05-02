@@ -40,13 +40,13 @@ object_name = shlex.quote(args.object_name)
 
 _logger.debug(f"Arguments inside SNDS_service:\nhost_name: {host_name}\nsnds_type: {snds_type}\nobject_name: {object_name}\n")
 
-def advertisement_app_route(snds_type: str):
-    return f"/snds/{snds_type}"
+def advertisement_app_route(object_name: str):
+    return f"/snds/{object_name}"
 
 def rid_app_route(rid: int):
     return f"/snds/{rid}"
 
-app_route = advertisement_app_route(snds_type)
+app_route = advertisement_app_route(object_name)
 
 # Function to run a command and return a combined result
 def run_subprocess(command):
