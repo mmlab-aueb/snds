@@ -28,7 +28,7 @@ chmod +x run_through_docker.sh
 The files of the project will be found inside the ``/app/`` folder. You can run ``snds.py`` using: 
 
 ```
-sudo python snds.py
+sudo python snds.py <specify_conf_file_here>
 ```
 
 Note that sudo is important here. 
@@ -36,7 +36,7 @@ Note that sudo is important here.
 You should also run using: 
 
 ```
-sudo python snds.py 2>&1 | tee logs/snds.log
+sudo python snds.py <specify_conf_file_here> 2>&1 | tee logs/snds.log
 ```
 
 To redirect the output to both stdout and stderr's to the snds.log file.
