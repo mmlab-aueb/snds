@@ -1,4 +1,6 @@
 scripts:
+    #IF YOU HAVE SPECIFIED NULL 
+    #IT WILL BE FILLED WITH THE HOST NAME INSIDE THE SCRIPT
   - name: "http_ngsild_proxy.py"
     path: "/app/snds/ngsild_dir/"
     log: "http_ngsild_proxy_logs.log"
@@ -17,7 +19,7 @@ scripts:
     log_path: "/app/snds/logs/"
     environment_variables:
       - '--type'
-      - 'Car'
+      - ~
     background_service: True
     run_from_main: True
 

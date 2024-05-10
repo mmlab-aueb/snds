@@ -41,7 +41,9 @@ async def run():
             lifetime=6000
         )
 
-        _logger.info(f"Received Data Name: {Name.to_str(data_name)}\n")
+        _logger.info(f"Received data_name in run: {Name.to_str(data_name)}\n")
+        _logger.info(f"Received meta_info in run: {meta_info}\n")
+        _logger.info(f"Received content in run: {content}\n")
         
         data = bytes(content)
         json_data = json.loads(data.decode())

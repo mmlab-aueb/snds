@@ -31,6 +31,7 @@ def parse_args():
 
 async def express_interest(interest_name):
     try:
+        _logger.info(f"Expressing interest on: {interest_name}\n")
         data_name, meta_info, content = await app.express_interest (
             interest_name,
             must_be_fresh=True,
@@ -59,7 +60,9 @@ async def run():
 
     data_name, meta_info, content = await express_interest(interest_name)
 
-    _logger.info(f"Received Data Name in run: {Name.to_str(data_name)}\n")
+    _logger.info(f"Received data_name in run: {Name.to_str(data_name)}\n")
+    _logger.info(f"Received meta_info in run: {meta_info}\n")
+    _logger.info(f"Received content in run: {list(content)}\n")
 
     rIDs = list(content)
 
@@ -67,7 +70,9 @@ async def run():
 
     data_name, meta_info, content = await express_interest(interest_name)
 
-    _logger.info(f"Received Data Name: {Name.to_str(data_name)}\n")
+    _logger.info(f"Received data_name in run: {Name.to_str(data_name)}\n")
+    _logger.info(f"Received meta_info in run: {meta_info}\n")
+    _logger.info(f"Received content in run: {bytes(content).decode()}\n")
 
     data = bytes(content)
     json_data = json.loads(data.decode())

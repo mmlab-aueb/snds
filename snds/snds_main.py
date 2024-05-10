@@ -52,7 +52,17 @@ def setup_nodes(custom_topo: CustomTopology, yaml_path: str):
 
             for i in range(0, len(script["environment_variables"]), 2):
 
+
                 if i+1 < len(script["environment_variables"]):
+
+                    if script["environment_variables"][i+1] is None:  
+                        condition = True if "type" in script['environment_variables'][i] else False
+
+                        var = f"{script['environment_variables'][i]}=type_{host_name}" if condition else f"{script['environment_variables'][i]}={host_name}"
+
+                        env_vars_processed.append(var)
+                        continue
+
                     env_var = f"{script['environment_variables'][i]}={script['environment_variables'][i+1]}"
 
                 env_vars_processed.append(shlex.quote(env_var))
