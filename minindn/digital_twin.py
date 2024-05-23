@@ -30,7 +30,7 @@ with open(json_ld_name, "w") as json_ld:
 
 #print(json_ld_data["@type"])
 
-os.system("export HOME=/tmp/minindn/node2")
+#os.system("export HOME=/tmp/minindn/node2")
 
 os.system('python3 /home/minindn/snds/minindn/SNDS_service.py ' + id + ' ' + json_ld_data["@type"] + ' &')
 

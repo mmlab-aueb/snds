@@ -1,0 +1,9 @@
+1 ueGIST0 provide Type_gist item1
+2 ueCORUNA0 provide Type_coruna item2
+3 ueSAVI0 provide Type_savi item3
+11 ueGIST0 consumeID Type_coruna item2
+12 ueGIST0 consumeID Type_savi item3
+13 ueCORUNA0 consumeID Type_gist item1
+14 ueCORUNA0 consumeID Type_savi item3
+15 ueSAVI0 consumeID Type_gist item1
+16 ueSAVI0 consumeID Type_coruna item2
