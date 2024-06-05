@@ -1,0 +1,6 @@
+0 uegist0 consumeID type_coruna itemcoruna0
+0 uesavi0 consumeID type_coruna itemcoruna0
+0 uecoruna0 consumeID type_savi itemsavi0
+0 uesavi0 consumeID type_gist itemgist0
+0 uecoruna0 consumeID type_gist itemgist0
+0 uegist0 consumeID type_savi itemsavi0

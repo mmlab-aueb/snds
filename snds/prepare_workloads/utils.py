@@ -1,10 +1,11 @@
-import sys
-import argparse
 import logging
+import sys
 import os
+import itertools
+import random
+
 from typing import Tuple, List
 
-# Set up logging
 _logger = logging.getLogger(os.path.basename(__file__))
 _logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -12,59 +13,11 @@ stream_handler = logging.StreamHandler()
 stream_handler.setFormatter(formatter)
 _logger.addHandler(stream_handler)
 
-def parse_args():
-    """Parses command-line arguments.
-
-    Returns:
-        argparse.Namespace: Parsed command-line arguments.
-    """
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        "--end-users",
-        type=int,
-        required=True,
-        help="Number of end users to be created per edge node."
-    )
-
-    parser.add_argument(
-        "--registry-filename",
-        type=str,
-        default="./experiments/registry.txt",
-        help="Filename for the registry where edge nodes are recorded."
-    )
-
-    parser.add_argument(
-        "--delay-edge-users",
-        type=str,
-        default="10ms",
-    )
-
-    parser.add_argument(
-        "--conf-files",
-        nargs="+",
-        required=True,
-        help="List of configuration files to process."
-    )
-
-    return parser.parse_args()
-
-args = parse_args()
-number_of_end_users = args.end_users
-conf_files = args.conf_files
-registry_filename = args.registry_filename
-delay_edge_users = args.delay_edge_users
-
-_logger.info(f"Number of end users: {number_of_end_users}")
-_logger.info(f"Registry filename: {registry_filename}")
-_logger.info(f"Configuration files: {conf_files}")
-_logger.info(f"Delay between edge nodes and users: {delay_edge_users}")
-
-def keep_nodes_and_links(lines: List[str]) -> Tuple[List[str], List[str]]:
+def extract_nodes_and_links(lines: List[str]) -> Tuple[List[str], List[str]]:
     """Extracts nodes and links from configuration lines.
 
     Args:
-        lines (List[str]): Lines from the configuration file.
+        lines: Lines from the configuration file.
 
     Returns:
         Tuple[List[str], List[str]]: A tuple containing lists of links and nodes.
@@ -98,7 +51,75 @@ def keep_nodes_and_links(lines: List[str]) -> Tuple[List[str], List[str]]:
 
     return links, nodes
 
-def find_edge_nodes(nodes: List[str], links: List[str]) -> List[str]: 
+def read_edge_nodes_from_registry(registry_filename: str) -> List[str]:
+
+    edge_nodes: List[str] = []
+
+    with open(registry_filename, "r") as f:
+        for line in f:
+            edge_nodes.append(line.strip())
+
+    _logger.debug(f"Read edge nodes: {edge_nodes}")    
+
+    return edge_nodes
+
+def create_provide_workload(
+    workload_filename: str, 
+    edge_nodes: List[str],
+    number_of_end_users: int,
+):
+
+    with open(workload_filename, "w") as f:
+        for node in edge_nodes:
+            for i in range(number_of_end_users):
+                f.write(f"{i} ue{node}{i} provide type_{node} item{node}{i}\n")
+
+def create_consume_workload(
+    workload_filename: str, 
+    edge_nodes: List[str],
+    number_of_end_users: int,
+):
+    with open(workload_filename, "w") as file:
+        #all combinations using cartesian product
+        for node, i, other_node, j in itertools.product(
+            edge_nodes, 
+            range(number_of_end_users), 
+            edge_nodes, 
+            range(number_of_end_users),
+        ):
+            if node != other_node or i != j:
+                ue_node = f"ue{node}{i}"
+                item_node = f"item{other_node}{j}"
+                file.write(f"{i} {ue_node} consumeID type_{other_node} {item_node}\n")
+
+def create_combined_workload(
+    workload_consume_filename: str,
+    workload_provide_filename: str,
+    number_of_end_users: int,
+):
+    workload_combined_filename = f"./experiments/workload_{number_of_end_users}.txt"
+
+    # Read and shuffle the consume workload
+    with open(workload_consume_filename, "r") as consume_file:
+        consume_lines = consume_file.readlines()
+
+    random.shuffle(consume_lines)
+
+    with open(workload_consume_filename, "w") as consume_file:
+        consume_file.writelines(consume_lines)
+
+    # Combine provide and shuffled consume workloads into the output file
+    with open(workload_combined_filename, "w") as outfile, \
+         open(workload_provide_filename, "r") as provide_file, \
+         open(workload_consume_filename, "r") as consume_file:
+
+        # Write provide workload to the output file
+        outfile.write(provide_file.read())
+
+        # Write shuffled consume workload to the output file
+        outfile.write(consume_file.read())
+
+def identify_edge_nodes(nodes: List[str], links: List[str]) -> List[str]: 
     """Identifies edge nodes with two or fewer links.
 
     Args:
@@ -133,11 +154,15 @@ def write_edge_nodes_to_disk(registry_filename: str, edge_nodes: List[str]):
     except IOError as e:
         _logger.error(f"Error writing to {registry_filename}: {e}", file=sys.stderr)
 
-def create_end_users(edge_nodes: List[str]) -> List[str]:
+def create_end_users(
+    edge_nodes: List[str], 
+    number_of_end_users: int,
+) -> List[str]:
     """Creates end user nodes for each edge node.
 
     Args:
-        edge_nodes (List[str]): List of edge nodes.
+        edge_nodes: List of edge nodes.
+        number_of_end_users: Number of users with links to the edge nodes.
 
     Returns:
         List[str]: List of end user nodes.
@@ -154,7 +179,8 @@ def create_new_topology_configuration_file(
     end_users: List[str],
     conf_file: str,
     lines_of_original_conf: List[str],
-    edge_nodes: List[str]
+    edge_nodes: List[str],
+    delay_edge_users: str,
 ):
     """Creates a new topology configuration file including end users.
 
@@ -163,6 +189,7 @@ def create_new_topology_configuration_file(
         conf_file (str): Original configuration file name.
         lines_of_original_conf (List[str]): Lines of the original configuration file.
         edge_nodes (List[str]): List of edge nodes.
+        delay_edge_nodes: Amount of delay between the users and the edge nodes.
     """
     # Split the filename and extension
     file_name, file_extension = os.path.splitext(conf_file)
@@ -199,17 +226,3 @@ def create_new_topology_configuration_file(
         _logger.info(f"New topology configuration file created: {new_conf_file}")
     except IOError as e:
         _logger.error(f"Error writing to {new_conf_file}: {e}", file=sys.stderr)
-
-# Process each configuration file
-for conf_file in conf_files:
-    try:
-        _logger.info(f"Processing configuration file: {conf_file}")
-        with open(conf_file, 'r') as f:
-            lines = f.readlines()
-            links, nodes = keep_nodes_and_links(lines=lines)
-            edge_nodes = find_edge_nodes(nodes=nodes, links=links)
-            write_edge_nodes_to_disk(registry_filename=registry_filename, edge_nodes=edge_nodes)
-            end_users = create_end_users(edge_nodes=edge_nodes)
-            create_new_topology_configuration_file(end_users=end_users, conf_file=conf_file, lines_of_original_conf=lines, edge_nodes=edge_nodes)
-    except IOError as e:
-        _logger.error(f"Error reading {conf_file}: {e}", file=sys.stderr)

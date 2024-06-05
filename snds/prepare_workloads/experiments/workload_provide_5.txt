@@ -1,0 +1,15 @@
+0 uegist0 provide type_gist itemgist0
+1 uegist1 provide type_gist itemgist1
+2 uegist2 provide type_gist itemgist2
+3 uegist3 provide type_gist itemgist3
+4 uegist4 provide type_gist itemgist4
+0 uecoruna0 provide type_coruna itemcoruna0
+1 uecoruna1 provide type_coruna itemcoruna1
+2 uecoruna2 provide type_coruna itemcoruna2
+3 uecoruna3 provide type_coruna itemcoruna3
+4 uecoruna4 provide type_coruna itemcoruna4
+0 uesavi0 provide type_savi itemsavi0
+1 uesavi1 provide type_savi itemsavi1
+2 uesavi2 provide type_savi itemsavi2
+3 uesavi3 provide type_savi itemsavi3
+4 uesavi4 provide type_savi itemsavi4

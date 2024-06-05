@@ -1,0 +1,3 @@
+0 uegist0 provide type_gist itemgist0
+0 uecoruna0 provide type_coruna itemcoruna0
+0 uesavi0 provide type_savi itemsavi0
