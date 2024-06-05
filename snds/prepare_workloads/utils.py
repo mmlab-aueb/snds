@@ -3,7 +3,6 @@ import sys
 import os
 import itertools
 import random
-
 from typing import Tuple, List
 
 _logger = logging.getLogger(os.path.basename(__file__))
@@ -17,10 +16,21 @@ def extract_nodes_and_links(lines: List[str]) -> Tuple[List[str], List[str]]:
     """Extracts nodes and links from configuration lines.
 
     Args:
-        lines: Lines from the configuration file.
+        lines (List[str]): Lines from the configuration file.
 
     Returns:
         Tuple[List[str], List[str]]: A tuple containing lists of links and nodes.
+
+    Example:
+        lines = [
+            "[nodes]",
+            "UNIVH2C: _ radius=15.7232 angle=3.03408",
+            "[links]",
+            "MICHIGAN:NEU delay=14ms"
+        ]
+        links, nodes = extract_nodes_and_links(lines)
+        print(links)  # Output: ['MICHIGAN:NEU']
+        print(nodes)  # Output: ['UNIVH2C']
     """
     link_flag = False
     links: List[str] = []
@@ -52,7 +62,18 @@ def extract_nodes_and_links(lines: List[str]) -> Tuple[List[str], List[str]]:
     return links, nodes
 
 def read_edge_nodes_from_registry(registry_filename: str) -> List[str]:
+    """Reads edge nodes from a registry file.
 
+    Args:
+        registry_filename (str): The registry filename.
+
+    Returns:
+        List[str]: List of edge nodes.
+
+    Example:
+        edge_nodes = read_edge_nodes_from_registry("registry.txt")
+        print(edge_nodes)  # Output: ['UNIVH2C', 'MINHO', ...]
+    """
     edge_nodes: List[str] = []
 
     with open(registry_filename, "r") as f:
@@ -68,7 +89,16 @@ def create_provide_workload(
     edge_nodes: List[str],
     number_of_end_users: int,
 ):
+    """Creates a provide workload file for edge nodes.
 
+    Args:
+        workload_filename (str): The filename to write the provide workload.
+        edge_nodes (List[str]): List of edge nodes.
+        number_of_end_users (int): Number of end users.
+
+    Example:
+        create_provide_workload("workload_provide.txt", ["UNIVH2C", "MINHO"], 5)
+    """
     with open(workload_filename, "w") as f:
         for node in edge_nodes:
             for i in range(number_of_end_users):
@@ -79,8 +109,18 @@ def create_consume_workload(
     edge_nodes: List[str],
     number_of_end_users: int,
 ):
+    """Creates a consume workload file for edge nodes.
+
+    Args:
+        workload_filename (str): The filename to write the consume workload.
+        edge_nodes (List[str]): List of edge nodes.
+        number_of_end_users (int): Number of end users.
+
+    Example:
+        create_consume_workload("workload_consume.txt", ["UNIVH2C", "MINHO"], 5)
+    """
     with open(workload_filename, "w") as file:
-        #all combinations using cartesian product
+        # All combinations using Cartesian product
         for node, i, other_node, j in itertools.product(
             edge_nodes, 
             range(number_of_end_users), 
@@ -97,6 +137,16 @@ def create_combined_workload(
     workload_provide_filename: str,
     number_of_end_users: int,
 ):
+    """Combines provide and consume workloads into a single file.
+
+    Args:
+        workload_consume_filename (str): The consume workload filename.
+        workload_provide_filename (str): The provide workload filename.
+        number_of_end_users (int): Number of end users.
+
+    Example:
+        create_combined_workload("workload_consume.txt", "workload_provide.txt", 5)
+    """
     workload_combined_filename = f"./experiments/workload_{number_of_end_users}.txt"
 
     # Read and shuffle the consume workload
@@ -128,6 +178,12 @@ def identify_edge_nodes(nodes: List[str], links: List[str]) -> List[str]:
 
     Returns:
         List[str]: List of edge nodes.
+
+    Example:
+        nodes = ["UNIVH2C", "MINHO", "MSU"]
+        links = ["UNIVH2C:MINHO", "MSU:MINHO"]
+        edge_nodes = identify_edge_nodes(nodes, links)
+        print(edge_nodes)  # Output: ["UNIVH2C", "MSU"]
     """
     edge_nodes: List[str] = []
 
@@ -145,6 +201,9 @@ def write_edge_nodes_to_disk(registry_filename: str, edge_nodes: List[str]):
     Args:
         registry_filename (str): The registry filename.
         edge_nodes (List[str]): List of edge nodes to be written.
+
+    Example:
+        write_edge_nodes_to_disk("registry.txt", ["UNIVH2C", "MINHO"])
     """
     try:
         with open(registry_filename, "w") as f:
@@ -161,11 +220,16 @@ def create_end_users(
     """Creates end user nodes for each edge node.
 
     Args:
-        edge_nodes: List of edge nodes.
-        number_of_end_users: Number of users with links to the edge nodes.
+        edge_nodes (List[str]): List of edge nodes.
+        number_of_end_users (int): Number of end users.
 
     Returns:
         List[str]: List of end user nodes.
+
+    Example:
+        edge_nodes = ["UNIVH2C", "MINHO"]
+        end_users = create_end_users(edge_nodes, 5)
+        print(end_users)  # Output: ["ueUNIVH2C0", "ueUNIVH2C1", ..., "ueMINHO4"]
     """
     end_users: List[str] = []
     for node in edge_nodes:
@@ -189,7 +253,13 @@ def create_new_topology_configuration_file(
         conf_file (str): Original configuration file name.
         lines_of_original_conf (List[str]): Lines of the original configuration file.
         edge_nodes (List[str]): List of edge nodes.
-        delay_edge_nodes: Amount of delay between the users and the edge nodes.
+        delay_edge_users (str): Amount of delay between the users and the edge nodes.
+
+    Example:
+        end_users = ["ueUNIVH2C0", "ueUNIVH2C1"]
+        edge_nodes = ["UNIVH2C", "MINHO"]
+        lines_of_original_conf = ["[nodes]", "UNIVH2C: _ radius=15.7232 angle=3.03408", "[links]", "MICHIGAN:NEU delay=14ms"]
+        create_new_topology_configuration_file(end_users, "config.txt", lines_of_original_conf, edge_nodes, "14ms")
     """
     # Split the filename and extension
     file_name, file_extension = os.path.splitext(conf_file)
@@ -212,7 +282,7 @@ def create_new_topology_configuration_file(
                     continue
                 f.write(line)
 
-            #sanity check: if nodes section is finished write links
+            # Sanity check: if nodes section is finished write links
             if nodes_section:
                 f.write("[links]\n")
 
