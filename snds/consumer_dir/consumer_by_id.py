@@ -2,6 +2,7 @@ import asyncio
 import os
 import logging
 import argparse
+import time
 
 from mininet.log    import MininetLogger
 
@@ -61,6 +62,9 @@ params = {
     'id':f'urn:ngsi-ld:Car:{id}',
 }
 
+start_time = time.time()
 response = asyncio.run(get_request(url=url, headers=headers, params=params))
+end_time = time.time()
 
 _logger.info(f"Received response from {url}\n{response}\n")
+_logger.info(f"Time the request took: {end_time - start_time}\n")
