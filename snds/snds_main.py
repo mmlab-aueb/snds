@@ -16,14 +16,70 @@ from minindn.apps.nlsr import Nlsr
 
 from pprint import pprint
 from time import sleep
+from typing import List
 
 # self made topology class
-from prepare_workloads.utils import read_edge_nodes_from_registry
+from prepare_workloads.utils import read_edge_nodes_from_registry, read_workload
 from Topology import CustomTopology
 
 #load_dotenv()
 
 background_service_pids = []
+
+def process_workload(
+    custom_topo: CustomTopology,
+    number_of_end_users: int,
+    edge_nodes: List[str],
+    yaml_path: str,
+):
+    _logger.info("Running setup on nodes\n")
+    #read the script yaml file
+    with open(yaml_path, 'r') as file:
+        data = yaml.safe_load(file)
+    # Extract the scripts list
+    scripts = data.get('scripts', [])
+    
+    # Initialize variables to None
+    ip_provider_script = None
+    consumer_by_id_script = None
+    consumer_by_type_script = None
+    
+    # Search for the scripts by name
+    for script in scripts:
+        if script['name'] == 'ip_provider.py':
+            ip_provider_script = script
+        elif script['name'] == 'consumer_by_id.py':
+            consumer_by_id_script = script
+        elif script['name'] == 'consumer_by_type.py':
+            consumer_by_type_script = script
+
+    workload_lines = read_workload(f"./prepare_workloads/experiments/workload_{number_of_end_users}.txt")
+
+    for line in workload_lines:
+
+        user = custom_topo.mininet_hosts[line[1].lower()]
+        
+        id_index = user.name.find("ID")
+        id_of_user = ''.join(filter(str.isdigit, user.name[id_index+2:]))
+
+        edge_node = next((node for node in edge_nodes if node.casefold() in user.name.casefold()), None)
+
+        if not edge_node:
+            continue
+        
+        ip_index = number_of_end_users - int(id_of_user)
+        edge_node_ip = custom_topo.edge_nodes[edge_node][len(custom_topo.edge_nodes[edge_node])-ip_index]
+        
+        if line[2] == "provide":
+            command = f"python ip_provider.py --type {line[3]} --id {line[4]} --ip {edge_node_ip} 2>&1 | tee {ip_provider_script['log_path']}/provide_workload.logs"
+        elif line[2] == "consumeID":
+            command = f"python consumer_by_id.py --type {line[3]} --id {line[4]} --ip {edge_node_ip} 2>&1 | tee {consumer_by_id_script['log_path']}/consume_by_id_workload.logs"
+        elif line[2] == "consumeType":
+            command = f"python consumer_by_type.py --type {line[3]} --ip {edge_node_ip} 2>&1 | tee {consumer_by_type_script['log_path']}/consume_by_type_workload.logs"
+        else:
+            continue
+        
+        result = custom_topo.run_command_on_mininet_host(command=command)
 
 def setup_nodes(custom_topo: CustomTopology, yaml_path: str):
 
@@ -95,6 +151,10 @@ def setup_nodes(custom_topo: CustomTopology, yaml_path: str):
                 host_name=host_name,
                 command=tcp_dump_command,
             )
+
+            if len(result.split()) == 2:
+                _, pid = result.split()
+                background_service_pids.append({"host_name": host_name, "pid": pid})
 
             # Construct the command to log the nlsr and nfd logs
             #command = (
@@ -184,9 +244,17 @@ def run():
 
         custom_topo.add_mininet_hosts(hosts=hosts)
         custom_topo.add_mininet_hosts(hosts=edge_hosts)
+
         _logger.debug(f"Mininet hosts:\n{custom_topo.mininet_hosts}\n")
 
+        custom_topo.add_edge_nodes(
+            edge_nodes=edge_nodes,
+            ndn_net=ndn.net,
+        )
+
         setup_nodes(custom_topo, './scripts_for_nodes_config.yaml')
+
+        process_workload(custom_topo)
 
         MiniNDNCLI(ndn.net)
 

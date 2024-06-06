@@ -23,6 +23,12 @@ def parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
+        "--type",
+        type=str,
+        required=True,
+    )
+
+    parser.add_argument(
         "--id",
         type=str, 
         required=True,
@@ -37,6 +43,7 @@ def parse_args():
     parser.add_argument(
         "--port",
         type=int,
+        default=8080,
         required=True,
     )
 
@@ -49,6 +56,7 @@ args = parse_args()
 ip = args.ip
 id = args.id 
 port = args.port
+type = args.type 
 
 url = f"http://{ip}:{port}"
 
@@ -59,7 +67,7 @@ headers = {
 params = {
     #TODO what in the name of god is this?
     'consumer': 'consumer1',
-    'id':f'urn:ngsi-ld:Car:{id}',
+    'id':f'urn:ngsi-ld:{type}:{id}',
 }
 
 start_time = time.time()

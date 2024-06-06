@@ -68,6 +68,20 @@ class CustomTopology(Topo):
 
         return result
 
+    def add_edge_nodes(
+        self, 
+        edge_nodes: List[str],
+    ):
+        for node in edge_nodes:
+            edge_node = self.mininet_hosts[node]
+            interfaces = edge_node.intfNames()
+            ips = []
+
+            for name in interfaces:
+                ips.append(edge_node.IP(intf=name))
+
+            self.edge_nodes[edge_node.name] = ips 
+
     def add_mininet_hosts(self, hosts: List[Host]):
         #TODO compatibility between topo and hosts
         for host in hosts:
