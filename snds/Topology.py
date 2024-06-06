@@ -46,6 +46,9 @@ class CustomTopology(Topo):
 
         # Gets filled in add_port
         self.all_ports_dictionary = {}
+        
+        # Map edge nodes to IP addresses
+        self.edge_nodes = {}
 
 
     def run_command_on_mininet_host(self, host_name:str, command:str, verbose: bool=True) -> str:

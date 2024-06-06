@@ -3,6 +3,7 @@ import logging
 import yaml
 import argparse
 import shlex
+import re
 
 
 from mininet.log import MininetLogger
@@ -45,6 +46,8 @@ def setup_nodes(custom_topo: CustomTopology, yaml_path: str):
                 host_name=host_name,
                 command=f"cp {script['path']}{script['name']} $HOME"
             )
+
+
             if not script['run_from_main']:
                 continue
 
@@ -55,6 +58,8 @@ def setup_nodes(custom_topo: CustomTopology, yaml_path: str):
 
                 if i+1 < len(script["environment_variables"]):
 
+                    # Provide the node_name as type
+                    # If the type specified in the yaml is null
                     if script["environment_variables"][i+1] is None:  
                         condition = True if "type" in script['environment_variables'][i] else False
 
@@ -74,13 +79,20 @@ def setup_nodes(custom_topo: CustomTopology, yaml_path: str):
             command = (
                 f"mkdir -p $HOME/tmp/ && "
                 f"mkdir -p $HOME/log/ && "
+                f"mkdir -p $HOME/results/ &&"
                 f"mkdir -p {script['log_path']}/{host_name}/ "
             )
-
 
             result = custom_topo.run_command_on_mininet_host(
                 host_name=host_name,
                 command=command
+            )
+
+            tcp_dump_command = f"tcpdump -i any -n -tttt | tee $HOME/results/{host_name}_packets.txt {script['result_path']}/{host_name}_packets.txt > /dev/null &"
+
+            result = custom_topo.run_command_on_mininet_host(
+                host_name=host_name,
+                command=tcp_dump_command,
             )
 
             # Construct the command to log the nlsr and nfd logs
@@ -153,7 +165,20 @@ def run():
 
         sleep(40)
 
-        custom_topo.add_mininet_hosts(ndn.net.hosts)
+        hosts = [host for host in ndn.net.hosts if "ue" not in host.name]
+        edge_hosts = [host for host in ndn.net.hosts if "ue" in host.name]
+
+        max_number = 0
+        for host in edge_hosts:
+            match = re.search(r'ue\w+(\d+):', host)
+            if match:
+                number = int(match.group(1))
+                if number > max_number:
+                    max_number = number
+
+        number_of_end_users = max_number + 1
+
+        custom_topo.add_mininet_hosts(hosts=hosts)
 
         setup_nodes(custom_topo, './scripts_for_nodes_config.yaml')
 

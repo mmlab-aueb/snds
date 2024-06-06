@@ -5,6 +5,8 @@ scripts:
     path: "/app/snds/ngsild_dir/"
     log: "http_ngsild_proxy_logs.log"
     log_path: "/app/snds/logs/"
+    result: "packets.txt"
+    result_path: "/app/snds/results/"
     environment_variables:
       - '--host-ip'
       - '0.0.0.0'
@@ -17,6 +19,8 @@ scripts:
     path: "/app/snds/producer_dir/"
     log: "SNDS_r_service_logs.log"
     log_path: "/app/snds/logs/"
+    result: "packets.txt"
+    result_path: "/app/snds/results/"
     environment_variables:
       - '--type'
       - ~
@@ -27,6 +31,8 @@ scripts:
     path: "/app/snds/forwarder_dir/"
     log: "SNDS_service_logs.log"
     log_path: "/app/snds/logs/"
+    result: "packets.txt"
+    result_path: "/app/snds/results/"
     environment_variables: []
     background_service: False
     run_from_main: False
@@ -37,6 +43,8 @@ scripts:
     log: "closestCDNNODE_byType.log"
     log_path: "/app/snds/logs/"
     # inputted dynamically inside http proxy
+    result: "packets.txt"
+    result_path: "/app/snds/results/"
     environment_variables: []
     background_service: False
     run_from_main: False
@@ -46,6 +54,8 @@ scripts:
     # shares file with proxy
     log: "closestCDNNode_byID.log"
     log_path: "/app/snds/logs"
+    result: "packets.txt"
+    result_path: "/app/snds/results/"
     # inputted dynamically inside http proxy
     environment_variables: []
     background_service: False
@@ -56,6 +66,8 @@ scripts:
     path: "/app/snds/ngsild_dir/"
     log: "digital_twin.log"
     log_path: "/app/snds/logs/"
+    result: "packets.txt"
+    result_path: "/app/snds/results/"
     environment_variables: []
     background_service: False
     run_from_main: False
@@ -63,6 +75,8 @@ scripts:
   - name: "ip_provider.py"
     path: "/app/snds/consumer_dir/"
     log: "ip_provider.log"
+    result: "packets.txt"
+    result_path: "/app/snds/results/"
     log_path: "/app/snds/logs/"
     environment_variables: []
     background_service: False
@@ -72,6 +86,8 @@ scripts:
     path: "/app/snds/consumer_dir/"
     log: "consumer_by_id.log"
     log_path: "/app/snds/logs/"
+    result: "packets.txt"
+    result_path: "/app/snds/results/"
     environment_variables: []
     background_service: False
     run_from_main: False
@@ -80,6 +96,8 @@ scripts:
     path: "/app/snds/consumer_dir/"
     log: "consumer_by_type.log"
     log_path: "/app/snds/logs"
+    result: "packets.txt"
+    result_path: "/app/snds/results/"
     environment_variables: []
     background_service: False
     run_from_main: False
