@@ -14,6 +14,7 @@ docker run -m 4g --cpus=4 -it --privileged \
   --env-file .env \
   -v /lib/modules:/lib/modules \
   -v ./snds/logs:/app/snds/logs \
+  -v ./snds/logs:/app/snds/results \
   --name snds-app \
   snds \
   /bin/bash
