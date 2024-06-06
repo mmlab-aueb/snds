@@ -3,7 +3,6 @@ import logging
 import yaml
 import argparse
 import shlex
-import re
 
 
 from mininet.log import MininetLogger
@@ -19,6 +18,7 @@ from pprint import pprint
 from time import sleep
 
 # self made topology class
+from prepare_workloads.utils import read_edge_nodes_from_registry
 from Topology import CustomTopology
 
 #load_dotenv()
@@ -81,6 +81,7 @@ def setup_nodes(custom_topo: CustomTopology, yaml_path: str):
                 f"mkdir -p $HOME/log/ && "
                 f"mkdir -p $HOME/results/ &&"
                 f"mkdir -p {script['log_path']}/{host_name}/ "
+                f"mkdir -p {script['result_path']}/{host_name}/"
             )
 
             result = custom_topo.run_command_on_mininet_host(
@@ -88,7 +89,7 @@ def setup_nodes(custom_topo: CustomTopology, yaml_path: str):
                 command=command
             )
 
-            tcp_dump_command = f"tcpdump -i any -n -tttt | tee $HOME/results/{host_name}_packets.txt {script['result_path']}/{host_name}_packets.txt > /dev/null &"
+            tcp_dump_command = f"tcpdump -i any -n -tttt | tee $HOME/results/{host_name}_packets.txt {script['result_path']}/{host_name}/{host_name}_packets.txt > /dev/null &"
 
             result = custom_topo.run_command_on_mininet_host(
                 host_name=host_name,
@@ -166,19 +167,24 @@ def run():
         sleep(40)
 
         hosts = [host for host in ndn.net.hosts if "ue" not in host.name]
+        _logger.debug(f"Non edge hosts:\n{hosts}\n")
+
         edge_hosts = [host for host in ndn.net.hosts if "ue" in host.name]
+        _logger.debug(f"Edge hosts:\n{edge_hosts}\n")
 
-        max_number = 0
-        for host in edge_hosts:
-            match = re.search(r'ue\w+(\d+):', host)
-            if match:
-                number = int(match.group(1))
-                if number > max_number:
-                    max_number = number
+        edge_nodes = read_edge_nodes_from_registry(
+            registry_filename="./prepare_workloads/experiments/registry.txt",
+        )
 
-        number_of_end_users = max_number + 1
+        _logger.debug(f"Edge nodes:\n{edge_nodes}\n")
+
+        number_of_end_users = len(edge_nodes)
+
+        _logger.debug(f"Number of end users: {number_of_end_users}\n")
 
         custom_topo.add_mininet_hosts(hosts=hosts)
+        custom_topo.add_mininet_hosts(hosts=edge_hosts)
+        _logger.debug(f"Mininet hosts:\n{custom_topo.mininet_hosts}\n")
 
         setup_nodes(custom_topo, './scripts_for_nodes_config.yaml')
 
