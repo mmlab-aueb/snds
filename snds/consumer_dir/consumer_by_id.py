@@ -44,7 +44,6 @@ def parse_args():
         "--port",
         type=int,
         default=8080,
-        required=True,
     )
 
     return parser.parse_args()

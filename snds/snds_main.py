@@ -28,6 +28,7 @@ background_service_pids = []
 
 def process_workload(
     custom_topo: CustomTopology,
+    number_of_edge_nodes:int,
     number_of_end_users: int,
     edge_nodes: List[str],
     yaml_path: str,
@@ -53,7 +54,7 @@ def process_workload(
         elif script['name'] == 'consumer_by_type.py':
             consumer_by_type_script = script
 
-    workload_lines = read_workload(f"./prepare_workloads/experiments/workload_{number_of_end_users}.txt")
+    workload_lines = read_workload(f"./prepare_workloads/experiments/workload_{number_of_edge_nodes}.txt")
 
     _logger.debug(f"Edge nodes in custom topo: {custom_topo.edge_nodes}\n")
 
@@ -81,7 +82,7 @@ def process_workload(
         if not edge_node:
             continue
         
-        ip_index = number_of_end_users - int(id_of_user)
+        ip_index = number_of_edge_nodes - int(id_of_user)
         edge_node_ip = custom_topo.edge_nodes[edge_node][len(custom_topo.edge_nodes[edge_node])-ip_index]
         
         if line[2] == "provide":
@@ -93,7 +94,7 @@ def process_workload(
         else:
             continue
         
-        result = custom_topo.run_command_on_mininet_host(command=command)
+        result = custom_topo.run_command_on_mininet_host(host_name=edge_node, command=command)
 
 def setup_nodes(custom_topo: CustomTopology, yaml_path: str):
 
@@ -238,7 +239,7 @@ def run():
         _logger.info('Starting NLSR on nodes\n')
         nlsrs = AppManager(ndn, ndn.net.hosts, Nlsr)
 
-        sleep(40)
+        sleep(90)
 
         hosts = [host for host in ndn.net.hosts if "ue" not in host.name]
         _logger.debug(f"Non edge hosts:\n{hosts}\n")
@@ -252,8 +253,36 @@ def run():
 
         _logger.debug(f"Edge nodes:\n{edge_nodes}\n")
 
-        number_of_end_users = len(edge_nodes)
+        number_of_edge_nodes = len(edge_nodes)
 
+        for edge_host in edge_hosts:
+            name = edge_host.name
+            # Find the index of "ID" or "id"
+            id_index_upper = name.find("ID")
+            id_index_lower = name.find("id")
+
+            if id_index_upper != -1:
+                id_index = id_index_upper
+            elif id_index_lower != -1:
+                id_index = id_index_lower
+            else:
+                id_index = -1
+
+            # Extract the max digit after "ID" or "id"
+            if id_index != -1:
+                digits_after_id = ''.join(filter(str.isdigit, name[id_index + 2:]))
+                if digits_after_id:
+                    max_digit = max(digits_after_id)
+                else:
+                    max_digit = ''
+            else:
+                max_digit = ''
+
+        _logger.debug(f"Max digit: {max_digit}\n")
+
+        number_of_end_users = number_of_edge_nodes * int(max_digit)
+
+        _logger.debug(f"Number of number of edge nodes: {number_of_edge_nodes}\n")
         _logger.debug(f"Number of end users: {number_of_end_users}\n")
 
         custom_topo.add_mininet_hosts(hosts=hosts)
@@ -267,8 +296,11 @@ def run():
 
         setup_nodes(custom_topo, './scripts_for_nodes_config.yaml')
 
+        sleep(300)
+
         process_workload(
             custom_topo=custom_topo,
+            number_of_edge_nodes=number_of_edge_nodes,
             number_of_end_users=number_of_end_users,
             edge_nodes=edge_nodes,
             yaml_path="./scripts_for_nodes_config.yaml",
