@@ -55,13 +55,27 @@ def process_workload(
 
     workload_lines = read_workload(f"./prepare_workloads/experiments/workload_{number_of_end_users}.txt")
 
+    _logger.debug(f"Edge nodes in custom topo: {custom_topo.edge_nodes}\n")
+
     for line in workload_lines:
 
         user = custom_topo.mininet_hosts[line[1].lower()]
         
-        id_index = user.name.find("ID")
-        id_of_user = ''.join(filter(str.isdigit, user.name[id_index+2:]))
+        # Find the index of "ID" or "id"
+        id_index_upper = user.name.find("ID")
+        id_index_lower = user.name.find("id")
 
+        if id_index_upper != -1:
+            id_index = id_index_upper
+            id_of_user = ''.join(filter(str.isdigit, user.name[id_index + 2:]))
+        elif id_index_lower != -1:
+            id_index = id_index_lower
+            id_of_user = ''.join(filter(str.isdigit, user.name[id_index + 2:]))
+        else:
+            id_index = -1
+            id_of_user = ''
+
+        _logger.debug(f"Host name: {user.name}\nID of user: {id_of_user}\nID index:{id_index}\n")
         edge_node = next((node for node in edge_nodes if node.casefold() in user.name.casefold()), None)
 
         if not edge_node:
@@ -249,12 +263,16 @@ def run():
 
         custom_topo.add_edge_nodes(
             edge_nodes=edge_nodes,
-            ndn_net=ndn.net,
         )
 
         setup_nodes(custom_topo, './scripts_for_nodes_config.yaml')
 
-        process_workload(custom_topo)
+        process_workload(
+            custom_topo=custom_topo,
+            number_of_end_users=number_of_end_users,
+            edge_nodes=edge_nodes,
+            yaml_path="./scripts_for_nodes_config.yaml",
+        )
 
         MiniNDNCLI(ndn.net)
 

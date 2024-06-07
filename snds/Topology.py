@@ -78,6 +78,7 @@ class CustomTopology(Topo):
             ips = []
 
             for name in interfaces:
+                _logger.debug(f"Interface to append:\nIP:\n{edge_node.IP(intf=name)}\nNAME:{name}")
                 ips.append(edge_node.IP(intf=name))
 
             self.edge_nodes[edge_node.name] = ips 
