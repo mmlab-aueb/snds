@@ -102,7 +102,7 @@ def create_provide_workload(
     with open(workload_filename, "w") as f:
         for node in edge_nodes:
             for i in range(number_of_end_users):
-                f.write(f"{i} ue{node}{i} provide type_{node} item{node}{i}\n")
+                f.write(f"{i} ue{node}ID{i} provide type_{node} item{node}ID{i}\n")
 
 def create_consume_workload(
     workload_filename: str, 
@@ -128,8 +128,8 @@ def create_consume_workload(
             range(number_of_end_users),
         ):
             if node != other_node or i != j:
-                ue_node = f"ue{node}{i}"
-                item_node = f"item{other_node}{j}"
+                ue_node = f"ue{node}ID{i}"
+                item_node = f"item{other_node}ID{j}"
                 file.write(f"{i} {ue_node} consumeID type_{other_node} {item_node}\n")
 
 def create_combined_workload(
@@ -168,6 +168,24 @@ def create_combined_workload(
 
         # Write shuffled consume workload to the output file
         outfile.write(consume_file.read())
+
+def read_workload(file_path: str) -> List[List[str]]:
+    """
+    Reads the workload file and returns a list of rows.
+
+    Args:
+        file_path (str): The path to the workload file.
+
+    Returns:
+        List[List[str]]: A list of rows, where each row is a list of strings.
+
+    Example:
+        >>> read_workload("experiments/workload_5.txt")
+        [['1', 'UserA', 'provide', 'param1', 'param2'],
+         ['2', 'UserB', 'consumeID', 'param3', 'param4']]
+    """
+    with open(file_path, "r") as file:
+        return [line.strip().split() for line in file]
 
 def identify_edge_nodes(nodes: List[str], links: List[str]) -> List[str]: 
     """Identifies edge nodes with two or fewer links.
@@ -234,7 +252,7 @@ def create_end_users(
     end_users: List[str] = []
     for node in edge_nodes:
         for i in range(number_of_end_users):
-            end_users.append(f"ue{node}{i}")
+            end_users.append(f"ue{node}ID{i}")
 
     _logger.debug(f"Created end users: {end_users}")
     return end_users

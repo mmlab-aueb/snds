@@ -28,7 +28,11 @@ class CustomTopology(Topo):
         extra_link_options: dict=None,
         extra_switch_options: dict=None,
     ):
-        super().__init__(hopts=extra_host_options, lopts=extra_link_options, sopts=extra_switch_options)
+        super().__init__(
+            hopts=extra_host_options, 
+            lopts=extra_link_options, 
+            sopts=extra_switch_options,
+        )
         # This gets filled in add_host and will contain a structure:
         #'host_name'= {
         #    'host_name': hosts_name,
@@ -46,20 +50,38 @@ class CustomTopology(Topo):
 
         # Gets filled in add_port
         self.all_ports_dictionary = {}
+        
+        # Map edge nodes to IP addresses
+        self.edge_nodes = {}
 
 
     def run_command_on_mininet_host(self, host_name:str, command:str, verbose: bool=True) -> str:
         _logger.info(f"Running command: {command} on host: {host_name}\n")
         host = self.mininet_hosts.get(host_name, None)
 
-        #if host is None:
-        #    _logger.error(f"Host {host_name} is not found in mininet_hosts\n")
-        #    return ''
+        if host is None:
+            _logger.error(f"Host {host_name} is not found in mininet_hosts\n")
+            return "Command was not run, because host is not in topology"
 
         result = host.cmdPrint(command)
         _logger.debug(f"Result after running: {command} on host: {host_name}\nResult: {result}\n")
 
         return result
+
+    def add_edge_nodes(
+        self, 
+        edge_nodes: List[str],
+    ):
+        for node in edge_nodes:
+            edge_node = self.mininet_hosts[node]
+            interfaces = edge_node.intfNames()
+            ips = []
+
+            for name in interfaces:
+                _logger.debug(f"Interface to append:\nIP:\n{edge_node.IP(intf=name)}\nNAME:{name}")
+                ips.append(edge_node.IP(intf=name))
+
+            self.edge_nodes[edge_node.name] = ips 
 
     def add_mininet_hosts(self, hosts: List[Host]):
         #TODO compatibility between topo and hosts

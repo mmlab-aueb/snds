@@ -43,7 +43,7 @@ def parse_args():
     parser.add_argument(
         "--port",
         type=int,
-        required=True,
+        default=8080,
     )
 
     return parser.parse_args()

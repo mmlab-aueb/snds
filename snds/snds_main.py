@@ -16,13 +16,85 @@ from minindn.apps.nlsr import Nlsr
 
 from pprint import pprint
 from time import sleep
+from typing import List
 
 # self made topology class
+from prepare_workloads.utils import read_edge_nodes_from_registry, read_workload
 from Topology import CustomTopology
 
 #load_dotenv()
 
 background_service_pids = []
+
+def process_workload(
+    custom_topo: CustomTopology,
+    number_of_edge_nodes:int,
+    number_of_end_users: int,
+    edge_nodes: List[str],
+    yaml_path: str,
+):
+    _logger.info("Running setup on nodes\n")
+    #read the script yaml file
+    with open(yaml_path, 'r') as file:
+        data = yaml.safe_load(file)
+    # Extract the scripts list
+    scripts = data.get('scripts', [])
+    
+    # Initialize variables to None
+    ip_provider_script = None
+    consumer_by_id_script = None
+    consumer_by_type_script = None
+    
+    # Search for the scripts by name
+    for script in scripts:
+        if script['name'] == 'ip_provider.py':
+            ip_provider_script = script
+        elif script['name'] == 'consumer_by_id.py':
+            consumer_by_id_script = script
+        elif script['name'] == 'consumer_by_type.py':
+            consumer_by_type_script = script
+
+    workload_lines = read_workload(f"./prepare_workloads/experiments/workload_{number_of_edge_nodes}.txt")
+
+    _logger.debug(f"Edge nodes in custom topo: {custom_topo.edge_nodes}\n")
+
+    for line in workload_lines:
+
+        user = custom_topo.mininet_hosts[line[1].lower()]
+        
+        # Find the index of "ID" or "id"
+        id_index_upper = user.name.find("ID")
+        id_index_lower = user.name.find("id")
+
+        if id_index_upper != -1:
+            id_index = id_index_upper
+            id_of_user = ''.join(filter(str.isdigit, user.name[id_index + 2:]))
+        elif id_index_lower != -1:
+            id_index = id_index_lower
+            id_of_user = ''.join(filter(str.isdigit, user.name[id_index + 2:]))
+        else:
+            id_index = -1
+            id_of_user = ''
+
+        _logger.debug(f"Host name: {user.name}\nID of user: {id_of_user}\nID index:{id_index}\n")
+        edge_node = next((node for node in edge_nodes if node.casefold() in user.name.casefold()), None)
+
+        if not edge_node:
+            continue
+        
+        ip_index = number_of_edge_nodes - int(id_of_user)
+        edge_node_ip = custom_topo.edge_nodes[edge_node][len(custom_topo.edge_nodes[edge_node])-ip_index]
+        
+        if line[2] == "provide":
+            command = f"python ip_provider.py --type {line[3]} --id {line[4]} --ip {edge_node_ip} 2>&1 | tee {ip_provider_script['log_path']}/provide_workload.logs"
+        elif line[2] == "consumeID":
+            command = f"python consumer_by_id.py --type {line[3]} --id {line[4]} --ip {edge_node_ip} 2>&1 | tee {consumer_by_id_script['log_path']}/consume_by_id_workload.logs"
+        elif line[2] == "consumeType":
+            command = f"python consumer_by_type.py --type {line[3]} --ip {edge_node_ip} 2>&1 | tee {consumer_by_type_script['log_path']}/consume_by_type_workload.logs"
+        else:
+            continue
+        
+        result = custom_topo.run_command_on_mininet_host(host_name=edge_node, command=command)
 
 def setup_nodes(custom_topo: CustomTopology, yaml_path: str):
 
@@ -45,6 +117,8 @@ def setup_nodes(custom_topo: CustomTopology, yaml_path: str):
                 host_name=host_name,
                 command=f"cp {script['path']}{script['name']} $HOME"
             )
+
+
             if not script['run_from_main']:
                 continue
 
@@ -55,6 +129,8 @@ def setup_nodes(custom_topo: CustomTopology, yaml_path: str):
 
                 if i+1 < len(script["environment_variables"]):
 
+                    # Provide the node_name as type
+                    # If the type specified in the yaml is null
                     if script["environment_variables"][i+1] is None:  
                         condition = True if "type" in script['environment_variables'][i] else False
 
@@ -74,14 +150,26 @@ def setup_nodes(custom_topo: CustomTopology, yaml_path: str):
             command = (
                 f"mkdir -p $HOME/tmp/ && "
                 f"mkdir -p $HOME/log/ && "
+                f"mkdir -p $HOME/results/ &&"
                 f"mkdir -p {script['log_path']}/{host_name}/ "
+                f"mkdir -p {script['result_path']}/{host_name}/"
             )
-
 
             result = custom_topo.run_command_on_mininet_host(
                 host_name=host_name,
                 command=command
             )
+
+            tcp_dump_command = f"tcpdump -i any -n -tttt | tee $HOME/results/{host_name}_packets.txt {script['result_path']}/{host_name}/{host_name}_packets.txt > /dev/null &"
+
+            result = custom_topo.run_command_on_mininet_host(
+                host_name=host_name,
+                command=tcp_dump_command,
+            )
+
+            if len(result.split()) == 2:
+                _, pid = result.split()
+                background_service_pids.append({"host_name": host_name, "pid": pid})
 
             # Construct the command to log the nlsr and nfd logs
             #command = (
@@ -151,11 +239,72 @@ def run():
         _logger.info('Starting NLSR on nodes\n')
         nlsrs = AppManager(ndn, ndn.net.hosts, Nlsr)
 
-        sleep(40)
+        sleep(90)
 
-        custom_topo.add_mininet_hosts(ndn.net.hosts)
+        hosts = [host for host in ndn.net.hosts if "ue" not in host.name]
+        _logger.debug(f"Non edge hosts:\n{hosts}\n")
+
+        edge_hosts = [host for host in ndn.net.hosts if "ue" in host.name]
+        _logger.debug(f"Edge hosts:\n{edge_hosts}\n")
+
+        edge_nodes = read_edge_nodes_from_registry(
+            registry_filename="./prepare_workloads/experiments/registry.txt",
+        )
+
+        _logger.debug(f"Edge nodes:\n{edge_nodes}\n")
+
+        number_of_edge_nodes = len(edge_nodes)
+
+        for edge_host in edge_hosts:
+            name = edge_host.name
+            # Find the index of "ID" or "id"
+            id_index_upper = name.find("ID")
+            id_index_lower = name.find("id")
+
+            if id_index_upper != -1:
+                id_index = id_index_upper
+            elif id_index_lower != -1:
+                id_index = id_index_lower
+            else:
+                id_index = -1
+
+            # Extract the max digit after "ID" or "id"
+            if id_index != -1:
+                digits_after_id = ''.join(filter(str.isdigit, name[id_index + 2:]))
+                if digits_after_id:
+                    max_digit = max(digits_after_id)
+                else:
+                    max_digit = ''
+            else:
+                max_digit = ''
+
+        _logger.debug(f"Max digit: {max_digit}\n")
+
+        number_of_end_users = number_of_edge_nodes * int(max_digit)
+
+        _logger.debug(f"Number of number of edge nodes: {number_of_edge_nodes}\n")
+        _logger.debug(f"Number of end users: {number_of_end_users}\n")
+
+        custom_topo.add_mininet_hosts(hosts=hosts)
+        custom_topo.add_mininet_hosts(hosts=edge_hosts)
+
+        _logger.debug(f"Mininet hosts:\n{custom_topo.mininet_hosts}\n")
+
+        custom_topo.add_edge_nodes(
+            edge_nodes=edge_nodes,
+        )
 
         setup_nodes(custom_topo, './scripts_for_nodes_config.yaml')
+
+        sleep(300)
+
+        process_workload(
+            custom_topo=custom_topo,
+            number_of_edge_nodes=number_of_edge_nodes,
+            number_of_end_users=number_of_end_users,
+            edge_nodes=edge_nodes,
+            yaml_path="./scripts_for_nodes_config.yaml",
+        )
 
         MiniNDNCLI(ndn.net)
 

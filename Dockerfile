@@ -16,8 +16,7 @@ WORKDIR /app
 COPY ./pyproject.toml ./
 
 # Copy your application files
-COPY ./snds/testbed.conf ./snds/
-COPY ./snds/snds-topology.conf ./snds/
+COPY ./snds/prepare_workloads ./snds/prepare_workloads
 COPY ./snds/http_utils ./snds/http_utils
 COPY ./snds/Topology.py ./snds/
 COPY ./snds/ngsild_dir ./snds/ngsild_dir/
