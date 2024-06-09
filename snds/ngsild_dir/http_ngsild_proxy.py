@@ -67,6 +67,7 @@ class MyServer(BaseHTTPRequestHandler):
             result = os.popen(command).read()
             _logger.debug(f"Result after running: {command}\nResult: {result}\n")
             self.wfile.write(bytes(result, "utf-8"))
+            self.wfile.flush()
             return
 
         if "id" in query_params:
@@ -76,6 +77,7 @@ class MyServer(BaseHTTPRequestHandler):
             result = os.popen(command).read()
             _logger.debug(f"Result after running: {command}\nResult: {result}\n")
             self.wfile.write(bytes(result, "utf-8"))
+            self.wfile.flush()
             return
 
         if "type" in query_params:
@@ -85,6 +87,7 @@ class MyServer(BaseHTTPRequestHandler):
             result = os.popen(command).read()
             _logger.debug(f"Result after running: {command}\nResult: {result}\n")
             self.wfile.write(bytes(result, "utf-8"))
+            self.wfile.flush()
             return 
 
 
