@@ -1,0 +1,60 @@
+2024-06-11 02:15:05,344 - asyncio - DEBUG - Using selector: EpollSelector
+2024-06-11 02:15:05,345 - ndn.app - DEBUG - Connected to NFD node, start running...
+2024-06-11 02:15:05,347 - __main__ - DEBUG - Interest name: /snds/Car_registry
+
+2024-06-11 02:15:05,347 - __main__ - INFO - Expressing interest on: /snds/Car_registry
+
+2024-06-11 02:15:05,493 - ndn.app - DEBUG - NetworkNack received /snds/Car_registry, reason=150
+2024-06-11 02:15:05,494 - __main__ - ERROR - Nacked with reason=150
+2024-06-11 02:15:05,495 - __main__ - ERROR - An error occurred: cannot unpack non-iterable NoneType object
+
+2024-06-11 02:15:05,495 - __main__ - ERROR - Exception type: TypeError
+
+2024-06-11 02:15:05,497 - __main__ - ERROR - Traceback: Traceback (most recent call last):
+  File "/home/scn4ndn/SNDN/testbed_experiments/closest_node_by_type.py", line 96, in <module>
+    app.run_forever(after_start=run())
+  File "/home/scn4ndn/.local/lib/python3.10/site-packages/ndn/app.py", line 337, in run_forever
+    aio.run(self.main_loop(after_start))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/home/scn4ndn/.local/lib/python3.10/site-packages/ndn/app.py", line 306, in main_loop
+    await task
+  File "/home/scn4ndn/.local/lib/python3.10/site-packages/ndn/app.py", line 281, in starting_task
+    await after_start
+  File "/home/scn4ndn/SNDN/testbed_experiments/closest_node_by_type.py", line 64, in run
+    data_name, meta_info, content = await express_interest(interest_name)
+TypeError: cannot unpack non-iterable NoneType object
+
+
+2024-06-11 02:15:23,964 - asyncio - DEBUG - Using selector: EpollSelector
+2024-06-11 02:15:23,965 - ndn.app - DEBUG - Connected to NFD node, start running...
+2024-06-11 02:15:23,967 - __main__ - DEBUG - Interest name: /snds/Car_registry
+
+2024-06-11 02:15:23,967 - __main__ - INFO - Expressing interest on: /snds/Car_registry
+
+2024-06-11 02:15:24,113 - ndn.app - DEBUG - NetworkNack received /snds/Car_registry, reason=150
+2024-06-11 02:15:24,114 - __main__ - ERROR - Nacked with reason=150
+2024-06-11 02:15:24,114 - __main__ - ERROR - An error occurred: cannot unpack non-iterable NoneType object
+
+2024-06-11 02:15:24,114 - __main__ - ERROR - Exception type: TypeError
+
+2024-06-11 02:15:24,115 - __main__ - ERROR - Traceback: Traceback (most recent call last):
+  File "/home/scn4ndn/SNDN/testbed_experiments/closest_node_by_type.py", line 96, in <module>
+    app.run_forever(after_start=run())
+  File "/home/scn4ndn/.local/lib/python3.10/site-packages/ndn/app.py", line 337, in run_forever
+    aio.run(self.main_loop(after_start))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/home/scn4ndn/.local/lib/python3.10/site-packages/ndn/app.py", line 306, in main_loop
+    await task
+  File "/home/scn4ndn/.local/lib/python3.10/site-packages/ndn/app.py", line 281, in starting_task
+    await after_start
+  File "/home/scn4ndn/SNDN/testbed_experiments/closest_node_by_type.py", line 64, in run
+    data_name, meta_info, content = await express_interest(interest_name)
+TypeError: cannot unpack non-iterable NoneType object
+
+

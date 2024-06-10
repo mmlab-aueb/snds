@@ -1,0 +1,4 @@
+2024-06-11 02:07:49,572 - __main__ - INFO - Started background process with command: python SNDS_r_service.py --type Car
+2024-06-11 02:07:49,572 - __main__ - INFO - Background process PID: 721349
+2024-06-11 02:07:49,572 - __main__ - INFO - Current background PIDs: [721349]
+2024-06-11 02:07:49,619 - __main__ - INFO - Result after running: python digital_twin.py --id 1 --type Car is: 

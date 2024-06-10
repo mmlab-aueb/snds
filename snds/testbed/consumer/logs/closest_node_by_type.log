@@ -1,0 +1,25 @@
+2024-06-11 02:16:55,215 - asyncio - DEBUG - Using selector: EpollSelector
+2024-06-11 02:16:55,216 - ndn.app - DEBUG - Connected to NFD node, start running...
+2024-06-11 02:16:55,217 - __main__ - DEBUG - Interest name: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry
+
+2024-06-11 02:16:55,217 - __main__ - INFO - Expressing interest on: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry
+
+2024-06-11 02:16:55,549 - ndn.app - DEBUG - Data received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry
+2024-06-11 02:16:55,549 - __main__ - INFO - Received data_name in run: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry
+
+2024-06-11 02:16:55,549 - __main__ - INFO - Received meta_info in run: MetaInfo(content_type=0, freshness_period=10000, final_block_id=None)
+
+2024-06-11 02:16:55,550 - __main__ - INFO - Received content in run: [96]
+
+2024-06-11 02:16:55,550 - __main__ - INFO - Expressing interest on: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/96
+
+2024-06-11 02:16:55,881 - ndn.app - DEBUG - Data received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/96
+2024-06-11 02:16:55,881 - __main__ - INFO - Received data_name in run: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/96
+
+2024-06-11 02:16:55,881 - __main__ - INFO - Received meta_info in run: MetaInfo(content_type=0, freshness_period=10000, final_block_id=None)
+
+2024-06-11 02:16:55,881 - __main__ - INFO - Received content in run: {"@context": "https://excid-io.github.io/dare/context/ngsi-context.jsonld", "@type": "Car", "@id": "1", "speed": 60, "location": {"@type": "Address", "street": "Trias 2", "country": "GR", "city": "Athens"}}
+
+2024-06-11 02:16:55,881 - __main__ - DEBUG - JSON DATA RECEIVED: {'@context': 'https://excid-io.github.io/dare/context/ngsi-context.jsonld', '@type': 'Car', '@id': '1', 'speed': 60, 'location': {'@type': 'Address', 'street': 'Trias 2', 'country': 'GR', 'city': 'Athens'}}
+
+2024-06-11 02:16:55,882 - ndn.app - INFO - Manually shutdown
