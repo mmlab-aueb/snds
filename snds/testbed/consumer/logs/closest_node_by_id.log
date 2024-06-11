@@ -1,16 +1,16 @@
-2024-06-11 02:14:51,913 - __main__ - DEBUG - Read ID from environment variable: 1
+2024-06-11 03:01:16,666 - __main__ - DEBUG - Read ID from environment variable: 1
 
-2024-06-11 02:14:51,914 - asyncio - DEBUG - Using selector: EpollSelector
-2024-06-11 02:14:51,915 - ndn.app - DEBUG - Connected to NFD node, start running...
-2024-06-11 02:14:51,915 - __main__ - INFO - Expressing interest on id: 1
+2024-06-11 03:01:16,667 - asyncio - DEBUG - Using selector: EpollSelector
+2024-06-11 03:01:16,668 - ndn.app - DEBUG - Connected to NFD node, start running...
+2024-06-11 03:01:16,668 - __main__ - INFO - Expressing interest on id: 1
 
-2024-06-11 02:14:52,248 - ndn.app - DEBUG - Data received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/1
-2024-06-11 02:14:52,249 - __main__ - INFO - Received data_name in run: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/1
+2024-06-11 03:01:16,669 - ndn.app - DEBUG - Data received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/1
+2024-06-11 03:01:16,669 - __main__ - INFO - Received data_name in run: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/1
 
-2024-06-11 02:14:52,249 - __main__ - INFO - Received meta_info in run: MetaInfo(content_type=0, freshness_period=10000, final_block_id=None)
+2024-06-11 03:01:16,669 - __main__ - INFO - Received meta_info in run: MetaInfo(content_type=0, freshness_period=10000, final_block_id=None)
 
-2024-06-11 02:14:52,249 - __main__ - INFO - Received content in run: <memory at 0x7fe700f5d840>
+2024-06-11 03:01:16,669 - __main__ - INFO - Received content in run: <memory at 0x7f193adb9840>
 
-2024-06-11 02:14:52,249 - __main__ - DEBUG - RECEIVED JSON DATA: {'@context': 'https://excid-io.github.io/dare/context/ngsi-context.jsonld', '@type': 'Car', '@id': '1', 'speed': 60, 'location': {'@type': 'Address', 'street': 'Trias 2', 'country': 'GR', 'city': 'Athens'}}
+2024-06-11 03:01:16,669 - __main__ - DEBUG - RECEIVED JSON DATA: {'@context': 'https://excid-io.github.io/dare/context/ngsi-context.jsonld', '@type': 'Car', '@id': '1', 'speed': 60, 'location': {'@type': 'Address', 'street': 'Trias 2', 'country': 'GR', 'city': 'Athens'}}
 
-2024-06-11 02:14:52,250 - ndn.app - INFO - Manually shutdown
+2024-06-11 03:01:16,669 - ndn.app - INFO - Manually shutdown

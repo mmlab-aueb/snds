@@ -1,0 +1,8 @@
+Τρι 11 Ιουν 2024 03:06:45 πμ EEST: NFD is running. Stopping it...
+face-created id=261 local=udp4://195.251.234.10:6363 remote=udp4://141.225.11.173:6363 persistency=persistent reliability=off congestion-marking=on congestion-marking-interval=100ms default-congestion-threshold=65536B mtu=8800
+Τρι 11 Ιουν 2024 03:06:47 πμ EEST: NFD face created successfully.
+route-add-accepted prefix=/ nexthop=261 origin=static cost=0 flags=child-inherit expires=never
+Τρι 11 Ιουν 2024 03:06:47 πμ EEST: Route to / added successfully.
+route-add-accepted prefix=/localhop/nfd nexthop=261 origin=static cost=0 flags=child-inherit expires=never
+Τρι 11 Ιουν 2024 03:06:47 πμ EEST: Route to /localhop/nfd added successfully.
+Τρι 11 Ιουν 2024 03:06:47 πμ EEST: NDN setup commands executed successfully.

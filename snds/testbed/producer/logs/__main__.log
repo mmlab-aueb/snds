@@ -98,3 +98,334 @@ For route: /snds/Car_registry
 2024-06-11 02:16:55,380 - __main__ - INFO - Data sent: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry
 From route: /snds/Car_registry
 
+2024-06-11 02:20:38,764 - ndn.app - INFO - Shutting down
+2024-06-11 02:20:38,764 - ndn.app - INFO - Receiving Ctrl+C, exit
+2024-06-11 02:20:38,764 - __main__ - INFO - Shutting down R-service
+
+2024-06-11 02:20:38,765 - ndn.app - INFO - Manually shutdown
+2024-06-11 02:21:50,782 - __main__ - DEBUG - Read SNDS-type from environment: Car
+
+2024-06-11 02:21:50,782 - __main__ - DEBUG - App route: /snds/Car
+
+2024-06-11 02:21:50,782 - __main__ - DEBUG - App route registry: /snds/Car_registry
+
+2024-06-11 02:21:50,783 - __main__ - INFO - Starting SNDS R service
+
+2024-06-11 02:21:50,783 - asyncio - DEBUG - Using selector: EpollSelector
+2024-06-11 02:21:50,783 - ndn.app - DEBUG - Connected to NFD node, start running...
+2024-06-11 02:21:50,786 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h1%07%2F%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%03Car/%00%00%01%90%04u%3D%C0/%A5%3C%22%F03X%5C%11/%16%03%1B%01%00/%17%20%99P%A4%90P%85DJ%A0%2B%1D%BC%04R%F9R%A4%DC%20%CDH%D8D%AA%5C%D7v%F0%5E%E3%9D%1D
+2024-06-11 02:21:50,786 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car succeeded: 200 Success
+2024-06-11 02:21:50,788 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h%3A%078%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%0CCar_registry/%00%00%01%90%04u%3D%C2/%FF%3D%20p%91%87%ABM/%16%03%1B%01%00/%17%20%B3%FB%03%28p%01n%A6w%EBb%13%12%7D%EA%8D%0FZ%9F8%FA%27%03%25%98%A3q%B0%05%BDHn
+2024-06-11 02:21:50,788 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry succeeded: 200 Success
+2024-06-11 02:21:50,819 - ndn.app - DEBUG - Interest received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/67571985
+2024-06-11 02:21:50,819 - __main__ - INFO - Received Interest: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/67571985
+For route: /snds/Car
+
+2024-06-11 02:21:50,826 - __main__ - INFO - Data sent: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/67571985
+From route: /snds/Car
+
+2024-06-11 02:32:57,791 - __main__ - DEBUG - Read SNDS-type from environment: Car
+
+2024-06-11 02:32:57,791 - __main__ - DEBUG - App route: /snds/Car
+
+2024-06-11 02:32:57,791 - __main__ - DEBUG - App route registry: /snds/Car_registry
+
+2024-06-11 02:32:57,792 - __main__ - INFO - Starting SNDS R service
+
+2024-06-11 02:32:57,792 - asyncio - DEBUG - Using selector: EpollSelector
+2024-06-11 02:32:57,792 - ndn.app - DEBUG - Connected to NFD node, start running...
+2024-06-11 02:32:57,794 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h1%07%2F%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%03Car/%00%00%01%90%04%7FkA/p%25%D2%CD%DE%28%81%DC/%16%03%1B%01%00/%17%20%9E%B3d%D2Ds%F3q%7B%98%93b%17%B8u%AE%2FD%95%17%1C%7F%E3%2A%5D%E7%C36%C3T%F8%7F
+2024-06-11 02:32:57,795 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car succeeded: 200 Success
+2024-06-11 02:32:57,796 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h%3A%078%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%0CCar_registry/%00%00%01%90%04%7FkC/%C8%DC%F8%CA%C9%2F%3AZ/%16%03%1B%01%00/%17%20k%E2%9A8%D5%FB%0Au%0B%FC%2F%09b%B5%8E%1F%B1%0E%3A%96%BF%25%40%14%B6%C2T%B3%3A%1E%C2%03
+2024-06-11 02:32:57,797 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry succeeded: 200 Success
+2024-06-11 02:32:57,837 - ndn.app - DEBUG - Interest received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/96829215
+2024-06-11 02:32:57,837 - __main__ - INFO - Received Interest: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/96829215
+For route: /snds/Car
+
+2024-06-11 02:32:57,842 - __main__ - INFO - Data sent: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/96829215
+From route: /snds/Car
+
+2024-06-11 02:34:22,497 - __main__ - DEBUG - Read SNDS-type from environment: Car
+
+2024-06-11 02:34:22,497 - __main__ - DEBUG - App route: /snds/Car
+
+2024-06-11 02:34:22,497 - __main__ - DEBUG - App route registry: /snds/Car_registry
+
+2024-06-11 02:34:22,498 - __main__ - INFO - Starting SNDS R service
+
+2024-06-11 02:34:22,498 - asyncio - DEBUG - Using selector: EpollSelector
+2024-06-11 02:34:22,498 - ndn.app - DEBUG - Connected to NFD node, start running...
+2024-06-11 02:34:22,500 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h1%07%2F%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%03Car/%00%00%01%90%04%80%B6%22/asE%E8h%BC%9A%DD/%16%03%1B%01%00/%17%20o%201%11%05%05%24%21%E3%B9%FD%AB%A5K%85%EB%06%ABY%FE%A9r%8E%A7p0%C4%F9.%DDs%90
+2024-06-11 02:34:22,500 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car succeeded: 200 Success
+2024-06-11 02:34:22,501 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h%3A%078%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%0CCar_registry/%00%00%01%90%04%80%B6%24/U~%D8%25%7B%60%BE%B9/%16%03%1B%01%00/%17%20G%B0%96%1B%AF%AB%DB%F3M%B0z%EF%D3%12%1C5C%CD%AD6%28F%8B%C9%F6%19%10%DB%CE%86%90h
+2024-06-11 02:34:22,502 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry succeeded: 200 Success
+2024-06-11 02:34:22,537 - ndn.app - DEBUG - Interest received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/30711687
+2024-06-11 02:34:22,537 - __main__ - INFO - Received Interest: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/30711687
+For route: /snds/Car
+
+2024-06-11 02:34:22,541 - __main__ - INFO - Data sent: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/30711687
+From route: /snds/Car
+
+2024-06-11 02:35:16,265 - ndn.app - INFO - Shutting down
+2024-06-11 02:35:16,265 - ndn.app - INFO - Receiving Ctrl+C, exit
+2024-06-11 02:35:16,265 - __main__ - INFO - Shutting down R-service
+
+2024-06-11 02:35:16,265 - ndn.app - INFO - Manually shutdown
+2024-06-11 02:35:32,812 - __main__ - DEBUG - Read SNDS-type from environment: Car
+
+2024-06-11 02:35:32,812 - __main__ - DEBUG - App route: /snds/Car
+
+2024-06-11 02:35:32,812 - __main__ - DEBUG - App route registry: /snds/Car_registry
+
+2024-06-11 02:35:32,812 - __main__ - INFO - Starting SNDS R service
+
+2024-06-11 02:35:32,813 - asyncio - DEBUG - Using selector: EpollSelector
+2024-06-11 02:35:32,813 - ndn.app - DEBUG - Connected to NFD node, start running...
+2024-06-11 02:35:32,815 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h1%07%2F%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%03Car/%00%00%01%90%04%81%C8%CD/%D7%14%06I6%E4j%22/%16%03%1B%01%00/%17%20s%07%07%D1%F6%A4%26%08e%7B%EB%60%15%13%DF%18z%876%5D%8D%899%40%23%F4%BD%2Bfm%BB%C2
+2024-06-11 02:35:32,815 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car succeeded: 200 Success
+2024-06-11 02:35:32,816 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h%3A%078%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%0CCar_registry/%00%00%01%90%04%81%C8%CF/%DC%C1v%81%CA%B8%B2%FF/%16%03%1B%01%00/%17%20%9A%2F%E4%F9%EB%05%19%16%C5%9DlRl%0En%F6s%D2%B4%ABR%1B%29%A0EGW%AF%C5%BE%13%AB
+2024-06-11 02:35:32,816 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry succeeded: 200 Success
+2024-06-11 02:35:32,852 - ndn.app - DEBUG - Interest received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/79777455
+2024-06-11 02:35:32,852 - __main__ - INFO - Received Interest: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/79777455
+For route: /snds/Car
+
+2024-06-11 02:35:32,857 - __main__ - INFO - Data sent: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/79777455
+From route: /snds/Car
+
+2024-06-11 02:35:34,815 - ndn.app - INFO - Shutting down
+2024-06-11 02:35:34,816 - ndn.app - INFO - Receiving Ctrl+C, exit
+2024-06-11 02:35:34,816 - __main__ - INFO - Shutting down R-service
+
+2024-06-11 02:35:34,816 - ndn.app - INFO - Manually shutdown
+2024-06-11 02:35:39,429 - __main__ - DEBUG - Read SNDS-type from environment: Car
+
+2024-06-11 02:35:39,429 - __main__ - DEBUG - App route: /snds/Car
+
+2024-06-11 02:35:39,429 - __main__ - DEBUG - App route registry: /snds/Car_registry
+
+2024-06-11 02:35:39,430 - __main__ - INFO - Starting SNDS R service
+
+2024-06-11 02:35:39,430 - asyncio - DEBUG - Using selector: EpollSelector
+2024-06-11 02:35:39,430 - ndn.app - DEBUG - Connected to NFD node, start running...
+2024-06-11 02:35:39,432 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h1%07%2F%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%03Car/%00%00%01%90%04%81%E2%A7/5id%C1t%03%E9%11/%16%03%1B%01%00/%17%20%A9%A0%99%1D%02%13%91%97%A3kA%BA%E1%DBu%2C%DD%B4%FC%AB%1C%29%EC%A9%E0%A9%B6%C6%C6s%A7%9B
+2024-06-11 02:35:39,432 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car succeeded: 200 Success
+2024-06-11 02:35:39,433 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h%3A%078%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%0CCar_registry/%00%00%01%90%04%81%E2%A8/%C2%A6%A9%9E%A9%C5M%82/%16%03%1B%01%00/%17%20%26f%B6%15%8Ek%12%9D%CE%3E%ED%BDDQwjzl%DE%F4%CF%EA%E8%27%B0%21%95%22g%85%B9r
+2024-06-11 02:35:39,434 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry succeeded: 200 Success
+2024-06-11 02:35:39,467 - ndn.app - DEBUG - Interest received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/17262380
+2024-06-11 02:35:39,468 - __main__ - INFO - Received Interest: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/17262380
+For route: /snds/Car
+
+2024-06-11 02:35:39,476 - __main__ - INFO - Data sent: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/17262380
+From route: /snds/Car
+
+2024-06-11 02:37:45,563 - ndn.app - INFO - Shutting down
+2024-06-11 02:37:45,564 - ndn.app - INFO - Receiving Ctrl+C, exit
+2024-06-11 02:37:45,564 - __main__ - INFO - Shutting down R-service
+
+2024-06-11 02:37:45,564 - ndn.app - INFO - Manually shutdown
+2024-06-11 02:37:46,668 - __main__ - DEBUG - Read SNDS-type from environment: Car
+
+2024-06-11 02:37:46,668 - __main__ - DEBUG - App route: /snds/Car
+
+2024-06-11 02:37:46,668 - __main__ - DEBUG - App route registry: /snds/Car_registry
+
+2024-06-11 02:37:46,669 - __main__ - INFO - Starting SNDS R service
+
+2024-06-11 02:37:46,669 - asyncio - DEBUG - Using selector: EpollSelector
+2024-06-11 02:37:46,669 - ndn.app - DEBUG - Connected to NFD node, start running...
+2024-06-11 02:37:46,671 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h1%07%2F%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%03Car/%00%00%01%90%04%83%D3%AE/%A8%98%13%EAF%B8%ABv/%16%03%1B%01%00/%17%20.%83%27%3F%EC%D1%E94r%81%C9%27y5%7B8%93%1B%F8%DC%960%E3%E6P%C9%E9%94%D3L%2AQ
+2024-06-11 02:37:46,671 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car succeeded: 200 Success
+2024-06-11 02:37:46,672 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h%3A%078%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%0CCar_registry/%00%00%01%90%04%83%D3%AF/%23YG%EF%AB%C8%97%AF/%16%03%1B%01%00/%17%20w%7F%02%C53%DF%3D%D1%87%ED%E3%2F%A0F~%3CyX%0E%9B%3At%E6ZK%3B0%A3%11J%22i
+2024-06-11 02:37:46,672 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry succeeded: 200 Success
+2024-06-11 02:37:46,707 - ndn.app - DEBUG - Interest received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/37057948
+2024-06-11 02:37:46,707 - __main__ - INFO - Received Interest: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/37057948
+For route: /snds/Car
+
+2024-06-11 02:37:46,712 - __main__ - INFO - Data sent: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/37057948
+From route: /snds/Car
+
+2024-06-11 02:38:57,097 - ndn.app - INFO - Shutting down
+2024-06-11 02:38:57,098 - ndn.app - INFO - Receiving Ctrl+C, exit
+2024-06-11 02:38:57,098 - __main__ - INFO - Shutting down R-service
+
+2024-06-11 02:38:57,098 - ndn.app - INFO - Manually shutdown
+2024-06-11 02:38:58,296 - __main__ - DEBUG - Read SNDS-type from environment: Car
+
+2024-06-11 02:38:58,296 - __main__ - DEBUG - App route: /snds/Car
+
+2024-06-11 02:38:58,296 - __main__ - DEBUG - App route registry: /snds/Car_registry
+
+2024-06-11 02:38:58,296 - __main__ - INFO - Starting SNDS R service
+
+2024-06-11 02:38:58,297 - asyncio - DEBUG - Using selector: EpollSelector
+2024-06-11 02:38:58,297 - ndn.app - DEBUG - Connected to NFD node, start running...
+2024-06-11 02:38:58,299 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h1%07%2F%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%03Car/%00%00%01%90%04%84%EBz/%B1%91%3A%04%D8%D5iJ/%16%03%1B%01%00/%17%20%B59hF%FC%1E6i%25%D3%26%DAH%1A%2At%EA%B9%FD%87%93K%0C%D7%5Eo%CA%B8%F8J%07T
+2024-06-11 02:38:58,299 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car succeeded: 200 Success
+2024-06-11 02:38:58,300 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h%3A%078%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%0CCar_registry/%00%00%01%90%04%84%EB%7B/%FB%A9L%B2D%B1%E6B/%16%03%1B%01%00/%17%20%93%94%B2%A1%E5%80S%2BH%13z%E4%C6%ED%81%D0%A9xu%04%D1%9Bz%B78%26%3C%B1X%F7%3F-
+2024-06-11 02:38:58,301 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry succeeded: 200 Success
+2024-06-11 02:38:58,334 - ndn.app - DEBUG - Interest received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/62423918
+2024-06-11 02:38:58,335 - __main__ - INFO - Received Interest: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/62423918
+For route: /snds/Car
+
+2024-06-11 02:38:58,341 - __main__ - INFO - Data sent: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/62423918
+From route: /snds/Car
+
+2024-06-11 02:44:07,241 - ndn.app - INFO - Shutting down
+2024-06-11 02:44:07,242 - ndn.app - INFO - Receiving Ctrl+C, exit
+2024-06-11 02:44:07,242 - __main__ - INFO - Shutting down R-service
+
+2024-06-11 02:44:07,242 - ndn.app - INFO - Manually shutdown
+2024-06-11 02:44:14,487 - __main__ - DEBUG - Read SNDS-type from environment: Car
+
+2024-06-11 02:44:14,487 - __main__ - DEBUG - App route: /snds/Car
+
+2024-06-11 02:44:14,487 - __main__ - DEBUG - App route registry: /snds/Car_registry
+
+2024-06-11 02:44:14,487 - __main__ - INFO - Starting SNDS R service
+
+2024-06-11 02:44:14,488 - asyncio - DEBUG - Using selector: EpollSelector
+2024-06-11 02:44:14,488 - ndn.app - DEBUG - Connected to NFD node, start running...
+2024-06-11 02:44:14,490 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h1%07%2F%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%03Car/%00%00%01%90%04%89%BE%98/%CE%90%28%20%3E%A5%7FV/%16%03%1B%01%00/%17%20%E9%88s-%01%18L%81%23G%8DZ%B0u%132%E9%1A%C89%8C.%1A%DC%FD0%C7%94%01%14%3Cp
+2024-06-11 02:44:14,490 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car succeeded: 200 Success
+2024-06-11 02:44:14,491 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h%3A%078%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%0CCar_registry/%00%00%01%90%04%89%BE%9A/%16%C1%EF%D2R%8A-o/%16%03%1B%01%00/%17%20%01J%99%AA%AF%F9%BC%C0%8C%EF-1%10%D2%0E%13%24n%C30%8E%D3%85%16~%C9S%E1%24%3Dn%84
+2024-06-11 02:44:14,492 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry succeeded: 200 Success
+2024-06-11 02:44:14,527 - ndn.app - DEBUG - Interest received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/58688958
+2024-06-11 02:44:14,527 - __main__ - INFO - Received Interest: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/58688958
+For route: /snds/Car
+
+2024-06-11 02:44:14,538 - __main__ - INFO - Data sent: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/58688958
+From route: /snds/Car
+
+2024-06-11 02:46:18,843 - ndn.app - INFO - Shutting down
+2024-06-11 02:46:18,844 - ndn.app - INFO - Receiving Ctrl+C, exit
+2024-06-11 02:46:18,844 - __main__ - INFO - Shutting down R-service
+
+2024-06-11 02:46:18,844 - ndn.app - INFO - Manually shutdown
+2024-06-11 02:50:59,163 - __main__ - DEBUG - Read SNDS-type from environment: Car
+
+2024-06-11 02:50:59,163 - __main__ - DEBUG - App route: /snds/Car
+
+2024-06-11 02:50:59,163 - __main__ - DEBUG - App route registry: /snds/Car_registry
+
+2024-06-11 02:50:59,163 - __main__ - INFO - Starting SNDS R service
+
+2024-06-11 02:50:59,163 - asyncio - DEBUG - Using selector: EpollSelector
+2024-06-11 02:50:59,164 - ndn.app - DEBUG - Connected to NFD node, start running...
+2024-06-11 02:50:59,165 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h1%07%2F%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%03Car/%00%00%01%90%04%8F%EB%5C/1%C7%03%D5%7D%E0%08%CD/%16%03%1B%01%00/%17%20w%EB%0D%C7%8D%BD%BA5%8BBL%B7%3Fa%C6%D35%28%8C%E0%C4%04%99J%17%14b%D5%D9%7F%EC%07
+2024-06-11 02:50:59,166 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car succeeded: 200 Success
+2024-06-11 02:50:59,167 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h%3A%078%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%0CCar_registry/%00%00%01%90%04%8F%EB%5E/%E7%B8c%18%91Q%0E%D0/%16%03%1B%01%00/%17%20%C2t%21%9F%20%C8EI%0C%D5%FB%111%22w1u%9F%0E%AF%9A%22%11%F2cm%AF%EDSYE%98
+2024-06-11 02:50:59,167 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry succeeded: 200 Success
+2024-06-11 02:50:59,170 - ndn.app - DEBUG - Interest received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/21080213
+2024-06-11 02:50:59,171 - __main__ - INFO - Received Interest: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/21080213
+For route: /snds/Car
+
+2024-06-11 02:50:59,175 - __main__ - INFO - Data sent: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/21080213
+From route: /snds/Car
+
+2024-06-11 02:51:46,852 - ndn.app - INFO - Shutting down
+2024-06-11 02:51:46,853 - ndn.app - INFO - Receiving Ctrl+C, exit
+2024-06-11 02:51:46,853 - __main__ - INFO - Shutting down R-service
+
+2024-06-11 02:51:46,853 - ndn.app - INFO - Manually shutdown
+2024-06-11 02:52:02,925 - __main__ - DEBUG - Read SNDS-type from environment: car
+
+2024-06-11 02:52:02,925 - __main__ - DEBUG - App route: /snds/car
+
+2024-06-11 02:52:02,925 - __main__ - DEBUG - App route registry: /snds/car_registry
+
+2024-06-11 02:52:02,925 - __main__ - INFO - Starting SNDS R service
+
+2024-06-11 02:52:02,926 - asyncio - DEBUG - Using selector: EpollSelector
+2024-06-11 02:52:02,926 - ndn.app - DEBUG - Connected to NFD node, start running...
+2024-06-11 02:52:02,927 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h1%07%2F%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%03car/%00%00%01%90%04%90%E4n/.%DC%C7%F5g%FA%BF%EE/%16%03%1B%01%00/%17%20%C3%3F%D3q%8B%D3%EA%9F1%22%B8%1B%11%D3~%F5%94%27lr9%9C%A7%84%E3%CEj%7F%03E%8F%05
+2024-06-11 02:52:02,928 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/car succeeded: 200 Success
+2024-06-11 02:52:02,929 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h%3A%078%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%0Ccar_registry/%00%00%01%90%04%90%E4p/%C9%D8%DE%28%205%EE%00/%16%03%1B%01%00/%17%20~%0C%BBI%D6%2C%E3%C4%F7K%16ia%99%03N%E7f%B6A%2A%92%BBQJ%F9%04%B2%40%A9%82l
+2024-06-11 02:52:02,929 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/car_registry succeeded: 200 Success
+2024-06-11 02:52:05,171 - ndn.app - INFO - Shutting down
+2024-06-11 02:52:05,172 - ndn.app - INFO - Receiving Ctrl+C, exit
+2024-06-11 02:52:05,172 - __main__ - INFO - Shutting down R-service
+
+2024-06-11 02:52:05,172 - ndn.app - INFO - Manually shutdown
+2024-06-11 02:52:07,325 - __main__ - DEBUG - Read SNDS-type from environment: Car
+
+2024-06-11 02:52:07,325 - __main__ - DEBUG - App route: /snds/Car
+
+2024-06-11 02:52:07,325 - __main__ - DEBUG - App route registry: /snds/Car_registry
+
+2024-06-11 02:52:07,325 - __main__ - INFO - Starting SNDS R service
+
+2024-06-11 02:52:07,325 - asyncio - DEBUG - Using selector: EpollSelector
+2024-06-11 02:52:07,326 - ndn.app - DEBUG - Connected to NFD node, start running...
+2024-06-11 02:52:07,327 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h1%07%2F%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%03Car/%00%00%01%90%04%90%F5%9E/w%B6%22Zo%F1%F4t/%16%03%1B%01%00/%17%20%F0%BD%1A%C6%99%1CM%CA-%A5Vh%01%CEFX%EA%E5%F9%89%EDn%A8%B1%A2%B1%0AQ%89b%CEl
+2024-06-11 02:52:07,328 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car succeeded: 200 Success
+2024-06-11 02:52:07,329 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h%3A%078%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%0CCar_registry/%00%00%01%90%04%90%F5%A0/%E2%B9%CF%CA%8D%FE%13W/%16%03%1B%01%00/%17%20%E0%1F%11%001%8E%12%C2%9A%A9%97q%00S%A4%AC%FCf%DA%B3%A4%7D%C8%CE%D2%E1%CD%83R%3Ap%08
+2024-06-11 02:52:07,329 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry succeeded: 200 Success
+2024-06-11 02:52:22,668 - ndn.app - DEBUG - Interest received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/88646370
+2024-06-11 02:52:22,668 - __main__ - INFO - Received Interest: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/88646370
+For route: /snds/Car
+
+2024-06-11 02:52:22,673 - __main__ - INFO - Data sent: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/88646370
+From route: /snds/Car
+
+2024-06-11 02:52:38,446 - ndn.app - DEBUG - Interest received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/17864630
+2024-06-11 02:52:38,446 - __main__ - INFO - Received Interest: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/17864630
+For route: /snds/Car
+
+2024-06-11 02:52:38,451 - __main__ - INFO - Data sent: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/17864630
+From route: /snds/Car
+
+2024-06-11 02:55:53,983 - ndn.app - INFO - Shutting down
+2024-06-11 02:55:53,984 - ndn.app - INFO - Receiving Ctrl+C, exit
+2024-06-11 02:55:53,984 - __main__ - INFO - Shutting down R-service
+
+2024-06-11 02:55:53,984 - ndn.app - INFO - Manually shutdown
+2024-06-11 02:56:47,989 - __main__ - INFO - Shutting down R-service
+
+2024-06-11 02:56:47,990 - ndn.app - INFO - Manually shutdown
+2024-06-11 02:56:48,006 - __main__ - INFO - Shutting down R-service
+
+2024-06-11 02:56:48,006 - ndn.app - INFO - Manually shutdown
+2024-06-11 03:00:38,924 - __main__ - DEBUG - Read SNDS-type from environment: Car
+
+2024-06-11 03:00:38,924 - __main__ - DEBUG - App route: /snds/Car
+
+2024-06-11 03:00:38,924 - __main__ - DEBUG - App route registry: /snds/Car_registry
+
+2024-06-11 03:00:38,925 - __main__ - INFO - Starting SNDS R service
+
+2024-06-11 03:00:38,925 - asyncio - DEBUG - Using selector: EpollSelector
+2024-06-11 03:00:38,926 - ndn.app - DEBUG - Connected to NFD node, start running...
+2024-06-11 03:00:38,927 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h1%07%2F%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%03Car/%00%00%01%90%04%98%C4%0E/%F2%7D%BB%0F%FD%10%A9%EF/%16%03%1B%01%00/%17%20%9B%E4M%7D%8F%17%83%F5%FD5%AF%E8%B6%FA%26%3BF%CB%15%E5R%F6%0F%F9h%8EQ%C0%F3%B5%C6%82
+2024-06-11 03:00:38,928 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car succeeded: 200 Success
+2024-06-11 03:00:38,929 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h%3A%078%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%0CCar_registry/%00%00%01%90%04%98%C4%10/%0D_%80%1C%CC%14%89%D8/%16%03%1B%01%00/%17%20B%19%F0%C0%15%ACW%8D%81%5C%06%D6%2F%BBG%CD%8CSV%20G%10%21%A9x%7D2%E4%90%8B%C3g
+2024-06-11 03:00:38,929 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry succeeded: 200 Success
+2024-06-11 03:00:38,931 - ndn.app - DEBUG - Interest received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/74815641
+2024-06-11 03:00:38,932 - __main__ - INFO - Received Interest: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/74815641
+For route: /snds/Car
+
+2024-06-11 03:00:38,939 - __main__ - INFO - Data sent: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/74815641
+From route: /snds/Car
+
+2024-06-11 03:01:04,007 - ndn.app - DEBUG - Interest received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry
+2024-06-11 03:01:04,007 - __main__ - INFO - Received Interest: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry
+For route: /snds/Car_registry
+
+2024-06-11 03:01:04,007 - __main__ - DEBUG - rIDs: [45]
+
+2024-06-11 03:01:04,012 - __main__ - INFO - Data sent: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry
+From route: /snds/Car_registry
+
+2024-06-11 03:01:16,814 - ndn.app - DEBUG - Interest received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry
+2024-06-11 03:01:16,814 - __main__ - INFO - Received Interest: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry
+For route: /snds/Car_registry
+
+2024-06-11 03:01:16,814 - __main__ - DEBUG - rIDs: [45]
+
+2024-06-11 03:01:16,819 - __main__ - INFO - Data sent: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car_registry
+From route: /snds/Car_registry
+
+2024-06-11 03:02:38,438 - ndn.app - INFO - Shutting down
+2024-06-11 03:02:38,439 - ndn.app - INFO - Receiving Ctrl+C, exit
+2024-06-11 03:02:38,439 - __main__ - INFO - Shutting down R-service
+
+2024-06-11 03:02:38,439 - ndn.app - INFO - Manually shutdown

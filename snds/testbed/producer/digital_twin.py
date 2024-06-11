@@ -3,6 +3,8 @@ import logging
 import os
 import json
 import shlex  # Import shlex
+import subprocess
+import sys
 
 # Get the current filename without the extension
 log_filename = os.path.splitext(os.path.basename(__file__))[0]
@@ -64,6 +66,14 @@ with open(json_ld_name, "w") as json_ld:
     _logger.debug(f"Writing to JSON file: {json_ld_name}\n")
     json.dump(json_ld_data, json_ld, indent=2)
 
-result = os.popen(f"python SNDS_service.py --object-name {id_w} --type {json_ld_data['@type']} &")
+command = f"python SNDS_service.py --object-name {id_w} --type {json_ld_data['@type']} &"
+
+process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+_logger.debug(f"Started SNDS_service with PID {process.pid}, object-name {id_w}, type {json_ld_data['@type']}")
+
+# Print the PID to stdout for capturing by run_producer.py
+print(process.pid)
+sys.stdout.flush()
 
 _logger.debug(f"Result after running SNDS_service with object-name {id_w}, type {json_ld_data['@type']}")

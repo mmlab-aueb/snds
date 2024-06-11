@@ -1,0 +1,29 @@
+Τρι 11 Ιουν 2024 03:06:01 πμ EEST: NFD is running. Stopping it...
+face-created id=334 local=udp4://195.251.234.21:6363 remote=udp4://195.251.234.11:6363 persistency=persistent reliability=off congestion-marking=on congestion-marking-interval=100ms default-congestion-threshold=65536B mtu=8800
+Τρι 11 Ιουν 2024 03:06:03 πμ EEST: NFD face created successfully.
+route-add-accepted prefix=/ nexthop=334 origin=static cost=0 flags=child-inherit expires=never
+Τρι 11 Ιουν 2024 03:06:03 πμ EEST: Route to / added successfully.
+route-add-accepted prefix=/localhop/nfd nexthop=334 origin=static cost=0 flags=child-inherit expires=never
+Τρι 11 Ιουν 2024 03:06:03 πμ EEST: Route to /localhop/nfd added successfully.
+<R	/ndn/gr/edu/mmlab2/aueb/fotiou/KEY/%EDW%E4%C3%F9%FC%EA%96
+<I	/ndn/gr/edu/mmlab2/KEY/%BAPw%96%0F%E6%D9%A2/NA/v=1715397451729
+>D	/ndn/gr/edu/mmlab2/KEY/%BAPw%96%0F%E6%D9%A2/NA/v=1715397451729
+<R	/ndn/gr/edu/mmlab2/KEY/%BAPw%96%0F%E6%D9%A2
+<I	/ndn/KEY/%27%C4%B2%2A%9F%7B%81%27/ndn/v=1651246789556
+>D	/ndn/KEY/%27%C4%B2%2A%9F%7B%81%27/ndn/v=1651246789556
+!S	/ndn/KEY/%27%C4%B2%2A%9F%7B%81%27/ndn/v=1651246789556
+Τρι 11 Ιουν 2024 03:09:04 πμ EEST: NFD is not running.
+Τρι 11 Ιουν 2024 03:09:06 πμ EEST: NFD started successfully.
+face-created id=334 local=udp4://195.251.234.21:6363 remote=udp4://195.251.234.11:6363 persistency=persistent reliability=off congestion-marking=on congestion-marking-interval=100ms default-congestion-threshold=65536B mtu=8800
+Τρι 11 Ιουν 2024 03:09:06 πμ EEST: NFD face created successfully.
+route-add-accepted prefix=/ nexthop=334 origin=static cost=0 flags=child-inherit expires=never
+Τρι 11 Ιουν 2024 03:09:06 πμ EEST: Route to / added successfully.
+route-add-accepted prefix=/localhop/nfd nexthop=334 origin=static cost=0 flags=child-inherit expires=never
+Τρι 11 Ιουν 2024 03:09:06 πμ EEST: Route to /localhop/nfd added successfully.
+<R	/ndn/gr/edu/mmlab2/aueb/fotiou/KEY/%EDW%E4%C3%F9%FC%EA%96
+<I	/ndn/gr/edu/mmlab2/KEY/%BAPw%96%0F%E6%D9%A2/NA/v=1715397451729
+>D	/ndn/gr/edu/mmlab2/KEY/%BAPw%96%0F%E6%D9%A2/NA/v=1715397451729
+<R	/ndn/gr/edu/mmlab2/KEY/%BAPw%96%0F%E6%D9%A2
+<I	/ndn/KEY/%27%C4%B2%2A%9F%7B%81%27/ndn/v=1651246789556
+>D	/ndn/KEY/%27%C4%B2%2A%9F%7B%81%27/ndn/v=1651246789556
+!S	/ndn/KEY/%27%C4%B2%2A%9F%7B%81%27/ndn/v=1651246789556

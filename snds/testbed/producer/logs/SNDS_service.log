@@ -1,30 +1,46 @@
-2024-06-11 02:14:44,296 - __main__ - DEBUG - Arguments inside SNDS_service:
+2024-06-11 03:00:38,928 - __main__ - DEBUG - Arguments inside SNDS_service:
 snds_type: Car
 object_name: 1
 
-2024-06-11 02:14:44,296 - asyncio - DEBUG - Using selector: EpollSelector
-2024-06-11 02:14:44,297 - ndn.app - DEBUG - Connected to NFD node, start running...
-2024-06-11 02:14:44,298 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h%2F%07-%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%011/%00%00%01%90%04n%BB%C9/%D4%BCL%C5%0AK%7C%D5/%16%03%1B%01%00/%17%20%B3%85R%07%93%2C%9B%0F%F7%FC%D5%C3%83%81%F7%99%CB%3A%BFi%20%5D%16%EA%FD%D9%3DY%EBv%A4%93
-2024-06-11 02:14:44,299 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/1 succeeded: 200 Success
-2024-06-11 02:14:44,307 - ndn.app - DEBUG - Data received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/20280958
-2024-06-11 02:14:44,307 - __main__ - INFO - Received Data Name: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/20280958
+2024-06-11 03:00:38,928 - asyncio - DEBUG - Using selector: EpollSelector
+2024-06-11 03:00:38,929 - ndn.app - DEBUG - Connected to NFD node, start running...
+2024-06-11 03:00:38,930 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h%2F%07-%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%011/%00%00%01%90%04%98%C4%11/%9A%80%96%EC%9E.%9B%87/%16%03%1B%01%00/%17%20%C2EH%3EW%B8%B6.%12%C4%19%BBy%21b%D8%17%EB%BFud%BF%CD%8F%C1%BA%0CXI%16%DB%E0
+2024-06-11 03:00:38,931 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/1 succeeded: 200 Success
+2024-06-11 03:00:38,939 - ndn.app - DEBUG - Data received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/74815641
+2024-06-11 03:00:38,939 - __main__ - INFO - Received Data Name: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/Car/74815641
 
-2024-06-11 02:14:44,307 - __main__ - DEBUG - b'\x00`'
-2024-06-11 02:14:44,307 - __main__ - DEBUG - rID received: 96
+2024-06-11 03:00:38,939 - __main__ - DEBUG - b'\x00-'
+2024-06-11 03:00:38,939 - __main__ - DEBUG - rID received: 45
 
-2024-06-11 02:14:44,309 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h0%07.%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%0296/%00%00%01%90%04n%BB%D3/%D7%F4%C4_%3Dw%2C%3A/%16%03%1B%01%00/%17%20%A0%F5%A9%EA%CA%E6%27zJ%EE%A2%13%23%21E%DF%BD%2C%2C%C67b%92%CA~%F6%924w%A4%C8r
-2024-06-11 02:14:44,309 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/96 succeeded: 200 Success
-2024-06-11 02:14:52,072 - ndn.app - DEBUG - Interest received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/1
-2024-06-11 02:14:52,073 - __main__ - INFO - Received Interest: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/1
+2024-06-11 03:00:38,941 - ndn.app - DEBUG - Data received /localhost/nfd/rib/register/h0%07.%08%03ndn%08%02gr%08%03edu%08%06mmlab2%08%04aueb%08%06fotiou%08%04snds%08%0245/%00%00%01%90%04%98%C4%1C/%89N%3E%2B%AE%05%1D%99/%16%03%1B%01%00/%17%20%E5%07%A9%1E%25F%E8%CF~%AA%05%ECCw%DC%E4%C5%F3%C8%98%8D%3B%C2%CF0%09%D0%A4%82%07%D03
+2024-06-11 03:00:38,941 - ndn.app - DEBUG - Registration for /ndn/gr/edu/mmlab2/aueb/fotiou/snds/45 succeeded: 200 Success
+2024-06-11 03:00:53,297 - ndn.app - DEBUG - Interest received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/1
+2024-06-11 03:00:53,297 - __main__ - INFO - Received Interest: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/1
 For route: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/1
 
-2024-06-11 02:14:52,079 - __main__ - DEBUG - Data sent: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/1
+2024-06-11 03:00:53,304 - __main__ - DEBUG - Data sent: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/1
 From route: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/1
 
-2024-06-11 02:16:55,706 - ndn.app - DEBUG - Interest received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/96
-2024-06-11 02:16:55,706 - __main__ - INFO - Received Interest: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/96
-For route: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/96
+2024-06-11 03:01:04,338 - ndn.app - DEBUG - Interest received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/45
+2024-06-11 03:01:04,338 - __main__ - INFO - Received Interest: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/45
+For route: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/45
 
-2024-06-11 02:16:55,712 - __main__ - DEBUG - Data sent: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/96
-From route: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/96
+2024-06-11 03:01:04,344 - __main__ - DEBUG - Data sent: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/45
+From route: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/45
 
+2024-06-11 03:01:12,369 - ndn.app - DEBUG - Interest received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/1
+2024-06-11 03:01:12,369 - __main__ - INFO - Received Interest: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/1
+For route: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/1
+
+2024-06-11 03:01:12,375 - __main__ - DEBUG - Data sent: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/1
+From route: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/1
+
+2024-06-11 03:01:17,146 - ndn.app - DEBUG - Interest received /ndn/gr/edu/mmlab2/aueb/fotiou/snds/45
+2024-06-11 03:01:17,146 - __main__ - INFO - Received Interest: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/45
+For route: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/45
+
+2024-06-11 03:01:17,154 - __main__ - DEBUG - Data sent: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/45
+From route: /ndn/gr/edu/mmlab2/aueb/fotiou/snds/45
+
+2024-06-11 03:02:38,438 - ndn.app - INFO - Shutting down
+2024-06-11 03:02:38,439 - ndn.app - INFO - Receiving Ctrl+C, exit

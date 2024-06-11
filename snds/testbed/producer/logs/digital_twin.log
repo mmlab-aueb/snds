@@ -1,3 +1,4 @@
-2024-06-11 02:14:44,181 - __main__ - DEBUG - Writing to JSON file: 1.jsonld
+2024-06-11 02:52:38,318 - __main__ - DEBUG - Writing to JSON file: 1.jsonld
 
-2024-06-11 02:14:44,184 - __main__ - DEBUG - Result after running SNDS_service with object-name 1, type Car
+2024-06-11 02:52:38,319 - __main__ - DEBUG - Started SNDS_service with PID 732670, object-name 1, type Car
+2024-06-11 02:52:38,319 - __main__ - DEBUG - Result after running SNDS_service with object-name 1, type Car
