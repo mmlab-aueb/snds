@@ -1,6 +1,5 @@
 import argparse
 import logging
-import shlex
 import random
 
 from ndn.app import NDNApp
@@ -9,6 +8,8 @@ from ndn.encoding import Name, InterestParam, BinaryStr, FormalName
 from typing import Optional
 
 prefix = "/ndn/gr/edu/mmlab2/aueb/fotiou"
+snds_type = "Car"
+
 url = "unix:///run/nfd/nfd.sock"
 
 # Configure the logger
@@ -30,53 +31,19 @@ app = NDNApp()
 
 rIDs = []
 
-def parse_args():
-    parser = argparse.ArgumentParser()
 
-    parser.add_argument(
-        "--type",
-        type=str,
-        required=True,
-    )
-
-    return parser.parse_args()
-
-def advertisement_app_route(snds_type: str):
-    return f"/snds/{snds_type}"
-
-def advertisement_app_route_registry(snds_type: str):
-    return f"/snds/{snds_type}_registry"
-
-args = parse_args()
-
-# Sanitize inputs
-snds_type: str = shlex.quote(args.type)
-
-app_route: str = advertisement_app_route(snds_type)
-app_route_registry: str = advertisement_app_route_registry(snds_type)
-
-_logger.debug(f"Read SNDS-type from environment: {snds_type}\n")
-
-_logger.debug(f"App route: {app_route}\n")
-_logger.debug(f"App route registry: {app_route_registry}\n")
-
-
-@app.route(prefix + app_route)
+@app.route(prefix + "snds/" + snds_type)
 def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
-    _logger.info(f"Received Interest: {Name.to_str(name)}\nFor route: {app_route}\n")
+    newItemId = Name.to_str(name)
+    _logger.info(f"Received Interest: {newItemId}\n")
 
-    # Create the rID
-    r_ID = random.randint(0,200)
-    while r_ID in rIDs:
-        r_ID = random.randint(0,200)
-
-    rIDs.append(r_ID)
-
-    app.put_data(name, content=(rIDs[-1].to_bytes(2, 'big')), freshness_period=10000)
+    rIDs.append(newItemId)
+    result="OK"
+    app.put_data(name, content=result.encode(), freshness_period=10000)
 
     _logger.info(f"Data sent: {Name.to_str(name)}\nFrom route: {app_route}\n")
 
-@app.route(prefix + app_route_registry)
+@app.route(prefix + "snds/" + snds_type + "_registry")
 def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
     _logger.info(f"Received Interest: {Name.to_str(name)}\nFor route: {app_route_registry}\n")
 
