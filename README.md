@@ -7,3 +7,9 @@ SNDS is set to revolutionize the Named-Data Networking (NDN) Information-Centric
 For more information about the project, visit the project's [homepage](https://mm.aueb.gr/projects/snds). 
 
 This project is funded by [NGI SARGASSO](https://www.ngi.eu/ngi-projects/ngi-sargasso/).
+
+## Contents
+* The folder minindn includes experiments using [mini-ndn](https://github.com/named-data/mini-ndn)
+network emulator. See the corresponding [Readme file](minindn/README.md) file.
+* The folder testbed included experiments using [NDN Testbed](https://named-data.net/ndn-testbed/).
+See the corresponding [Readme file](testbed/README.md) file.
