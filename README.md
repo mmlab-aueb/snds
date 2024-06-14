@@ -10,6 +10,6 @@ This project is funded by [NGI SARGASSO](https://www.ngi.eu/ngi-projects/ngi-sar
 
 ## Contents
 * The folder minindn includes experiments using [mini-ndn](https://github.com/named-data/mini-ndn)
-network emulator. See the corresponding [Readme file](minindn/README.md) file.
+network emulator. See the corresponding [Readme](minindn/README.md) file.
 * The folder testbed included experiments using [NDN Testbed](https://named-data.net/ndn-testbed/).
-See the corresponding [Readme file](testbed/README.md) file.
+See the corresponding [Readme](testbed/README.md) file.
