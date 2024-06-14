@@ -32,7 +32,7 @@ app = NDNApp()
 rIDs = []
 
 
-@app.route(prefix + "snds/" + snds_type)
+@app.route(prefix + "/snds/" + snds_type)
 def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
     newItemId = Name.to_str(name)
     _logger.info(f"Received Interest: {newItemId}\n")
@@ -43,7 +43,7 @@ def on_interest(name: FormalName, interest_param: InterestParam, app_param: Opti
 
     _logger.info(f"Data sent: {Name.to_str(name)}\nFrom route: {app_route}\n")
 
-@app.route(prefix + "snds/" + snds_type + "_registry")
+@app.route(prefix + "/snds/" + snds_type + "_registry")
 def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
     _logger.info(f"Received Interest: {Name.to_str(name)}\nFor route: {app_route_registry}\n")
 

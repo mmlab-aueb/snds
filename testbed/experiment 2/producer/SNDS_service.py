@@ -68,7 +68,9 @@ async def main():
             lifetime=6000
         )
         _logger.info(f"Received Data Name: {Name.to_str(data_name)}\n")
-        print("Registration result:" + bytes(content))
+        print("Registration result:")
+        data = bytes(content)
+        print(data)
         _logger.debug(bytes(content) if content else "" + "\n")
 
         
