@@ -1,16 +1,20 @@
 from ndn.encoding import Name, InterestParam, FormalName, BinaryStr
 from ndn.app import NDNApp
 from ndn.types import InterestNack, InterestTimeout, InterestCanceled, ValidationFailure
+from jwcrypto import jwk, jws
 
 from typing import Optional
 import random
 import os
 import json
 import logging
+import time
 
 
 app = NDNApp()
 prefix = "/ndn/gr/edu/mmlab2/aueb/fotiou"
+
+
 
 # Ensure the logs directory exists
 os.makedirs("./logs", exist_ok=True)
@@ -60,9 +64,23 @@ def on_interest(name: FormalName, interest_param: InterestParam, app_param: Opti
 
 async def main():
     try:
-        nonce = str(random.randint(0,100000000))
+        signing_key = jwk.JWK.generate(kty='EC', crv='P-256')
+        jws_header_dict = {
+            'alg': ES256,
+        }
+        jws_payload_dict = {
+            "exp": int(time.time()) + 600,
+            "iat": int(time.time()),
+            "nonce":"this is a nonce"
+        }
+        jws_payload = json.dumps(jws_payload_dict)
+        jws_header = json.dumps(jws_header_dict)
+        proof = jws.JWS(jws_payload.encode('utf-8'))
+        proof.add_signature(signing_key, None, jws_header,None)
+
         data_name, meta_info, content = await app.express_interest(
-            f'{prefix}/snds/Car/iQ9PsBKOH1nLT9FyhsUGvXyKoW00yqm_-_rVa3W7Cl0/car1',
+            f'{prefix}/snds/Car/iQ9PsBKOH1nLT9FyhsUGvXyKoW00yqm_-_rVa3W7Cl0/car2',
+            proof.encode(),
             must_be_fresh=True,
             can_be_prefix=False,
             lifetime=6000

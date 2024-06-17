@@ -36,7 +36,8 @@ rIDs = []
 def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
     newItemId = Name.to_str(name)
     _logger.info(f"Received Interest: {newItemId}\n")
-
+    app_param = bytes(app_param)
+    print("app_param:", app_param)
     rIDs.append(newItemId)
     result="OK"
     app.put_data(name, content=result.encode(), freshness_period=10000)
