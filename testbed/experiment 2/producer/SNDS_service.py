@@ -66,7 +66,7 @@ async def main():
     try:
         signing_key = jwk.JWK.generate(kty='EC', crv='P-256')
         jws_header_dict = {
-            'alg': ES256,
+            'alg': 'ES256',
         }
         jws_payload_dict = {
             "exp": int(time.time()) + 600,
@@ -80,7 +80,7 @@ async def main():
 
         data_name, meta_info, content = await app.express_interest(
             f'{prefix}/snds/Car/iQ9PsBKOH1nLT9FyhsUGvXyKoW00yqm_-_rVa3W7Cl0/car2',
-            proof.encode(),
+            proof.serialize().encode(),
             must_be_fresh=True,
             can_be_prefix=False,
             lifetime=6000

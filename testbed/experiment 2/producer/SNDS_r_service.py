@@ -1,6 +1,5 @@
 import argparse
 import logging
-import random
 
 from ndn.app import NDNApp
 from ndn.encoding import Name, InterestParam, BinaryStr, FormalName
@@ -42,17 +41,17 @@ def on_interest(name: FormalName, interest_param: InterestParam, app_param: Opti
     result="OK"
     app.put_data(name, content=result.encode(), freshness_period=10000)
 
-    _logger.info(f"Data sent: {Name.to_str(name)}\nFrom route: {app_route}\n")
+    _logger.info(f"Data sent: {Name.to_str(name)}\n")
 
 @app.route(prefix + "/snds/" + snds_type + "_registry")
 def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
-    _logger.info(f"Received Interest: {Name.to_str(name)}\nFor route: {app_route_registry}\n")
+    _logger.info(f"Received Interest: {Name.to_str(name)}\n")
 
     _logger.debug(f"rIDs: {rIDs}\n")
 
     app.put_data(name, content=bytes(rIDs), freshness_period=10000)
 
-    _logger.info(f"Data sent: {Name.to_str(name)}\nFrom route: {app_route_registry}\n")
+    _logger.info(f"Data sent: {Name.to_str(name)}\n")
 
 # This file runs inside the producer
 if __name__ == '__main__':
