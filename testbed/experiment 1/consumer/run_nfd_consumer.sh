@@ -2,6 +2,9 @@
 
 LOGFILE="./nfd_consumer.log"
 
+# Truncate the logfile at the start
+: > $LOGFILE
+
 # Function to check if NFD is running
 is_nfd_running() {
     pgrep -x nfd > /dev/null 2>&1
@@ -11,7 +14,7 @@ is_nfd_running() {
 # Stop NFD if it is running
 if is_nfd_running; then
     echo "$(date): NFD is running. Stopping it..." | tee -a $LOGFILE
-    nfd-stop | tee -a $LOGFILE
+    sudo nfd-stop | tee -a $LOGFILE
     sleep 2  # Wait a bit for NFD to stop
     if is_nfd_running; then
         echo "$(date): Failed to stop NFD." | tee -a $LOGFILE
@@ -24,7 +27,7 @@ else
 fi
 
 # Start NFD as a background process and wait for it to be ready
-nfd-start | tee -a $LOGFILE &
+sudo nfd-start | tee -a $LOGFILE &
 sleep 2  # Wait a bit for NFD to start
 
 # Check if NFD started successfully

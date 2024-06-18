@@ -51,25 +51,6 @@ _logger = logging.getLogger(__name__)
 # TODO hardcoded log level
 _logger.setLevel(logging.DEBUG)
 
-# Ensure the logs directory exists
-os.makedirs("./logs", exist_ok=True)
-
-# Get the current filename without the extension
-log_filename = os.path.splitext(os.path.basename(__file__))[0]
-
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    handlers=[
-                        logging.FileHandler(f"./logs/{log_filename}.log", mode='w'),
-                        logging.StreamHandler()
-                    ])
-
-# Create a logger
-_logger = logging.getLogger(__name__)
-
-# TODO hardcoded log level
-_logger.setLevel(logging.DEBUG)
-
 def parse_args():
     parser = argparse.ArgumentParser()
 
