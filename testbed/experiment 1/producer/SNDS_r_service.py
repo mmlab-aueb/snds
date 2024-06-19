@@ -9,15 +9,6 @@ from ndn.encoding import Name, InterestParam, BinaryStr, FormalName
 
 from typing import Optional
 
-def read_config(config_file):
-    config = configparser.ConfigParser()
-    config.read(config_file)
-    return config['DEFAULT']['prefix']
-
-prefix = read_config("producer.conf")
-
-url = "unix:///run/nfd/nfd.sock"
-
 # Configure the logger
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -31,6 +22,18 @@ _logger = logging.getLogger(__name__)
 
 # Define a new logging format
 standard_logging = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+
+def read_config(config_file):
+    config = configparser.ConfigParser()
+    config.read(config_file)
+    return config['DEFAULT']['prefix']
+
+prefix = read_config("producer.conf")
+
+_logger.debug(f"Read prefix from config: {prefix}")
+
+url = "unix:///run/nfd/nfd.sock"
+
 
 app = NDNApp()
 

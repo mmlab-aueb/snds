@@ -8,13 +8,6 @@ import logging
 import os
 import configparser
 
-def read_config(config_file):
-    config = configparser.ConfigParser()
-    config.read(config_file)
-    return config['DEFAULT']['prefix']
-
-prefix = read_config("consumer.conf")
-
 # Ensure the logs directory exists
 os.makedirs("./logs", exist_ok=True)
 
@@ -33,6 +26,16 @@ _logger = logging.getLogger(__name__)
 
 # TODO hardcoded log level
 _logger.setLevel(logging.DEBUG)
+
+def read_config(config_file):
+    config = configparser.ConfigParser()
+    config.read(config_file)
+    return config['DEFAULT']['prefix']
+
+prefix = read_config("consumer.conf")
+
+_logger.debug(f"Read prefix from config: {prefix}")
+
 
 def parse_args(): 
 
