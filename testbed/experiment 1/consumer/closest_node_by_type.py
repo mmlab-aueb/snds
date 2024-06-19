@@ -6,8 +6,16 @@ import json
 import argparse
 import logging
 import os
+import configparser
 
-prefix = "/ndn/gr/edu/mmlab2/aueb/fotiou"
+
+def read_config(config_file):
+    config = configparser.ConfigParser()
+    config.read(config_file)
+    return config['DEFAULT']['prefix']
+
+prefix = read_config("consumer.conf")
+
 # Ensure the logs directory exists
 os.makedirs("./logs", exist_ok=True)
 

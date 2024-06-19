@@ -2,13 +2,20 @@ import argparse
 import logging
 import shlex
 import random
+import configparser
 
 from ndn.app import NDNApp
 from ndn.encoding import Name, InterestParam, BinaryStr, FormalName
 
 from typing import Optional
 
-prefix = "/ndn/gr/edu/mmlab2/aueb/fotiou"
+def read_config(config_file):
+    config = configparser.ConfigParser()
+    config.read(config_file)
+    return config['DEFAULT']['prefix']
+
+prefix = read_config("producer.conf")
+
 url = "unix:///run/nfd/nfd.sock"
 
 # Configure the logger
