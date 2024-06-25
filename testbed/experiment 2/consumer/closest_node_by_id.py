@@ -53,14 +53,9 @@ async def run():
         _logger.info(f"Received content in run: {content}\n")
         
         data = bytes(content)
-        json_data = json.loads(data.decode())
 
-        _logger.debug(f"RECEIVED JSON DATA: {json_data}\n")
+        _logger.debug(f"RECEIVED DATA: {data}\n")
 
-        json_ld_name = "{}.jsonld".format(id)
-
-        with open(json_ld_name, "w") as json_ld:
-            json.dump(json_data, json_ld, indent=2)
 
 
     except InterestNack as e:
