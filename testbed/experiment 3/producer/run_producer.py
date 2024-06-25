@@ -134,7 +134,7 @@ with open(json_ld_name, "w") as json_ld:
     _logger.debug(f"Writing to JSON file: {json_ld_name}\n")
     json_ld.write( base64.b64encode(signature).decode())
     json_ld.write(".")
-    json_ld.write(base64.b64encode(json.dumps(json_ld_data)).decode())
+    json_ld.write(base64.b64encode(json.dumps(json_ld_data).encode()).decode())
 
 # Command to run SNDS_r_service.py
 command = f"python SNDS_r_service.py --type car"

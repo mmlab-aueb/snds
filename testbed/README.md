@@ -103,3 +103,15 @@ This script generates and signs a data item. Then in the consumer machine run th
 python3 closest_node_by_id.py
 ```
 
+## Experiment 3
+An experiment that demonstrates signing of content items using BBS+ signatures.
+
+### Preparation
+In order to execute this experiment you need to install the following dependencies
+both at the producer machine, as well as in the consumer machine.
+
+```bash
+python3 -m pip install secrets
+python3 -m pip install jwcrypto
+python3 -m pip install ursa-bbs-signatures
+```
