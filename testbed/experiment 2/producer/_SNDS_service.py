@@ -1,17 +1,20 @@
 from ndn.encoding import Name, InterestParam, FormalName, BinaryStr
 from ndn.app import NDNApp
 from ndn.types import InterestNack, InterestTimeout, InterestCanceled, ValidationFailure
-from typing import Optional
+from jwcrypto import jwk, jws
 
+from typing import Optional
 import random
 import os
 import json
 import logging
-import argparse
-import shlex
-import configparser
+import time
+
 
 app = NDNApp()
+prefix = "/ndn/gr/edu/mmlab2/aueb/fotiou"
+
+
 
 # Ensure the logs directory exists
 os.makedirs("./logs", exist_ok=True)
@@ -31,78 +34,64 @@ _logger = logging.getLogger(__name__)
 
 # TODO hardcoded log level
 _logger.setLevel(logging.DEBUG)
+# Ensure the logs directory exists
+os.makedirs("./logs", exist_ok=True)
 
-def read_config(config_file):
-    config = configparser.ConfigParser()
-    config.read(config_file)
-    return config['DEFAULT']['prefix']
+# Get the current filename without the extension
+log_filename = os.path.splitext(os.path.basename(__file__))[0]
 
-prefix = read_config("producer.conf")
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    handlers=[
+                        logging.FileHandler(f"./logs/{log_filename}.log", mode='w'),
+                        logging.StreamHandler()
+                    ])
 
-_logger.debug(f"Read prefix from config: {prefix}")
+# Create a logger
+_logger = logging.getLogger(__name__)
 
 
-def parse_args():
-    parser = argparse.ArgumentParser()
 
-    parser.add_argument("--type", type=str, required=True)
-    parser.add_argument("--object-name", type=str, required=True)
-
-    return parser.parse_args()
-
-args = parse_args()
-
-# Sanitize inputs
-snds_type = shlex.quote(args.type)
-object_name = shlex.quote(args.object_name)
-
-_logger.debug(f"Arguments inside SNDS_service:\nsnds_type: {snds_type}\nobject_name: {object_name}\n")
-
-def advertisement_app_route(object_name: str):
-    return f"{prefix}/snds/{object_name}"
-
-def rid_app_route(rid: int):
-    return f"{prefix}/snds/{rid}"
-
-app_route = advertisement_app_route(object_name)
-
-@app.route(app_route)
+@app.route(prefix + "/snds/iQ9PsBKOH1nLT9FyhsUGvXyKoW00yqm_-_rVa3W7Cl0")
 def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
     _logger.info(f"Received Interest: {Name.to_str(name)}\nFor route: {app_route}\n")
 
-    with open(f"{object_name}.jsonld", "r") as json_file:
-        json_content = json_file.read()
+    with open(f"Data/iQ9PsBKOH1nLT9FyhsUGvXyKoW00yqm_-_rVa3W7Cl0/{object_name}.jsonld", "r") as json_file:
+        json_content = json.load(json_file)
 
-    app.put_data(name, content=json_content, freshness_period=10000)
+    app.put_data(name, content=json.dumps(json_content).encode(), freshness_period=10000)
     _logger.debug(f"Data sent: {Name.to_str(name)}\nFrom route: {app_route}\n")
 
 async def main():
     try:
-        nonce = str(random.randint(0,100000000))
+        signing_key = jwk.JWK.generate(kty='EC', crv='P-256')
+        jws_header_dict = {
+            'alg': 'ES256',
+        }
+        jws_payload_dict = {
+            "exp": int(time.time()) + 600,
+            "iat": int(time.time()),
+            "nonce":"this is a nonce"
+        }
+        jws_payload = json.dumps(jws_payload_dict)
+        jws_header = json.dumps(jws_header_dict)
+        proof = jws.JWS(jws_payload.encode('utf-8'))
+        proof.add_signature(signing_key, None, jws_header,None)
+
         data_name, meta_info, content = await app.express_interest(
-            f'{prefix}/snds/{snds_type}/{nonce}',
+            f'{prefix}/snds/Car/iQ9PsBKOH1nLT9FyhsUGvXyKoW00yqm_-_rVa3W7Cl0/car2',
+            proof.serialize().encode(),
             must_be_fresh=True,
             can_be_prefix=False,
             lifetime=6000
         )
         _logger.info(f"Received Data Name: {Name.to_str(data_name)}\n")
+        print("Registration result:")
+        data = bytes(content)
+        print(data)
         _logger.debug(bytes(content) if content else "" + "\n")
 
-        rID = str(int.from_bytes(content, 'big'))
-        _logger.debug(f"rID received: {rID}\n")
         
-        rid_app_route_str = rid_app_route(rID)
-
-        @app.route(rid_app_route_str)
-        def on_interest(name: FormalName, interest_param: InterestParam, app_param: Optional[BinaryStr]):
-            _logger.info(f"Received Interest: {Name.to_str(name)}\nFor route: {rid_app_route_str}\n")
-
-            with open("{}.jsonld".format(object_name), "r") as json_file:
-                json_content = json.load(json_file)
-
-            app.put_data(name, content=json.dumps(json_content).encode(), freshness_period=10000)
-
-            _logger.debug(f"Data sent: {Name.to_str(name)}\nFrom route: {rid_app_route_str}\n")
 
     except InterestNack as e:
         _logger.error(f'Nacked with reason={e.reason}\n')

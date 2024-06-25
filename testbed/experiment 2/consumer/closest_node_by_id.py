@@ -37,22 +37,9 @@ prefix = read_config("consumer.conf")
 _logger.debug(f"Read prefix from config: {prefix}")
 
 
-def parse_args(): 
-
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        '--id', 
-        type=str, 
-        required=True
-    )
-
-    return parser.parse_args()
-
-
 async def run():
     try:
-        
+        id=
         _logger.info(f"Expressing interest on id: {id}\n")
         data_name, meta_info, content = await app.express_interest (
             f'{prefix}/snds/{id}',
@@ -93,9 +80,9 @@ async def run():
 
 if __name__ == '__main__':
     
-    args = parse_args()
+ 
 
-    id: str = args.id
+    id: str = "R1h9F5Oo-eDudLZDe1_1minM0Tjszh2Jpoio7iXRi68"
 
     _logger.debug(f"Read ID from environment variable: {id}\n")
 

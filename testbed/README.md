@@ -7,9 +7,11 @@ prefix following [these instructions](https://named-data.net/ndn-testbed/user-gu
 
 Then replace the `prefix` variable in each script with your prefix. 
 
-### NFD setup
+Moreover, for all your experiment you must have installed [python-ndn](https://github.com/named-data/python-ndn).
 
-The below scripts outline the bare minimum of commands you need to run in order to connect to testbed.
+## NFD setup
+
+All experiments include the below scripts that outline the bare minimum of commands you need to run in order to connect to testbed.
 
 In the producer machine the ``run_nfd_producer.sh`` must be run: 
 
@@ -38,11 +40,10 @@ This is a proof of concept that a simple case where a producer provider the type
 
 It outputs detailed logs about the execution and the execution time of the requests.
 
-You should have the ``python-ndn==0.4.2`` dependency installed.
 
+### Execution
 
-
-### Run producer
+First in the producer machine run the producer script.
 
 ```cmd
 python run_producer.py --type Car --id 1 
@@ -58,9 +59,7 @@ The ``SNDS_r_service.py`` listens to the ``snds/Car`` and the ``snds/Car_registr
 
 The ``SNDS_service.py`` listens to the ``snds/1`` 1 being the ``<id>`` and the ``snds/1/<rid>``. The ``<rid>`` is a random ID generated when the program is run.
 
-### Run consumer
-
-You can run the scripts together or individually:
+Then, in the consumer machine run the consumer scripts together or individually:
 
 ```cmd
 //together 
@@ -79,7 +78,7 @@ You should get the ``1.jsonld`` file from the producer, use it as a debug tool.
 
 
 ## Experiment 2
-An experiment that demonstrates secure registry operation using Decentralized Identifiers.
+An experiment that demonstrates signing of content items using Decentralized Identifiers.
 
 ### Preparation
 This experiment requires jwcrypto library. Install it using
@@ -87,3 +86,20 @@ This experiment requires jwcrypto library. Install it using
 ```
 python3 -m pip install jwcrypto
 ```
+
+It also requires the python implementation of did:self. This [can be found here](https://github.com/excid-io/did-self-py).
+
+### Execution
+In the producer machine run the `run_producer.py` script
+
+```cmd
+python3 run_producer.py
+```
+
+This script generates and signs a data item. Then in the consumer machine run the
+`closest_node_by_id.py` script
+
+```cmd
+python3 closest_node_by_id.py
+```
+
