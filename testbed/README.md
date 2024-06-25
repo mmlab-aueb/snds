@@ -115,3 +115,17 @@ python3 -m pip install secrets
 python3 -m pip install jwcrypto
 python3 -m pip install ursa-bbs-signatures
 ```
+
+### Execution
+In the producer machine run the `run_producer.py` script
+
+```cmd
+python3 run_producer.py
+```
+
+This script generates and signs a data item using BBS+. Then in the consumer machine run the
+`closest_node_by_id.py` script
+
+```cmd
+python3 closest_node_by_id.py
+```
