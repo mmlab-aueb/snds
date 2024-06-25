@@ -39,7 +39,7 @@ _logger.debug(f"Read prefix from config: {prefix}")
 
 async def run():
     try:
-        id=
+        id="R1h9F5Oo-eDudLZDe1_1minM0Tjszh2Jpoio7iXRi68"
         _logger.info(f"Expressing interest on id: {id}\n")
         data_name, meta_info, content = await app.express_interest (
             f'{prefix}/snds/{id}',
